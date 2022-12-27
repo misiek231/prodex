@@ -1,0 +1,32 @@
+﻿@page "/process-add"
+@using Prodex.Client.Coponents
+@using Prodex.Shared.Models.Processes;
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+
+<h3>ProcessesAdd</h3>
+
+
+<label for="name">Nazwa</label><br />
+<input id="name" type="text" @bind="Form.Name"/>
+
+<BpmnModeler @ref="modeler"></BpmnModeler>
+
+<button class="btn-primary mt-3" @onclick="Save">Zapisz</button>
+
+@code {
+    private FormModel Form = new FormModel();
+
+    private BpmnModeler modeler;
+
+    private async Task Save()
+    {
+        // do work
+        Form.Xml = await modeler.GetValueAsync();
+
+        await Http.PostAsync("api/processes", JsonContent.Create(Form));
+
+        Navigation.NavigateTo("processes");
+    }
+}

@@ -1,0 +1,41 @@
+﻿@page "/processes"
+@using Prodex.Shared.Models.Processes;
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+
+<button @onclick="Add">Dodaj</button>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Xml</th>
+    </tr>
+  </thead>
+  <tbody>
+        @foreach(var item in items)
+        {
+            <tr>
+                <th scope="row">@item.Id</th>
+                <td>@item.Name</td>
+                <td>@item.Xml</td>
+            </tr>
+        }
+  </tbody>
+</table>
+
+@code {
+    private List<ListItemModel> items = new List<ListItemModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await Http.GetFromJsonAsync<List<ListItemModel>>("api/processes");
+    }
+
+    private void Add()
+    {
+        Navigation.NavigateTo("process-add");
+    }
+}

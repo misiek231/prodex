@@ -10,13 +10,17 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Prodex.Data\Prodex.Data.csproj" />
-    <ProjectReference Include="..\Client\Prodex.Client.csproj" />
-    <ProjectReference Include="..\Shared\Prodex.Shared.csproj" />
+    <ProjectReference Include="..\Prodex.Data\Prodex.Data.csproj" />
+    <ProjectReference Include="..\Prodex.Client\Prodex.Client.csproj" />
+    <ProjectReference Include="..\Prodex.Shared\Prodex.Shared.csproj" />
   </ItemGroup>
 
 

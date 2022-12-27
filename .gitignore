@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 Prodex/Server/appsettings.json
 Prodex/Client/wwwroot/js/index.bundle.js
+Prodex.Server/appsettings.json

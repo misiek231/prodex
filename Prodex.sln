@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Server", "Prodex\Server\Prodex.Server.csproj", "{7289C83E-7ED4-4C71-B551-64FF04CF523F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Server", "Prodex.Server\Prodex.Server.csproj", "{7289C83E-7ED4-4C71-B551-64FF04CF523F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Client", "Prodex\Client\Prodex.Client.csproj", "{0C1E16D4-2DED-415A-A3F3-3317B406C7E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Client", "Prodex.Client\Prodex.Client.csproj", "{0C1E16D4-2DED-415A-A3F3-3317B406C7E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Shared", "Prodex\Shared\Prodex.Shared.csproj", "{BADDD19C-46AF-4370-AEDB-9DB9199BF9C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Shared", "Prodex.Shared\Prodex.Shared.csproj", "{BADDD19C-46AF-4370-AEDB-9DB9199BF9C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prodex.Data", "Prodex.Data\Prodex.Data.csproj", "{0FB3958B-17F6-468A-AAAF-0B4CA5A073B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Data", "Prodex.Data\Prodex.Data.csproj", "{0FB3958B-17F6-468A-AAAF-0B4CA5A073B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

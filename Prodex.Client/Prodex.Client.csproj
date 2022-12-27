@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Prodex.Shared.csproj" />
+    <ProjectReference Include="..\Prodex.Shared\Prodex.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,9 +28,10 @@
     <None Include="wwwroot\css\bpmnjs\font\bpmn.woff2" />
   </ItemGroup>
 
+	<!--
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
 		<Exec Command="npm install" WorkingDirectory="NodeJs" />
 		<Exec Command="npm run build" WorkingDirectory="NodeJs" />
 	</Target>
-
+    -->
 </Project>
