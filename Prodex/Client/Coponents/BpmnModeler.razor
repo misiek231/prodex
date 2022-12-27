@@ -1,0 +1,25 @@
+﻿@inject IJSRuntime _js
+
+<h3>BpmnModeler</h3>
+
+
+<div id="bpmn-canvas"></div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await _js.InvokeVoidAsync("loadBpmn");
+        var i = await _js.InvokeAsync<string>("getCurrentDiagram");
+
+
+    }
+}
+
+<style>
+
+    #bpmn-canvas{
+        height: 700px;
+        border: 1px solid black;
+    }
+
+</style>

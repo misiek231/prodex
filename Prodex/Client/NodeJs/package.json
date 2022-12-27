@@ -1,0 +1,17 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack ./src/index.js --output-path ../wwwroot/js --output-filename index.bundle.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bpmn-js": "^11.1.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.0.1"
+  }
+}
