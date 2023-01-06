@@ -1,3 +1,4 @@
+using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using Prodex.Data;
 
@@ -13,7 +14,18 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+builder.Services.AddFluentMigratorCore()
+    .ConfigureRunner(o => o.AddSqlServer()
+                           .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DefaultConnection"))
+                           .ScanIn(typeof(DataContext).Assembly).For.Migrations());
+
 var app = builder.Build();
+
+using (var services = app.Services.CreateScope())
+{
+    services.ServiceProvider.GetRequiredService<IMigrationRunner>().MigrateUp();
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
