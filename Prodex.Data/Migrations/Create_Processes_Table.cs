@@ -10,7 +10,7 @@ namespace Prodex.Data.Migrations
             Create.Table("Processes")
                 .WithColumn("Id").AsInt64().PrimaryKey().Identity()
                 .WithColumn("Name").AsString(60)
-                .WithColumn("Xml").AsString();
+                .WithColumn("Xml").AsString(int.MaxValue);
         }
 
         public override void Down()

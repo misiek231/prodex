@@ -15,9 +15,7 @@ namespace Prodex.Data.Configurations
             entity.Property(e => e.Name)
             .IsRequired()
             .HasMaxLength(60);
-            entity.Property(e => e.Xml)
-            .IsRequired()
-            .HasMaxLength(255);
+            entity.Property(e => e.Xml).IsRequired();
 
             OnConfigurePartial(entity);
         }
