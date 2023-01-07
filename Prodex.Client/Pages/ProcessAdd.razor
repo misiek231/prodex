@@ -2,11 +2,20 @@
 @using Prodex.Client.Coponents
 @using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.Processes;
+@using System.Net;
 @inject NavigationManager Navigation
 @inject ProcessesClient Processes
 
 
 <h3>ProcessesAdd</h3>
+
+@if (Form.HasErrors)
+{
+    @foreach(var error in Form.Errors)
+    {
+        <p>@error.Key: @error.Value</p>
+    }
+}
 
 
 <label for="name">Nazwa</label><br />
@@ -26,8 +35,18 @@
         // do work
         Form.Xml = await modeler.GetValueAsync();
 
-        await Processes.Post(Form);
+        var result = await Processes.Post(Form);
 
-        Navigation.NavigateTo("processes");
+        if (result.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("processes");
+        }
+        else
+        {
+            if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                Form.WithErrors(await result.Content.ReadAsStringAsync());     
+            }
+        }
     }
 }

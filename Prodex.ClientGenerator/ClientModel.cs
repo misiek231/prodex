@@ -10,6 +10,7 @@ namespace Prodex.ClientGenerator
 
         public ClientModel(IGrouping<string, RouteEndpoint> group) 
         {
+            Name = group.Key.FirstLetterUpper();
             Endpoints = group.Select(item => new EndpointModel(item)).ToList();
         }
     }
@@ -33,7 +34,7 @@ namespace Prodex.ClientGenerator
             Method = method;
             MethodName = name ?? method.FirstLetterUpper();
             Route = item.RoutePattern.RawText;
-            ReturnType = methodInfo.ReturnParameter.ToString().FixTypeDefinition();
+            ReturnType = method == "POST" ? "System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage>" : methodInfo.ReturnParameter.ToString().FixTypeDefinition();
             ResponseType = methodInfo.ReturnParameter.ToString().FixTypeDefinition().RemoveTask();
             Parameters = item.Metadata.GetRequiredMetadata<MethodInfo>().GetParameters()
                     .Where(p => p.ParameterType.Assembly == typeof(FilterModel).Assembly)

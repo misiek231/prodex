@@ -24,8 +24,8 @@ public class ProcessesClient
         return await client.GetFromJsonAsync<System.Collections.Generic.List<Prodex.Shared.Models.Processes.ListItemModel>>("api/processes/", model);
     }
     
-    public async System.Threading.Tasks.Task Post(Prodex.Shared.Models.Processes.FormModel model)
+    public async System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> Post(Prodex.Shared.Models.Processes.FormModel model)
     {
-        await client.PostAsJsonAsync("api/processes/", model);
+        return await client.PostAsJsonAsync("api/processes/", model);
     }
 }

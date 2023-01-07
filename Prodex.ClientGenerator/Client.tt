@@ -23,7 +23,7 @@ public class <#=Model.Name#>Client
     public async <#=item.ReturnType#> <#=item.MethodName#>(<# var i = 1; foreach(var param in item.Parameters) { #><#=param.Type #> <#= param.Name#><# if(item.Parameters.Count != i)#>, <# i++; } #>)
     {
 <# if(item.Method == "POST") { #>
-        await client.PostAsJsonAsync("<#=item.Route#>", model);
+        return await client.PostAsJsonAsync("<#=item.Route#>", model);
 <# } else if(item.Method == "GET") { #>        return await client.GetFromJsonAsync<<#=item.ResponseType#>>("<#=item.Route#>", model);
 <# } #>
     }

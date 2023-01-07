@@ -1,4 +1,7 @@
-﻿namespace Prodex.Server.MinimalApiExtensions;
+﻿using FluentValidation.Results;
+using Prodex.Shared.Validation;
+
+namespace Prodex.Server.MinimalApiExtensions;
 
 public static class EndpointDefinitionExtensions
 {
@@ -22,7 +25,7 @@ public static class EndpointDefinitionExtensions
 
         if (apiPrefix != null)
         {
-            group = app.MapGroup(apiPrefix);
+            group = app.MapGroup(apiPrefix).AddEndpointFilter<ValidationFilter>();
         }
 
         foreach (var def in defs)
@@ -32,5 +35,31 @@ public static class EndpointDefinitionExtensions
             else
                 def.DefineEndpoints(app.MapGroup(def.GroupName));
         }
+    }
+}
+
+
+public class ValidationFilter : IEndpointFilter
+{
+    public ValueTask<object> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
+    {
+        var models = context.Arguments.Where(p => p.GetType().GetInterfaces().Where(p => p.Name.Contains("IValidatable")).Any()).ToList();
+
+        foreach (var p in models)
+        {
+            var modelType = p.GetType();
+            var validatorType = typeof(FluentValidator<>).MakeGenericType(modelType);
+            var validator = Activator.CreateInstance(validatorType);
+
+            modelType.GetMethod("Rules").Invoke(p, new object[] { null, validator });
+
+            var result = validatorType.GetMethod("Validate", new Type[] { modelType }).Invoke(validator, new object[] { p }) as ValidationResult;
+
+            if (!result.IsValid)
+                return ValueTask.FromResult((object)Results.BadRequest(result.Errors.Select(p => new KeyValuePair<string, string>(p.PropertyName, p.ErrorMessage))));
+
+        }
+
+        return next(context);
     }
 }
