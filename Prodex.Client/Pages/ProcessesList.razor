@@ -1,6 +1,7 @@
 ﻿@page "/processes"
+@using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.Processes;
-@inject HttpClient Http
+@inject ProcessesClient Processes
 @inject NavigationManager Navigation
 
 
@@ -31,7 +32,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        items = await Http.GetFromJsonAsync<List<ListItemModel>>("api/processes");
+        items = await Processes.Get(new FilterModel());
     }
 
     private void Add()

@@ -1,8 +1,9 @@
 ﻿@page "/process-add"
 @using Prodex.Client.Coponents
+@using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.Processes;
 @inject NavigationManager Navigation
-@inject HttpClient Http
+@inject ProcessesClient Processes
 
 
 <h3>ProcessesAdd</h3>
@@ -25,7 +26,7 @@
         // do work
         Form.Xml = await modeler.GetValueAsync();
 
-        await Http.PostAsync("api/processes", JsonContent.Create(Form));
+        await Processes.Post(Form);
 
         Navigation.NavigateTo("processes");
     }

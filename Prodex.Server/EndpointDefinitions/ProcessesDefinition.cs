@@ -12,6 +12,6 @@ public class ProcessesDefinition : IEndpointDefinition
     public void DefineEndpoints(RouteGroupBuilder group)
     {
         group.MapGet("", async (IMediator mediator, [AsParameters] FilterModel model) => await mediator.Send(model));
-        group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(model));
+        group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => { await mediator.Send(model); });
     }
 }

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Prodex.ClientGenerator": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53017;http://localhost:53018",
+      "hotReloadEnabled": false
+    }
+  }
+}
