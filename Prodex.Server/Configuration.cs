@@ -1,4 +1,5 @@
-﻿using FluentMigrator.Runner;
+﻿using AutoMapper;
+using FluentMigrator.Runner;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Prodex.Bussines.Handlers.Processes;
@@ -20,6 +21,8 @@ namespace Prodex.Server
             // Todo: Register handlers in better way
             builder.Services.AddMediatR(typeof(Program).Assembly, typeof(FilterModel).Assembly, typeof(CreateHandler).Assembly);
 
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             builder.Services.AddFluentMigratorCore()
                 .ConfigureRunner(o => o.AddSqlServer()
                                        .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DefaultConnection"))
@@ -32,6 +35,7 @@ namespace Prodex.Server
             using (var services = app.Services.CreateScope())
             {
                 services.ServiceProvider.GetRequiredService<IMigrationRunner>().MigrateUp();
+                services.ServiceProvider.GetRequiredService<IMapper>().ConfigurationProvider.AssertConfigurationIsValid();
             }
 
             // Configure the HTTP request pipeline.
