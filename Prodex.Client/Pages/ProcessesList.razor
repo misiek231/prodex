@@ -1,6 +1,7 @@
 ﻿@page "/processes"
 @using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.Processes;
+@using Prodex.Shared.Pagination;
 @inject ProcessesClient Processes
 @inject NavigationManager Navigation
 
@@ -27,16 +28,31 @@
   </tbody>
 </table>
 
+<button @onclick="() => ChangePage(-1)">Poprzednia strona</button>
+<button @onclick="() => ChangePage(1)">Następna strona</button>
+
 @code {
     private List<ListItemModel> items = new List<ListItemModel>();
+    private Pager pager = new Pager(1, 10);
 
     protected override async Task OnInitializedAsync()
     {
-        items = await Processes.Get(new FilterModel());
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        items = (await Processes.Get(pager, new FilterModel())).Items.ToList();
     }
 
     private void Add()
     {
         Navigation.NavigateTo("process-add");
+    }
+
+    private async Task ChangePage(int val)
+    {
+        pager.PageIndex += val;
+        await LoadData();
     }
 }

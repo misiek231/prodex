@@ -36,7 +36,7 @@ public class <#=Model.Name#>Client
         }
 
         return result;
-<# } else if(item.Method == "GET") { #>        return await client.GetFromJsonAsync<<#=item.ResponseType#>>("<#=item.Route#>", model);
+<# } else if(item.Method == "GET") { #>        return await client.GetFromJsonAsync<<#=item.ResponseType#>>("<#=item.Route#>", TypeMerger.TypeMerger.Merge(<# i = 1; foreach(var param in item.Parameters) { #><#= param.Name#><# if(item.Parameters.Count != i)#>, <# i++; } #>));
 <# } #>
     }
 <# } #>

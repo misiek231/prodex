@@ -20,9 +20,9 @@ public class ProcessesClient
         this.client = client;
     }
     
-    public async System.Threading.Tasks.Task<System.Collections.Generic.List<Prodex.Shared.Models.Processes.ListItemModel>> Get(Prodex.Shared.Models.Processes.FilterModel model)
+    public async System.Threading.Tasks.Task<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Processes.ListItemModel>> Get(Prodex.Shared.Pagination.Pager pager, Prodex.Shared.Models.Processes.FilterModel model)
     {
-        return await client.GetFromJsonAsync<System.Collections.Generic.List<Prodex.Shared.Models.Processes.ListItemModel>>("api/processes/", model);
+        return await client.GetFromJsonAsync<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Processes.ListItemModel>>("api/processes/", TypeMerger.TypeMerger.Merge(pager, model));
     }
     
     public async System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> Post(Prodex.Shared.Models.Processes.FormModel model)
