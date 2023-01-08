@@ -9,7 +9,7 @@ namespace Prodex.Bussines.Handlers.Processes
     public class GetListHandler : BaseGetListHandler<FilterModel, ListItemModel>
     {
         private readonly DataContext context;
-        public GetListHandler(DataContext context, IMapper mapper): base(mapper)
+        public GetListHandler(DataContext context, IMapper mapper) : base(mapper)
         {
             this.context = context;
         }

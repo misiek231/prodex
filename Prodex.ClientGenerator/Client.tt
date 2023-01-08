@@ -12,6 +12,8 @@ using System.Net.Http.Json;
 
 namespace Prodex.Client.RestClients;
 
+
+[Prodex.Client.DiHelpers.RegisterScoped]
 public class <#=Model.Name#>Client
 {
     private readonly HttpClient client;
