@@ -1,8 +1,5 @@
-﻿using MediatR;
+﻿namespace Prodex.Shared.Models.Processes;
 
-namespace Prodex.Shared.Models.Processes
+public class FilterModel
 {
-    public class FilterModel : IRequest<List<ListItemModel>>
-    {
-    }
 }
