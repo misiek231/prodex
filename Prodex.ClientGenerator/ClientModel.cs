@@ -1,4 +1,5 @@
-﻿using Prodex.Shared.Models.Processes;
+﻿using Prodex.Shared.Forms;
+using Prodex.Shared.Models.Processes;
 using System.Reflection;
 
 namespace Prodex.ClientGenerator
@@ -24,21 +25,23 @@ namespace Prodex.ClientGenerator
         public string Method { get; set; }
         public string Route { get; set; }
         public string ResponseType { get; set; }
+        public bool Validate { get; set; }
 
         public EndpointModel(RouteEndpoint item)
         {
             var methodInfo = item.Metadata.GetRequiredMetadata<MethodInfo>();
             var name = item.RoutePattern.RawText.Split("/").ElementAtOrDefault(3)?.FirstLetterUpper();
             var method = item.Metadata.GetRequiredMetadata<HttpMethodMetadata>().HttpMethods[0];
-            
+            var parameteters = item.Metadata.GetRequiredMetadata<MethodInfo>().GetParameters();
+
             Method = method;
             MethodName = name ?? method.FirstLetterUpper();
             Route = item.RoutePattern.RawText;
             ReturnType = method == "POST" ? "System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage>" : methodInfo.ReturnParameter.ToString().FixTypeDefinition();
             ResponseType = methodInfo.ReturnParameter.ToString().FixTypeDefinition().RemoveTask();
-            Parameters = item.Metadata.GetRequiredMetadata<MethodInfo>().GetParameters()
-                    .Where(p => p.ParameterType.Assembly == typeof(FilterModel).Assembly)
+            Parameters = parameteters.Where(p => p.ParameterType.Assembly == typeof(FilterModel).Assembly)
                     .Select(p => new Parameter(p)).ToList();
+            Validate = parameteters.Where(p => p.ParameterType.IsAssignableTo(typeof(FormBaseModel))).Any();
         }
     }
 

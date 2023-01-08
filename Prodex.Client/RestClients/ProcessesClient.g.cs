@@ -6,6 +6,7 @@
 // </auto-generated>
 
 using Prodex.Client.Extensions;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace Prodex.Client.RestClients;
@@ -26,6 +27,16 @@ public class ProcessesClient
     
     public async System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> Post(Prodex.Shared.Models.Processes.FormModel model)
     {
-        return await client.PostAsJsonAsync("api/processes/", model);
+        if (model.Validate(null).HasErrors)
+            return new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+        
+        var result = await client.PostAsJsonAsync("api/processes/", model);
+
+        if (result.StatusCode == HttpStatusCode.BadRequest)
+        {
+            model.WithErrors(await result.Content.ReadAsStringAsync());
+        }
+
+        return result;
     }
 }

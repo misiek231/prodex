@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Prodex.Shared.Forms;
 using Prodex.Shared.Validation;
 
 namespace Prodex.Server.MinimalApiExtensions;
@@ -43,23 +44,10 @@ public class ValidationFilter : IEndpointFilter
 {
     public ValueTask<object> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        var models = context.Arguments.Where(p => p.GetType().GetInterfaces().Where(p => p.Name.Contains("IValidatable")).Any()).ToList();
+        var errors = new ValidationErrors(context.Arguments.OfType<FormBaseModel>().SelectMany(p => p.Validate(null).Errors));
 
-        foreach (var p in models)
-        {
-            var modelType = p.GetType();
-            var validatorType = typeof(FluentValidator<>).MakeGenericType(modelType);
-            var validator = Activator.CreateInstance(validatorType);
-
-            modelType.GetMethod("Rules").Invoke(p, new object[] { null, validator });
-
-            var result = validatorType.GetMethod("Validate", new Type[] { modelType }).Invoke(validator, new object[] { p }) as ValidationResult;
-
-            if (!result.IsValid)
-                return ValueTask.FromResult((object)Results.BadRequest(result.Errors.Select(p => new KeyValuePair<string, string>(p.PropertyName, p.ErrorMessage))));
-
-        }
-
-        return next(context);
+        return errors.HasErrors ?
+            ValueTask.FromResult((object)Results.BadRequest(errors)) : 
+            next(context);
     }
 }

@@ -18,10 +18,7 @@ namespace Prodex.ClientGenerator
                     Model = model,
                 }.TransformText();
 
-                using var f = File.OpenWrite($"../Prodex.Client/RestClients/{model.Name}Client.g.cs");
-
-                f.Flush();
-                f.Write(Encoding.UTF8.GetBytes(text));
+                File.WriteAllText($"../Prodex.Client/RestClients/{model.Name}Client.g.cs", text);
             }
         }
     }

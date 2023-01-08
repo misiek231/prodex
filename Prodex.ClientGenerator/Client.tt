@@ -7,6 +7,7 @@
 // </auto-generated>
 
 using Prodex.Client.Extensions;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace Prodex.Client.RestClients;
@@ -23,7 +24,18 @@ public class <#=Model.Name#>Client
     public async <#=item.ReturnType#> <#=item.MethodName#>(<# var i = 1; foreach(var param in item.Parameters) { #><#=param.Type #> <#= param.Name#><# if(item.Parameters.Count != i)#>, <# i++; } #>)
     {
 <# if(item.Method == "POST") { #>
-        return await client.PostAsJsonAsync("<#=item.Route#>", model);
+<# if(item.Validate) { #>
+        if (model.Validate(null).HasErrors)
+            return new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+<# } #>        
+        var result = await client.PostAsJsonAsync("<#=item.Route#>", model);
+
+        if (result.StatusCode == HttpStatusCode.BadRequest)
+        {
+            model.WithErrors(await result.Content.ReadAsStringAsync());
+        }
+
+        return result;
 <# } else if(item.Method == "GET") { #>        return await client.GetFromJsonAsync<<#=item.ResponseType#>>("<#=item.Route#>", model);
 <# } #>
     }

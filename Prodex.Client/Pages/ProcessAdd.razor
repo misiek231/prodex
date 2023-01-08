@@ -13,7 +13,7 @@
 {
     @foreach(var error in Form.Errors)
     {
-        <p>@error.Key: @error.Value</p>
+        <p>@error.Name: @error.Message</p>
     }
 }
 
@@ -32,7 +32,6 @@
 
     private async Task Save()
     {
-        // do work
         Form.Xml = await modeler.GetValueAsync();
 
         var result = await Processes.Post(Form);
@@ -40,13 +39,6 @@
         if (result.IsSuccessStatusCode)
         {
             Navigation.NavigateTo("processes");
-        }
-        else
-        {
-            if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                Form.WithErrors(await result.Content.ReadAsStringAsync());     
-            }
         }
     }
 }
