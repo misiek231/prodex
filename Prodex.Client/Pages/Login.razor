@@ -38,7 +38,7 @@
             var token = await result.Content.ReadAsStringAsync();
             await LocalStorage.SetItemAsStringAsync("token", result.Result.Token);
             ((CustomAuthenticationStateProvider)AuthProvider).NotifyAuthStateChanged();
-            Navigation.NavigateTo("processes");
+            Navigation.NavigateTo("");
         }
     }
 }

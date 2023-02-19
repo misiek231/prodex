@@ -1,20 +1,21 @@
-﻿@page "/processes"
+﻿@page "/users"
 @using Microsoft.AspNetCore.Authorization;
 @using Prodex.Client.Coponents
 @using Prodex.Client.RestClients;
-@using Prodex.Shared.Models.Processes;
+@using Prodex.Shared.Models.Users;
 @using Prodex.Shared.Pagination;
-@inject ProcessesClient Processes
+@inject UsersClient Users
 
 <Card>
     <CardHeader>
-        <Button Type="ButtonType.Link" To="processes/add" Color="Color.Primary">Dodaj</Button>
+        <Button Type="ButtonType.Link" To="users/add" Color="Color.Primary">Dodaj</Button>
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" Responsive>
             <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
-            <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
-            <DataGridColumn Field="@nameof(ListItemModel.Xml)" Caption="Xml" Editable />
+            <DataGridColumn Field="@nameof(ListItemModel.GivenName)" Caption="Imię" />
+            <DataGridColumn Field="@nameof(ListItemModel.Surname)" Caption="Nazwisko" />
+            <DataGridColumn Field="@nameof(ListItemModel.Username)" Caption="Nazwa użytkownika" />
         </DataGrid>
     </CardBody>
     <CardFooter>
@@ -25,7 +26,6 @@
 @code {
     private List<ListItemModel> items = new List<ListItemModel>();
     private Pager pager = new Pager(1, 10);
-    private bool Loading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,10 +34,9 @@
 
     private async Task LoadData()
     {
-        Loading = true;
         try
         {
-            var result = await Processes.Get(pager, new FilterModel());
+            var result = await Users.Get(pager, new FilterModel());
             items = result.Items.ToList();
             pager.TotalRows = result.TotalRows;
         }
@@ -45,6 +44,5 @@
         {
             // todo: find nice way to handle exceptions like that
         }
-        Loading = false;
     }
 }

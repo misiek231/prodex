@@ -39,7 +39,7 @@
 
     [Parameter] public EventCallback LoadData { get; set; }
     [Parameter] public Pager Pager { get; set; }
-    
+
     private async Task ChangePage(int val)
     {
         Pager.PageIndex += val;
@@ -55,6 +55,7 @@
     private async Task PageSizeChanged(int val)
     {
         Pager.PageSize = val;
+        Pager.PageIndex = 1;
         await LoadData.InvokeAsync();
     }
 }

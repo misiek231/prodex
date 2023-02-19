@@ -12,9 +12,11 @@ namespace Prodex.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<User> entity)
         {
+            entity.Property(e => e.GivenName).HasMaxLength(60);
             entity.Property(e => e.Password)
             .IsRequired()
             .HasMaxLength(60);
+            entity.Property(e => e.Surname).HasMaxLength(60);
             entity.Property(e => e.Username)
             .IsRequired()
             .HasMaxLength(60);

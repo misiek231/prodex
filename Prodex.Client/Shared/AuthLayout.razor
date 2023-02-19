@@ -1,8 +1,22 @@
-﻿@using Microsoft.AspNetCore.Authorization;
+﻿@using Blazored.LocalStorage;
+@using Microsoft.AspNetCore.Authorization;
 @inherits LayoutComponentBase
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigation
 
 <Layout>
     <LayoutContent Flex="Flex.AlignItems.Center.JustifyContent.Center" Background="Background.Light">
         @Body
     </LayoutContent>
 </Layout>
+
+@code{
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(!string.IsNullOrEmpty(await LocalStorage.GetItemAsStringAsync("token")))
+        {
+            Navigation.NavigateTo("");
+        }
+    }
+}

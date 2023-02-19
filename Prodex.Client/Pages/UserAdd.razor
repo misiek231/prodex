@@ -1,0 +1,56 @@
+﻿@page "/users/add"
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.Users;
+@using System.Net;
+@inject NavigationManager Navigation
+@inject UsersClient Processes
+
+@if (Form.HasErrors)
+{
+    @foreach(var error in Form.Errors)
+    {
+        <p>@error.Name: @error.Message</p>
+    }
+}
+
+<Card>
+    <CardHeader>
+        Dodaj Użytkownika
+    </CardHeader>
+    <CardBody>
+        <Field>
+            <FieldLabel>Imię</FieldLabel>
+            <TextEdit @bind-Text="Form.GivenName" />
+        </Field>
+        <Field>
+            <FieldLabel>Nazwisko</FieldLabel>
+            <TextEdit @bind-Text="Form.Surname" />
+        </Field>
+        <Field>
+            <FieldLabel>Nazwa użytkownika</FieldLabel>
+            <TextEdit @bind-Text="Form.Username" />
+        </Field>
+        <Field>
+            <FieldLabel>Hasło</FieldLabel>
+            <TextEdit @bind-Text="Form.Password" />
+        </Field>
+
+    </CardBody>
+    <CardFooter>
+        <Button Color="Color.Primary" @onclick="Save">Zapisz</Button>
+    </CardFooter>
+</Card>
+
+@code {
+    private FormModel Form = new FormModel();
+
+    private async Task Save()
+    {
+        var result = await Processes.Post(Form);
+
+        if (result.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("users");
+        }
+    }
+}

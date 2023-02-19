@@ -29,6 +29,7 @@ public class CustomMessageHandler : DelegatingHandler
         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             // TODO: refreshing token
+            await _localStorage.RemoveItemAsync("token");
             _navigationManager.NavigateTo("login");
         }
 
