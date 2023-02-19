@@ -1,0 +1,44 @@
+﻿@page "/login"
+@using Blazored.LocalStorage;
+@using Prodex.Client.RestClients;
+@using Prodex.Client.Services.Auth;
+@using Prodex.Shared.Models.Auth;
+@using System.Text.Json;
+@inject AuthClient Auth
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthProvider
+@layout AuthLayout
+
+<Card>
+    <CardBody>
+        <Field>
+            <FieldLabel>Login</FieldLabel>
+            <TextEdit @bind-Text="Form.Username" @onsubmit="LoginClick" />
+        </Field>
+
+        <Field>
+            <FieldLabel>Hasło</FieldLabel>
+            <TextEdit @bind-Text="Form.Password" @onsubmit="LoginClick"/>
+        </Field>
+        <Button Color="Color.Primary" @onclick="LoginClick">Zaloguj</Button>
+    </CardBody>
+</Card>
+
+@code {
+
+    private LoginModel Form = new LoginModel();
+
+    private async Task LoginClick()
+    {
+        var result = await Auth.Post(Form);
+
+        if (result.IsSuccessStatusCode)
+        {
+            var token = await result.Content.ReadAsStringAsync();
+            await LocalStorage.SetItemAsStringAsync("token", result.Result.Token);
+            ((CustomAuthenticationStateProvider)AuthProvider).NotifyAuthStateChanged();
+            Navigation.NavigateTo("processes");
+        }
+    }
+}

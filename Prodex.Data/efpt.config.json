@@ -17,6 +17,10 @@
       {
          "Name": "[dbo].[Processes]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Users]",
+         "ObjectType": 0
       }
    ],
    "UiHint": "DESKTOP-02VRDT7.Prodex",

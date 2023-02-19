@@ -47,7 +47,7 @@ public class ValidationFilter : IEndpointFilter
         var errors = new ValidationErrors(context.Arguments.OfType<FormBaseModel>().SelectMany(p => p.Validate(null).Errors));
 
         return errors.HasErrors ?
-            ValueTask.FromResult((object)Results.BadRequest(errors)) : 
+            ValueTask.FromResult((object)Results.BadRequest(errors)) : // TODO: change returning status code to 422
             next(context);
     }
 }

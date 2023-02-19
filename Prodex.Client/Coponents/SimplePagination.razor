@@ -1,0 +1,60 @@
+﻿@using Prodex.Shared.Pagination;
+
+<Div Flex="Flex.Row.JustifyContent.Between">
+    <Div>
+    <Pagination Style="margin-bottom: 0">
+        <PaginationItem Disabled="Pager.PageIndex == 1" @onclick="() => ChangePage(-1)">
+            <PaginationLink>
+                <span aria-hidden="true">«</span>
+            </PaginationLink>
+        </PaginationItem>
+            @for (var i = 1; i <= Pager.TotalPages; i++)
+            {
+                var pageNumberAsString = i.ToString();
+                int localVar = i;
+                <PaginationItem @key="pageNumberAsString" Active="Pager.PageIndex == localVar">
+                    <PaginationLink Page="@pageNumberAsString" Clicked="() => SetPage(localVar)">
+                        @pageNumberAsString
+                    </PaginationLink>
+                </PaginationItem>
+            }
+        <PaginationItem Disabled="Pager.PageIndex == Pager.TotalPages" @onclick="() => ChangePage(1)">
+            <PaginationLink>
+                <span aria-hidden="true">»</span>
+            </PaginationLink>
+        </PaginationItem>
+    </Pagination>
+    </Div>
+    <Div>
+    <Select TValue="int" SelectedValue="@Pager.PageSize" SelectedValueChanged="PageSizeChanged">
+        <SelectItem Value="10">10</SelectItem>
+        <SelectItem Value="20">20</SelectItem>
+        <SelectItem Value="50">50</SelectItem>
+        <SelectItem Value="100">100</SelectItem>
+    </Select>
+    </Div>
+</Div>
+
+@code {
+
+    [Parameter] public EventCallback LoadData { get; set; }
+    [Parameter] public Pager Pager { get; set; }
+    
+    private async Task ChangePage(int val)
+    {
+        Pager.PageIndex += val;
+        await LoadData.InvokeAsync();
+    }
+
+    private async Task SetPage(int val)
+    {
+        Pager.PageIndex = val;
+        await LoadData.InvokeAsync();
+    }
+
+    private async Task PageSizeChanged(int val)
+    {
+        Pager.PageSize = val;
+        await LoadData.InvokeAsync();
+    }
+}

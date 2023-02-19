@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Prodex.Shared.Pagination;
 
-namespace Prodex.Server.Requests
+namespace Prodex.Bussines.Requests
 {
     public class GetListRequest<TFilter, TItem> : IRequest<Pagination<TItem>>
     {

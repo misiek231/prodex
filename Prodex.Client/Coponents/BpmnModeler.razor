@@ -1,9 +1,6 @@
 ﻿@inject IJSRuntime _js
 
-<h3>BpmnModeler</h3>
-
-
-<div id="bpmn-canvas"></div>
+<Div id="bpmn-canvas"></Div>
 
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -20,7 +17,7 @@
 <style>
 
     #bpmn-canvas{
-        height: 600px;
+        height: 500px;
         border: 1px solid black;
     }
 

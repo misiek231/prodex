@@ -1,17 +1,49 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.LocalStorage;
+@using Microsoft.AspNetCore.Authorization;
+@using Prodex.Client.Coponents
+@using Prodex.Client.Services.Auth;
+@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager Navigation
+@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<AuthorizeView>
+    <Authorized>
+        <Layout Sider>
+            <LayoutSider>
+                <LayoutSiderContent>
+                    <NavMenu />
+                </LayoutSiderContent>
+            </LayoutSider>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+            <Layout>
+                <LayoutHeader Fixed>
+                    <Bar Breakpoint="Breakpoint.Desktop" Background="Background.White" Shadow="Shadow.Default" ThemeContrast="ThemeContrast.Light">
+                        <BarEnd>
+                            <BarItem>
+                                <BarLink @onclick="LogoutClick">Wyloguj</BarLink>
+                            </BarItem>
+                        </BarEnd>
+                    </Bar>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+                </LayoutHeader>
+                <LayoutContent Padding="Padding.Is4">
+                    @Body
+                </LayoutContent>
+            </Layout>
+        </Layout>
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+
+    private async Task LogoutClick()
+    {
+        await LocalStorage.RemoveItemAsync("token");
+        ((CustomAuthenticationStateProvider)AuthProvider).NotifyAuthStateChanged();
+        Navigation.NavigateTo("login");
+    }
+}

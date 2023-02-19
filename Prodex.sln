@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Shared", "Prodex.Sha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Data", "Prodex.Data\Prodex.Data.csproj", "{0FB3958B-17F6-468A-AAAF-0B4CA5A073B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prodex.Bussines", "Prodex.Bussines\Prodex.Bussines.csproj", "{2EB479BF-6398-4494-BC21-BA487BF74A32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Bussines", "Prodex.Bussines\Prodex.Bussines.csproj", "{2EB479BF-6398-4494-BC21-BA487BF74A32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prodex.ClientGenerator", "Prodex.ClientGenerator\Prodex.ClientGenerator.csproj", "{7F175AE4-9A00-4627-A19E-B64D4FFAF032}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.ClientGenerator", "Prodex.ClientGenerator\Prodex.ClientGenerator.csproj", "{7F175AE4-9A00-4627-A19E-B64D4FFAF032}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

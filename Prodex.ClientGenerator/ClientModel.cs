@@ -37,8 +37,8 @@ namespace Prodex.ClientGenerator
             Method = method;
             MethodName = name ?? method.FirstLetterUpper();
             Route = item.RoutePattern.RawText;
-            ReturnType = method == "POST" ? "System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage>" : methodInfo.ReturnParameter.ToString().FixTypeDefinition();
             ResponseType = methodInfo.ReturnParameter.ToString().FixTypeDefinition().RemoveTask();
+            ReturnType = method == "POST" ? $"System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<{ResponseType}>>" : methodInfo.ReturnParameter.ToString().FixTypeDefinition();
             Parameters = parameteters.Where(p => p.ParameterType.Assembly == typeof(FilterModel).Assembly)
                     .Select(p => new Parameter(p)).ToList();
             Validate = parameteters.Where(p => p.ParameterType.IsAssignableTo(typeof(FormBaseModel))).Any();

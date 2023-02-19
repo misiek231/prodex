@@ -6,9 +6,6 @@
 @inject NavigationManager Navigation
 @inject ProcessesClient Processes
 
-
-<h3>ProcessesAdd</h3>
-
 @if (Form.HasErrors)
 {
     @foreach(var error in Form.Errors)
@@ -17,13 +14,23 @@
     }
 }
 
+<Card>
+    <CardHeader>
+        Dodaj Proces
+    </CardHeader>
+    <CardBody>
+        <Field>
+            <FieldLabel>Nazwa</FieldLabel>
+            <TextEdit @bind-Text="Form.Name" />
+        </Field>
 
-<label for="name">Nazwa</label><br />
-<input id="name" type="text" @bind="Form.Name"/>
+        <BpmnModeler @ref="modeler"></BpmnModeler>
 
-<BpmnModeler @ref="modeler"></BpmnModeler>
-
-<button class="btn-primary mt-3" @onclick="Save">Zapisz</button>
+    </CardBody>
+    <CardFooter>
+        <Button Color="Color.Primary" @onclick="Save">Zapisz</Button>
+    </CardFooter>
+</Card>
 
 @code {
     private FormModel Form = new FormModel();

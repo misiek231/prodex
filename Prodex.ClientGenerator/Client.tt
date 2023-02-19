@@ -28,9 +28,11 @@ public class <#=Model.Name#>Client
 <# if(item.Method == "POST") { #>
 <# if(item.Validate) { #>
         if (model.Validate(null).HasErrors)
-            return new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            return new Prodex.Client.RestClients.HttpResponseMessage<<#=item.ResponseType#>>(System.Net.HttpStatusCode.BadRequest);
 <# } #>        
-        var result = await client.PostAsJsonAsync("<#=item.Route#>", model);
+        var result = new Prodex.Client.RestClients.HttpResponseMessage<<#=item.ResponseType#>>(await client.PostAsJsonAsync("<#=item.Route#>", model));
+
+        await result.InitResultAsync();
 
         if (result.StatusCode == HttpStatusCode.BadRequest)
         {

@@ -6,9 +6,9 @@ public class Pagination<T>
 
     public int TotalRows { get; set; }
 
-    public Pagination(IEnumerable<T> items)
+    public Pagination(IEnumerable<T> items, int totalRows)
     {
         Items = items;
-        TotalRows = Items.Count();
+        TotalRows = totalRows;
     }
 }

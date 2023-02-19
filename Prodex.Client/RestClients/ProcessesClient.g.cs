@@ -27,12 +27,14 @@ public class ProcessesClient
         return await client.GetFromJsonAsync<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Processes.ListItemModel>>("api/processes/", TypeMerger.TypeMerger.Merge(pager, model));
     }
     
-    public async System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> Post(Prodex.Shared.Models.Processes.FormModel model)
+    public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Post(Prodex.Shared.Models.Processes.FormModel model)
     {
         if (model.Validate(null).HasErrors)
-            return new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            return new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(System.Net.HttpStatusCode.BadRequest);
         
-        var result = await client.PostAsJsonAsync("api/processes/", model);
+        var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(await client.PostAsJsonAsync("api/processes/", model));
+
+        await result.InitResultAsync();
 
         if (result.StatusCode == HttpStatusCode.BadRequest)
         {

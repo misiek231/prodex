@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using FluentMigrator.Runner;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Prodex.Bussines.Handlers.Processes;
+using Prodex.Bussines.Services;
 using Prodex.Data;
 using Prodex.Server.MinimalApiExtensions;
 using Prodex.Shared.Models.Processes;
+using System.Text;
 
 namespace Prodex.Server
 {
@@ -19,14 +23,37 @@ namespace Prodex.Server
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             // Todo: Register handlers in better way
-            builder.Services.AddMediatR(typeof(Program).Assembly, typeof(FilterModel).Assembly, typeof(CreateHandler).Assembly);
+            builder.Services.AddMediatR(typeof(Program).Assembly, typeof(FilterModel).Assembly, typeof(LoginHandler).Assembly);
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            builder.Services.AddScoped<PasswordHasher>();
 
             builder.Services.AddFluentMigratorCore()
                 .ConfigureRunner(o => o.AddSqlServer()
                                        .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DefaultConnection"))
                                        .ScanIn(typeof(DataContext).Assembly).For.Migrations());
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true
+                };
+            });
+
+            builder.Services.AddAuthorization();
 
             builder.Services.AddEndpointDefinitions();
         }
@@ -52,6 +79,9 @@ namespace Prodex.Server
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpointDefinitions("api");
 

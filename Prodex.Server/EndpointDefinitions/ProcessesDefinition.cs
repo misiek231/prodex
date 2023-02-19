@@ -2,7 +2,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Prodex.Bussines.Requests;
 using Prodex.Server.MinimalApiExtensions;
-using Prodex.Server.Requests;
 using Prodex.Shared.Models.Processes;
 using Prodex.Shared.Pagination;
 
@@ -15,8 +14,10 @@ public class ProcessesDefinition : IEndpointDefinition
     public void DefineEndpoints(RouteGroupBuilder group)
     {
         group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) => 
-            await mediator.Send(new GetListRequest<FilterModel, ListItemModel>(pager, model)));
+            await mediator.Send(new GetListRequest<FilterModel, ListItemModel>(pager, model)))
+            .RequireAuthorization();
 
-        group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new CreateRequest<FormModel, object>(model)));
+        group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new CreateRequest<FormModel, object>(model)))
+            .RequireAuthorization();
     }
 }
