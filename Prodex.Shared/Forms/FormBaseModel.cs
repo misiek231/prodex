@@ -1,4 +1,5 @@
-﻿using Prodex.Shared.Models.Processes;
+﻿using Blazorise;
+using Prodex.Shared.Models.Processes;
 using Prodex.Shared.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
@@ -20,6 +21,9 @@ namespace Prodex.Shared.Forms
         [JsonIgnore]
         public bool HasErrors => _errors != null && _errors.HasErrors;
 
+        [JsonIgnore]
+        public Validations Validations;
+
         public abstract void Rules(ValidationContext validationContext, FluentValidator<T> model);
 
         public void WithErrors(string errors)
@@ -31,6 +35,16 @@ namespace Prodex.Shared.Forms
             _errors = JsonSerializer.Deserialize<ValidationErrors>(errors, options);
         }
 
+        public void Status(ValidatorEventArgs a, string propName)
+        {
+            a.Status = _errors?.Errors.Any(p => p.Name.Equals(propName, StringComparison.OrdinalIgnoreCase)) == true ? ValidationStatus.Error : ValidationStatus.Success;
+        }
+        
+        public string Message(string propName)
+        {
+            return _errors?.Errors.Single(p => p.Name.Equals(propName, StringComparison.OrdinalIgnoreCase)).Message;
+        }
+
         public void ClearErrors()
         {
             _errors = null;
@@ -39,13 +53,11 @@ namespace Prodex.Shared.Forms
         public override sealed ValidationErrors Validate(ValidationContext validationContext)
         {
             ClearErrors();
-
             var validator = new FluentValidator<T>();
-
             Rules(validationContext, validator);
-
             _errors = new ValidationErrors(validator.Validate(this as T).Errors);
 
+            Validations?.ValidateAll();
             return _errors;
         }
     }

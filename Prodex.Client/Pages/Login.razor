@@ -12,15 +12,30 @@
 
 <Card>
     <CardBody>
-        <Field>
-            <FieldLabel>Login</FieldLabel>
-            <TextEdit @bind-Text="Form.Username" @onsubmit="LoginClick" />
-        </Field>
+        <Blazorise.ValidationSummary Errors="Err" />
+        <Validations @ref="Form.Validations" Mode="ValidationMode.Manual">
+            <Validation Validator="(a) => Form.Status(a, nameof(Form.Username))" >
+                <Field>
+                    <FieldLabel>Login</FieldLabel>
+                    <TextEdit @bind-Text="Form.Username" @onsubmit="LoginClick">
+                        <Feedback>
+                            <ValidationError>@Form.Message(nameof(Form.Username))</ValidationError>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
 
-        <Field>
-            <FieldLabel>Hasło</FieldLabel>
-            <TextEdit @bind-Text="Form.Password" @onsubmit="LoginClick"/>
-        </Field>
+            <Validation Validator="(a) => Form.Status(a, nameof(Form.Password))">
+                <Field>
+                    <FieldLabel>Hasło</FieldLabel>
+                    <TextEdit Role="TextRole.Password" @bind-Text="Form.Password" @onsubmit="LoginClick">
+                        <Feedback>
+                            <ValidationError>@Form.Message(nameof(Form.Password))</ValidationError>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+        </Validations>
         <Button Color="Color.Primary" @onclick="LoginClick">Zaloguj</Button>
     </CardBody>
 </Card>
@@ -28,17 +43,25 @@
 @code {
 
     private LoginModel Form = new LoginModel();
+    private string[] Err; // TODO: return this message from backend
 
     private async Task LoginClick()
     {
+        Err = null;
         var result = await Auth.Post(Form);
 
         if (result.IsSuccessStatusCode)
         {
+            if (result?.Result?.Token == null) {
+                Err = new string[] { "Nieprawidłowy login lub hasło" };
+                return;
+            }
+
             var token = await result.Content.ReadAsStringAsync();
             await LocalStorage.SetItemAsStringAsync("token", result.Result.Token);
             ((CustomAuthenticationStateProvider)AuthProvider).NotifyAuthStateChanged();
             Navigation.NavigateTo("");
         }
+        else Err = null;
     }
 }

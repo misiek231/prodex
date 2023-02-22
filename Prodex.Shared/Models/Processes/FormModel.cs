@@ -1,4 +1,5 @@
-﻿using Prodex.Shared.Forms;
+﻿using FluentValidation;
+using Prodex.Shared.Forms;
 using Prodex.Shared.Validation;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,6 +12,6 @@ public class FormModel : FormBaseModel<FormModel>
 
     public override void Rules(ValidationContext validationContext, FluentValidator<FormModel> model)
     {
-        model.RuleFor(p => p.Name).LengthCheck(60);
+        model.RuleFor(p => p.Name).NotEmpty().LengthCheck(60);
     }
 }

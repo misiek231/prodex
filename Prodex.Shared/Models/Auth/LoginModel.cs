@@ -12,8 +12,8 @@ namespace Prodex.Shared.Models.Auth
 
         public override void Rules(ValidationContext validationContext, FluentValidator<LoginModel> model)
         {
-            model.RuleFor(p => p.Username).NotEmpty();
-            model.RuleFor(p => p.Password).NotEmpty();
+            model.RuleFor(p => p.Username).NotEmpty().WithMessage("Pole jest wymagane");
+            model.RuleFor(p => p.Password).NotEmpty().WithMessage("Pole jest wymagane");
         }
     }
 }

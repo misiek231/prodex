@@ -6,24 +6,24 @@
 @inject NavigationManager Navigation
 @inject ProcessesClient Processes
 
-@if (Form.HasErrors)
-{
-    @foreach(var error in Form.Errors)
-    {
-        <p>@error.Name: @error.Message</p>
-    }
-}
-
 <Card>
     <CardHeader>
         Dodaj Proces
     </CardHeader>
     <CardBody>
-        <Field>
-            <FieldLabel>Nazwa</FieldLabel>
-            <TextEdit @bind-Text="Form.Name" />
-        </Field>
-
+        
+        <Validations @ref="Form.Validations" Mode="ValidationMode.Manual" >
+            <Validation Validator="(a) => Form.Status(a, nameof(Form.Name))">
+                <Field>
+                    <FieldLabel>Nazwa</FieldLabel>
+                    <TextEdit @bind-Text="Form.Name">
+                        <Feedback>
+                            <ValidationError>@Form.Message(nameof(Form.Name))</ValidationError>
+                        </Feedback>
+                    </TextEdit>
+                </Field>
+            </Validation>
+        </Validations>
         <BpmnModeler @ref="modeler"></BpmnModeler>
 
     </CardBody>
