@@ -1,0 +1,22 @@
+﻿[
+  {
+    "name": "Dashboard",
+    "route": "",
+    "icon": "fa-chart-line"
+  },
+  {
+    "name": "Użytkownicy",
+    "route": "users",
+    "icon": "fa-user"
+  },
+  {
+    "name": "Produkty",
+    "route": "fetchdata",
+    "icon": "fa-desktop"
+  },
+  {
+    "name": "Procesy",
+    "route": "processes",
+    "icon": "fa-microchip"
+  }
+]

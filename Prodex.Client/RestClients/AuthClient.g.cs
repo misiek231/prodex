@@ -22,7 +22,12 @@ public class AuthClient
         this.client = client;
     }
     
-    public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<Prodex.Shared.Models.Auth.TokenModel>> Post(Prodex.Shared.Models.Auth.LoginModel model)
+    public async System.Threading.Tasks.Task<Prodex.Shared.Models.Sitemap.SitemapModel> Sitemap()
+    {
+        return await client.GetFromJsonAsync<Prodex.Shared.Models.Sitemap.SitemapModel>("api/auth/sitemap");
+    }
+    
+    public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<Prodex.Shared.Models.Auth.TokenModel>> Login(Prodex.Shared.Models.Auth.LoginModel model)
     {
         if (model.Validate(null).HasErrors)
             return new Prodex.Client.RestClients.HttpResponseMessage<Prodex.Shared.Models.Auth.TokenModel>(System.Net.HttpStatusCode.BadRequest);

@@ -48,7 +48,7 @@
     private async Task LoginClick()
     {
         Err = null;
-        var result = await Auth.Post(Form);
+        var result = await Auth.Login(Form);
 
         if (result.IsSuccessStatusCode)
         {

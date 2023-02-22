@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Prodex.Bussines.Handlers.Processes;
 using Prodex.Bussines.Services;
+using Prodex.Bussines.Sitemap;
 using Prodex.Data;
 using Prodex.Server.MinimalApiExtensions;
 using Prodex.Shared.Models.Processes;
@@ -23,7 +24,7 @@ namespace Prodex.Server
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             // Todo: Register handlers in better way
-            builder.Services.AddMediatR(typeof(Program).Assembly, typeof(FilterModel).Assembly, typeof(LoginHandler).Assembly);
+            builder.Services.AddMediatR(typeof(Program).Assembly, typeof(FilterModel).Assembly, typeof(LoginHandler).Assembly, typeof(SitemapHandler).Assembly);
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
