@@ -1,0 +1,48 @@
+﻿@using Prodex.Shared.Forms;
+@using System.Linq.Expressions;
+@using System.Reflection;
+@using System.ComponentModel;
+@typeparam TForm where TForm : FormBaseModel
+
+<Validation Validator="(a) => Form.Status(a, GetProp().Name)">
+    <Field>
+        <FieldLabel>@GetLabel()</FieldLabel>
+        <TextEdit Text="@Property.Compile()(Form)" TextChanged="TextChanged" Role="Role">
+            <Feedback>
+                <ValidationError>@Form.Message(GetProp().Name)</ValidationError>
+            </Feedback>
+        </TextEdit>
+    </Field>
+</Validation>
+
+@code {
+
+    [CascadingParameter]
+    public TForm Form { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public TextRole Role { get; set; }
+
+    [Parameter]
+    public Expression<Func<TForm, string>> Property { get; set; }
+
+    private string GetLabel()
+    {
+        if (!string.IsNullOrEmpty(Label)) return Label;
+
+        return GetProp().GetCustomAttribute<DescriptionAttribute>()?.Description ?? "";
+    }
+
+    private PropertyInfo GetProp()
+    {
+        return (Property.Body as MemberExpression).Member as PropertyInfo;
+    }
+
+    private void TextChanged(string newValue)
+    {
+        GetProp().SetValue(Form, newValue);
+    }
+}

@@ -1,4 +1,4 @@
-﻿@page "/users/add"
+﻿@page "/administration/users/add"
 @using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.Users;
 @using System.Net;
@@ -10,48 +10,12 @@
         Dodaj Użytkownika
     </CardHeader>
     <CardBody>
-        <Validations @ref="Form.Validations" Mode="ValidationMode.Manual" >
-            <Validation Validator="(a) => Form.Status(a, nameof(Form.GivenName))">
-                <Field>
-                    <FieldLabel>Imię</FieldLabel>
-                    <TextEdit @bind-Text="Form.GivenName">
-                        <Feedback>
-                            <ValidationError>@Form.Message(nameof(Form.GivenName))</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-            </Validation>
-            <Validation Validator="(a) => Form.Status(a, nameof(Form.Surname))">
-                <Field>
-                    <FieldLabel>Nazwisko</FieldLabel>
-                    <TextEdit @bind-Text="Form.Surname">
-                        <Feedback>
-                            <ValidationError>@Form.Message(nameof(Form.Surname))</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-            </Validation>
-            <Validation Validator="(a) => Form.Status(a, nameof(Form.Username))">
-                <Field>
-                    <FieldLabel>Nazwa użytkownika</FieldLabel>
-                    <TextEdit @bind-Text="Form.Username">
-                        <Feedback>
-                            <ValidationError>@Form.Message(nameof(Form.Username))</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-            </Validation>
-            <Validation Validator="(a) => Form.Status(a, nameof(Form.Password))">
-                <Field>
-                    <FieldLabel>Hasło</FieldLabel>
-                    <TextEdit Role="TextRole.Password" @bind-Text="Form.Password">
-                        <Feedback>
-                            <ValidationError>@Form.Message(nameof(Form.Password))</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-            </Validation>
-        </Validations>
+        <FormWrapper Form="Form">
+            <FormInput Property="p => p.GivenName" />
+            <FormInput Property="p => p.Surname" />
+            <FormInput Property="p => p.Username" />
+            <FormInput Property="p => p.Password" Role="TextRole.Password" />
+        </FormWrapper>
     </CardBody>
     <CardFooter>
         <Button Color="Color.Primary" @onclick="Save">Zapisz</Button>

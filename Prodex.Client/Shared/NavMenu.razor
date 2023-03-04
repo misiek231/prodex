@@ -1,6 +1,4 @@
-﻿@using Prodex.Client.RestClients;
-@using Prodex.Shared.Models.Sitemap;
-@inject AuthClient Auth
+﻿@using Prodex.Shared.Models.Sitemap;
 
 <Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet" ThemeContrast="ThemeContrast.Dark"
      Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small">
@@ -12,18 +10,32 @@
     </BarBrand>
         <BarMenu>
         <BarStart>
-            @if(Loading)
-            {
-                <p>Loading...</p>
-            }
-            else
-            @foreach(var node in Sitemap.Nodes)
+            @foreach (var node in Sitemap.Nodes)
             {
                 <BarItem>
-                    <BarLink To="@node.Route">
-                        <BarIcon IconName="@node.Icon" />
-                        @node.Name
-                    </BarLink>
+
+                    @if (node.HasVisibleChildren)
+                    {
+                        <BarDropdown>
+                            <BarDropdownToggle>
+                                <BarIcon IconName="@node.Icon" />
+                                @node.Name
+                            </BarDropdownToggle>
+                            <BarDropdownMenu>
+                                @foreach (var node2 in node.Children)
+                                {
+                                    <BarDropdownItem To="@GetRoute(node.Route, node2.Route)">@node2.Name</BarDropdownItem>
+                                }
+                            </BarDropdownMenu>
+                        </BarDropdown>
+                    }
+                    else
+                    {
+                        <BarLink To="@node.Route">
+                            <BarIcon IconName="@node.Icon" />
+                            @node.Name
+                        </BarLink>
+                    }
                 </BarItem>
             }
         </BarStart>
@@ -31,13 +43,8 @@
 </Bar>
 
 @code{
-    public SitemapModel Sitemap;
-    public bool Loading = false;
+    [Parameter] public SitemapModel Sitemap { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        Loading = true;
-        Sitemap = await Auth.Sitemap();
-        Loading = false;
-    }
+    public string GetRoute(string a, string b) => a + "/" + b;
+
 }

@@ -30,7 +30,8 @@ namespace Prodex.ClientGenerator
         public EndpointModel(RouteEndpoint item)
         {
             var methodInfo = item.Metadata.GetRequiredMetadata<MethodInfo>();
-            var name = item.RoutePattern.RawText.Split("/").ElementAtOrDefault(2)?.FirstLetterUpper();
+            var name = item.RoutePattern.RawText.Split("/").ElementAtOrDefault(2);
+            name = !string.IsNullOrEmpty(name) ? name.FirstLetterUpper() : null;
             var method = item.Metadata.GetRequiredMetadata<HttpMethodMetadata>().HttpMethods[0];
             var parameteters = item.Metadata.GetRequiredMetadata<MethodInfo>().GetParameters();
 

@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace Prodex.Data.Models;
 
-public partial class Process
+public partial class Product
 {
     public long Id { get; set; }
 
     public string Name { get; set; }
 
-    public string Xml { get; set; }
+    public long ProcessId { get; set; }
 
-    public virtual ICollection<Product> Products { get; } = new List<Product>();
+    public virtual Process Process { get; set; }
 }

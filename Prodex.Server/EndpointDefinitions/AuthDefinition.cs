@@ -22,7 +22,7 @@ public class AuthDefinition : IEndpointDefinition
             path = Path.Combine(path, "sitemap.json");
 
             return await mediator.Send(new GetSitemapRequest(path));
-        });
+        }).RequireAuthorization();
         group.MapPost("login", async (IMediator mediator, [FromBody] LoginModel model) => await mediator.Send(new CreateRequest<LoginModel, TokenModel>(model)));
     }
 }

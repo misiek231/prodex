@@ -13,29 +13,10 @@
 <Card>
     <CardBody>
         <Blazorise.ValidationSummary Errors="Err" />
-        <Validations @ref="Form.Validations" Mode="ValidationMode.Manual">
-            <Validation Validator="(a) => Form.Status(a, nameof(Form.Username))" >
-                <Field>
-                    <FieldLabel>Login</FieldLabel>
-                    <TextEdit @bind-Text="Form.Username" @onsubmit="LoginClick">
-                        <Feedback>
-                            <ValidationError>@Form.Message(nameof(Form.Username))</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-            </Validation>
-
-            <Validation Validator="(a) => Form.Status(a, nameof(Form.Password))">
-                <Field>
-                    <FieldLabel>Hasło</FieldLabel>
-                    <TextEdit Role="TextRole.Password" @bind-Text="Form.Password" @onsubmit="LoginClick">
-                        <Feedback>
-                            <ValidationError>@Form.Message(nameof(Form.Password))</ValidationError>
-                        </Feedback>
-                    </TextEdit>
-                </Field>
-            </Validation>
-        </Validations>
+        <FormWrapper Form="Form">
+            <FormInput Property="p => p.Username"/>
+            <FormInput Property="p => p.Password" Role="TextRole.Password"/>
+        </FormWrapper>
         <Button Color="Color.Primary" @onclick="LoginClick">Zaloguj</Button>
     </CardBody>
 </Card>

@@ -5,18 +5,46 @@
     "icon": "fa-chart-line"
   },
   {
-    "name": "Użytkownicy",
-    "route": "users",
-    "icon": "fa-user"
+    "name": "Administracja",
+    "route": "administration",
+    "icon": "fa-chart-line",
+    "children": [
+      {
+        "name": "Użytkownicy",
+        "route": "users",
+        "icon": "fa-user",
+        "children": [
+          {
+            "name": "Dodaj Użytkownika",
+            "route": "add",
+            "icon": "",
+            "hidden": true
+          }
+        ]
+      }
+    ]
   },
   {
     "name": "Produkty",
-    "route": "fetchdata",
+    "route": "products",
+    "icon": "fa-desktop"
+  },
+  {
+    "name": "Produkcja",
+    "route": "production",
     "icon": "fa-desktop"
   },
   {
     "name": "Procesy",
     "route": "processes",
-    "icon": "fa-microchip"
+    "icon": "fa-microchip",
+    "children": [
+      {
+        "name": "Dodaj Proces",
+        "route": "add",
+        "icon": "",
+        "hidden": true
+      }
+    ]
   }
 ]

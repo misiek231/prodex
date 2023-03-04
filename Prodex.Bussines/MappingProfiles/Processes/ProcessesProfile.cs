@@ -11,6 +11,7 @@ public class ProcessesProfile : Profile
         CreateMap<Process, ListItemModel>();
 
         CreateMap<FormModel, Process>()
-            .ForMember(p => p.Id, o => o.Ignore());
+            .ForMember(p => p.Id, o => o.Ignore())
+            .ForMember(p => p.Products, o => o.Ignore());
     }
 }

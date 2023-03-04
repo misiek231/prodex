@@ -1,24 +1,51 @@
 ﻿@using Blazored.LocalStorage;
 @using Microsoft.AspNetCore.Authorization;
 @using Prodex.Client.Coponents
+@using Prodex.Client.RestClients;
 @using Prodex.Client.Services.Auth;
+@using Prodex.Shared.Models.Sitemap;
 @inject ILocalStorageService LocalStorage
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 @inherits LayoutComponentBase
+@inject AuthClient Auth
 
+
+@if (Loading)
+{
+    <p>Loading...</p> // TODO: nice loading page
+}
+else
+{
 <AuthorizeView>
     <Authorized>
         <Layout Sider>
             <LayoutSider>
                 <LayoutSiderContent>
-                    <NavMenu />
+                    <NavMenu Sitemap="Sitemap"/>
                 </LayoutSiderContent>
             </LayoutSider>
 
             <Layout>
                 <LayoutHeader Fixed>
                     <Bar Breakpoint="Breakpoint.Desktop" Background="Background.White" Shadow="Shadow.Default" ThemeContrast="ThemeContrast.Light">
+                        <BarStart>
+                            <Breadcrumb Margin="Margin.Is0" Padding="Padding.Is0" Background="Background.Transparent">
+                                @foreach (var item in BreadcrumbItems)
+                                {
+                                    <BreadcrumbItem Active="item.Active">
+                                        @if (!string.IsNullOrEmpty(item.Route))
+                                        {
+                                            <BreadcrumbLink To="@item.Route">@item.Name</BreadcrumbLink>
+                                        }
+                                        else
+                                        {
+                                            @item.Name
+                                        }
+                                    </BreadcrumbItem>
+                                }
+                            </Breadcrumb>
+                        </BarStart>
                         <BarEnd>
                             <BarItem>
                                 <BarLink @onclick="LogoutClick">Wyloguj</BarLink>
@@ -27,7 +54,7 @@
                     </Bar>
 
                 </LayoutHeader>
-                <LayoutContent Padding="Padding.Is4">
+                <LayoutContent Padding="Padding.Is3">
                     @Body
                 </LayoutContent>
             </Layout>
@@ -37,8 +64,37 @@
         <RedirectToLogin />
     </NotAuthorized>
 </AuthorizeView>
-
+}
 @code{
+    public SitemapModel Sitemap { get; set; }
+    public bool Loading = false;
+    List<BreadcrumbItemModel> BreadcrumbItems;
+
+    protected override void OnParametersSet()
+    {
+        var route = Navigation.ToBaseRelativePath(Navigation.Uri);
+        var result = Sitemap?.Breadcrumb(route);
+
+        if(result != null)
+        {
+            BreadcrumbItems = result;
+            return;
+        }
+
+        BreadcrumbItems = new List<BreadcrumbItemModel>();
+
+        // Navigation.NavigateTo(""); // TODO: navigate to unknown route page, Navigation is not working
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Loading = true;
+        try
+        {
+            Sitemap = await Auth.Sitemap();
+        } catch { }
+        Loading = false;
+    }
 
     private async Task LogoutClick()
     {

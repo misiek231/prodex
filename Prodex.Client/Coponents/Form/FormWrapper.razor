@@ -1,0 +1,21 @@
+﻿@using Prodex.Shared.Forms;
+@attribute [CascadingTypeParameter(nameof(TForm))]
+@typeparam TForm where TForm : FormBaseModel
+
+<Form>
+    <CascadingValue Value="@Form">
+        <Validations @ref="Form.Validations" Mode="ValidationMode.Manual" >
+            @ChildContent
+        </Validations>
+    </CascadingValue>
+</Form>
+
+@code {
+
+    [Parameter]
+    public TForm Form { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+}

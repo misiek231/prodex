@@ -1,23 +1,20 @@
-﻿@page "/processes/add"
+﻿@page "/products/add"
 @using Prodex.Client.Coponents
+@using Prodex.Client.Coponents.Form
 @using Prodex.Client.RestClients;
-@using Prodex.Shared.Models.Processes;
+@using Prodex.Shared.Models.Products;
 @using System.Net;
 @inject NavigationManager Navigation
-@inject ProcessesClient Processes
+@inject ProductsClient Products
 
 <Card>
     <CardHeader>
-        Dodaj Proces
+        Dodaj Produkt
     </CardHeader>
     <CardBody>
-        
         <FormWrapper Form="Form">
-            <FormInput Property="p => p.Name"></FormInput>
+            <FormInput Property="p => p.Name" />
         </FormWrapper>
-
-        <BpmnModeler @ref="modeler"></BpmnModeler>
-
     </CardBody>
     <CardFooter>
         <Button Color="Color.Primary" @onclick="Save">Zapisz</Button>
@@ -27,17 +24,13 @@
 @code {
     private FormModel Form = new FormModel();
 
-    private BpmnModeler modeler;
-
     private async Task Save()
     {
-        Form.Xml = await modeler.GetValueAsync();
-
-        var result = await Processes.Post(Form);
+        var result = await Products.Post(Form);
 
         if (result.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("processes");
+            Navigation.NavigateTo("products");
         }
     }
 }

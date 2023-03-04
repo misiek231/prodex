@@ -1,21 +1,19 @@
-﻿@page "/administration/users"
+﻿@page "/products"
 @using Microsoft.AspNetCore.Authorization;
 @using Prodex.Client.Coponents
 @using Prodex.Client.RestClients;
-@using Prodex.Shared.Models.Users;
+@using Prodex.Shared.Models.Products;
 @using Prodex.Shared.Pagination;
-@inject UsersClient Users
+@inject ProductsClient Products
 
 <Card>
     <CardHeader>
-        <Button Type="ButtonType.Link" To="administration/users/add" Color="Color.Primary">Dodaj</Button>
+        <Button Type="ButtonType.Link" To="products/add" Color="Color.Primary">Dodaj</Button>
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" Responsive>
             <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
-            <DataGridColumn Field="@nameof(ListItemModel.GivenName)" Caption="Imię" />
-            <DataGridColumn Field="@nameof(ListItemModel.Surname)" Caption="Nazwisko" />
-            <DataGridColumn Field="@nameof(ListItemModel.Username)" Caption="Nazwa użytkownika" />
+            <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
         </DataGrid>
     </CardBody>
     <CardFooter>
@@ -26,6 +24,7 @@
 @code {
     private List<ListItemModel> items = new List<ListItemModel>();
     private Pager pager = new Pager(1, 10);
+    private bool Loading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,9 +33,10 @@
 
     private async Task LoadData()
     {
+        Loading = true;
         try
         {
-            var result = await Users.Get(pager, new FilterModel());
+            var result = await Products.Get(pager, new FilterModel());
             items = result.Items.ToList();
             pager.TotalRows = result.TotalRows;
         }
@@ -44,5 +44,6 @@
         {
             // todo: find nice way to handle exceptions like that
         }
+        Loading = false;
     }
 }
