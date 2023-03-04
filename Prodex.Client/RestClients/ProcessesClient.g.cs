@@ -27,6 +27,11 @@ public class ProcessesClient
         return await client.GetFromJsonAsync<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Processes.ListItemModel>>("api/processes/", TypeMerger.TypeMerger.Merge(pager, model));
     }
     
+    public async System.Threading.Tasks.Task<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Utils.KeyValueResult>> Select(Prodex.Shared.Pagination.Pager pager, string search)
+    {
+        return await client.GetFromJsonAsync<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Utils.KeyValueResult>>("api/processes/select", TypeMerger.TypeMerger.Merge(pager, new { search }));
+    }
+    
     public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Post(Prodex.Shared.Models.Processes.FormModel model)
     {
         if (model.Validate(null).HasErrors)

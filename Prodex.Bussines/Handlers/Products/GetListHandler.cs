@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Prodex.Bussines.HandlersHelpers;
 using Prodex.Data;
 using Prodex.Data.Models;
@@ -16,7 +17,7 @@ namespace Prodex.Bussines.Handlers.Products
 
         public override IQueryable<Product> GetList(FilterModel filter, CancellationToken cancellationToken)
         {
-            return context.Products.AsQueryable();
+            return context.Products.Include(p => p.Process).AsQueryable();
         }
     }
 }

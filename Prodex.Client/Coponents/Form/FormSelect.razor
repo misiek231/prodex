@@ -1,0 +1,59 @@
+﻿@using Prodex.Shared.Forms;
+@using Prodex.Shared.Pagination;
+@using Prodex.Shared.Utils;
+@using Blazorise.Components
+@using System.Linq.Expressions;
+@using System.Reflection;
+@typeparam TForm where TForm : FormBaseModel
+
+<Autocomplete TItem="KeyValueResult"
+                TValue="long?"
+                Data="@Options"
+                ValueField="@(item => item.Key)"
+                TextField="@(item => item.Value)"
+                SelectedValue="@Property.Compile()(Form)"
+                SelectedValueChanged="ValueChanged"
+                ReadData="e => LoadData(e.SearchValue)"
+                Placeholder="Search..."
+                Validator="(a) => Form.Status(a, GetProp().Name)"
+                Debounce="true"
+                MinLength="0">
+    <NotFoundContent> Brak wyników </NotFoundContent>
+</Autocomplete>
+
+@code {
+
+    [CascadingParameter]
+    public TForm Form { get; set; }
+
+    [Parameter]
+    public Expression<Func<TForm, long?>> Property { get; set; }
+
+    [Parameter]
+    public Func<Pager, string, Task<Pagination<KeyValueResult>>> DataSource { get; set; }
+
+    private Pager pager = new Pager();
+
+    private List<KeyValueResult> Options { get; set; }
+    private long value;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData("");
+    }
+
+    private async Task LoadData(string search)
+    {
+        Options = (await DataSource(pager, search)).Items.ToList();
+    }
+
+    private void ValueChanged(long? newValue)
+    {
+        GetProp().SetValue(Form, newValue);
+    }
+
+    private PropertyInfo GetProp()
+    {
+        return (Property.Body as MemberExpression).Member as PropertyInfo;
+    }
+}

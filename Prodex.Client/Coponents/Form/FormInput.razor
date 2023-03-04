@@ -9,7 +9,7 @@
         <FieldLabel>@GetLabel()</FieldLabel>
         <TextEdit Text="@Property.Compile()(Form)" TextChanged="TextChanged" Role="Role">
             <Feedback>
-                <ValidationError>@Form.Message(GetProp().Name)</ValidationError>
+                <ValidationError />
             </Feedback>
         </TextEdit>
     </Field>

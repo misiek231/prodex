@@ -14,6 +14,7 @@
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" Responsive>
             <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
             <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
+            <DataGridColumn Field="Process.Value" Caption="Proces" Editable />
         </DataGrid>
     </CardBody>
     <CardFooter>

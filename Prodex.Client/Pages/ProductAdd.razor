@@ -4,8 +4,11 @@
 @using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.Products;
 @using System.Net;
+@using Prodex.Shared.Pagination;
+@using Prodex.Shared.Utils;
 @inject NavigationManager Navigation
 @inject ProductsClient Products
+@inject ProcessesClient Processes
 
 <Card>
     <CardHeader>
@@ -14,6 +17,7 @@
     <CardBody>
         <FormWrapper Form="Form">
             <FormInput Property="p => p.Name" />
+            <FormSelect DataSource="Processes.Select" Property="p => p.ProcessId" />
         </FormWrapper>
     </CardBody>
     <CardFooter>

@@ -26,6 +26,11 @@ namespace Prodex.Shared.Forms
         public void Status(ValidatorEventArgs a, string propName)
         {
             a.Status = _errors?.Errors.Any(p => p.Name.Equals(propName, StringComparison.OrdinalIgnoreCase)) == true ? ValidationStatus.Error : ValidationStatus.Success;
+            
+            if(a.Status == ValidationStatus.Error)
+            {
+                a.ErrorText = Message(propName);
+            }
         }
 
         public string Message(string propName)
