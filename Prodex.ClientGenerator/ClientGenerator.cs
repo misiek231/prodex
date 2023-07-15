@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.AspNetCore.Routing;
+using System.Text;
 
 namespace Prodex.ClientGenerator
 {
@@ -18,7 +19,7 @@ namespace Prodex.ClientGenerator
                     Model = model,
                 }.TransformText();
 
-                File.WriteAllText($"../Prodex.Client/RestClients/{model.Name}Client.g.cs", text);
+                File.WriteAllText($"../../../../Prodex.Client/RestClients/{model.Name}Client.g.cs", text);
             }
         }
     }
