@@ -8,22 +8,17 @@ using System.Collections.Generic;
 
 namespace Prodex.Data.Configurations
 {
-    public partial class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public partial class ProductTemplateConfiguration : IEntityTypeConfiguration<ProductTemplate>
     {
-        public void Configure(EntityTypeBuilder<Product> entity)
+        public void Configure(EntityTypeBuilder<ProductTemplate> entity)
         {
             entity.Property(e => e.Name)
             .IsRequired()
             .HasMaxLength(60);
 
-            entity.HasOne(d => d.Template).WithMany(p => p.Products)
-            .HasForeignKey(d => d.TemplateId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName("FK_Products_TemplateId_ProductTemplates_Id");
-
             OnConfigurePartial(entity);
         }
 
-        partial void OnConfigurePartial(EntityTypeBuilder<Product> entity);
+        partial void OnConfigurePartial(EntityTypeBuilder<ProductTemplate> entity);
     }
 }

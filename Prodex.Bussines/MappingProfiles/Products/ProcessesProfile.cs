@@ -9,11 +9,9 @@ public class ProcessesProfile : Profile
 {
     public ProcessesProfile()
     {
-        CreateMap<Product, ListItemModel>()
-            .ForMember(p => p.Process, o => o.MapFrom(k => new KeyValueResult(k.Process.Id, k.Process.Name)));
+        CreateMap<ProductTemplate, ListItemModel>();
 
-        CreateMap<FormModel, Product>()
-            .ForMember(p => p.Id, o => o.Ignore())
-            .ForMember(p => p.Process, o => o.Ignore());
+        CreateMap<FormModel, ProductTemplate>()
+            .ForMember(p => p.Id, o => o.Ignore());
     }
 }

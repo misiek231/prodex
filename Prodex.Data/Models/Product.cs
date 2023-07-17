@@ -11,7 +11,7 @@ public partial class Product
 
     public string Name { get; set; }
 
-    public long ProcessId { get; set; }
+    public long TemplateId { get; set; }
 
-    public virtual Process Process { get; set; }
+    public virtual ProductTemplate Template { get; set; }
 }

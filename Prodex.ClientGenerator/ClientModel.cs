@@ -2,6 +2,8 @@
 using Prodex.Shared.Forms;
 using Prodex.Shared.Models.Processes;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Prodex.ClientGenerator
 {
@@ -12,8 +14,24 @@ namespace Prodex.ClientGenerator
 
         public ClientModel(IGrouping<string, RouteEndpoint> group) 
         {
-            Name = group.Key.FirstLetterUpper();
+            Name = ConvertKebabCaseToPascalCase(group.Key);
             Endpoints = group.Select(item => new EndpointModel(item)).ToList();
+        }
+
+        public string ConvertKebabCaseToPascalCase(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            string pascalCaseString = Regex.Replace(input, "(^|-)([a-z])", match =>
+            {
+                string letter = match.Groups[2].Value;
+                return letter.ToUpper();
+            });
+
+            return pascalCaseString;
         }
     }
 

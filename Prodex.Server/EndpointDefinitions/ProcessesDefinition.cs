@@ -18,9 +18,9 @@ public class ProcessesDefinition : IEndpointDefinition
             await mediator.Send(new GetListRequest<FilterModel, ListItemModel>(pager, model)))
             .RequireAuthorization();
 
-        group.MapGet("select", async (IMediator mediator, [AsParameters] Pager pager, [FromQuery] string search) =>
+        /*group.MapGet("select", async (IMediator mediator, [AsParameters] Pager pager, [FromQuery] string search) =>
             await mediator.Send(new ProcessesSelect(pager, search)))
-            .RequireAuthorization();
+            .RequireAuthorization();*/
 
         group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new CreateRequest<FormModel, object>(model)))
             .RequireAuthorization();

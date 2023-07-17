@@ -3,19 +3,19 @@
 namespace Prodex.Data.Migrations
 {
     [Migration(4)]
-    public class AddPrductsTable : Migration
+    public class AddPrductTemplatesTable : Migration
     {
         public override void Up()
         {
-            Create.Table("Products")
+            Create.Table("ProductTemplates")
                 .WithColumn("Id").AsInt64().PrimaryKey().Identity()
                 .WithColumn("Name").AsString(60)
-                .WithColumn("ProcessId").AsInt64().ForeignKey("Processes", "Id").NotNullable();
+                .WithColumn("ProcessXml").AsString(8000).Nullable();
         }
 
         public override void Down()
         {
-            Delete.Table("Products");
+            Delete.Table("ProductTemplates");
         }
     }
 }

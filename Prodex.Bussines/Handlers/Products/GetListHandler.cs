@@ -15,9 +15,9 @@ namespace Prodex.Bussines.Handlers.Products
             this.context = context;
         }
 
-        public override IQueryable<Product> GetList(FilterModel filter, CancellationToken cancellationToken)
+        public override IQueryable<ProductTemplate> GetList(FilterModel filter, CancellationToken cancellationToken)
         {
-            return context.Products.Include(p => p.Process).AsQueryable();
+            return context.ProductTemplates.AsQueryable();
         }
     }
 }

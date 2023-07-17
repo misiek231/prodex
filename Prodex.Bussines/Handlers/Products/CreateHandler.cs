@@ -19,7 +19,7 @@ namespace Prodex.Bussines.Handlers.Products
 
         public override async Task<object> Create(FormModel form, CancellationToken cancellationToken)
         {
-            context.Products.Add(mapper.Map<Product>(form));
+            context.ProductTemplates.Add(mapper.Map<ProductTemplate>(form));
             await context.SaveChangesAsync(cancellationToken);
             return null; // Todo: return detils model
         }

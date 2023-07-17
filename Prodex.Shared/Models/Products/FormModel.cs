@@ -11,11 +11,11 @@ public class FormModel : FormBaseModel<FormModel>
     [Description("Nazwa")]
     public string Name { get; set; }
     [Description("Proces")]
-    public long? ProcessId { get; set; }
+    public string ProcessXml { get; set; }
 
     public override void Rules(ValidationContext validationContext, FluentValidator<FormModel> model)
     {
         model.RuleFor(p => p.Name).NotEmpty().LengthCheck(60);
-        model.RuleFor(p => p.ProcessId).NotNull();
+        model.RuleFor(p => p.ProcessXml).NotNull();
     }
 }

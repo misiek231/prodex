@@ -19,12 +19,15 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductTemplate> ProductTemplates { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
             modelBuilder.ApplyConfiguration(new Configurations.ProcessConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.ProductTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.UserConfiguration());
 
         OnModelCreatingPartial(modelBuilder);

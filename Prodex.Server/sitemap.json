@@ -25,9 +25,17 @@
     ]
   },
   {
-    "name": "Produkty",
-    "route": "products",
-    "icon": "fa-desktop"
+    "name": "Szablony produktów",
+    "route": "product-template",
+    "icon": "fa-desktop",
+    "children": [
+      {
+        "name": "Dodaj szablon",
+        "route": "add",
+        "icon": "",
+        "hidden": true
+      }
+    ]
   },
   {
     "name": "Produkcja",

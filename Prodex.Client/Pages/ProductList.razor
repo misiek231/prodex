@@ -1,4 +1,4 @@
-﻿@page "/products"
+﻿@page "/product-template"
 @using Microsoft.AspNetCore.Authorization;
 @using Prodex.Client.Coponents
 @using Prodex.Client.RestClients;
@@ -8,13 +8,13 @@
 
 <Card>
     <CardHeader>
-        <Button Type="ButtonType.Link" To="products/add" Color="Color.Primary">Dodaj</Button>
+        <Button Type="ButtonType.Link" To="product-template/add" Color="Color.Primary">Dodaj</Button>
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" Responsive>
             <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
             <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
-            <DataGridColumn Field="Process.Value" Caption="Proces" Editable />
+            <DataGridColumn Field="@nameof(ListItemModel.ProcessXml)" Caption="Proces" Editable />
         </DataGrid>
     </CardBody>
     <CardFooter>

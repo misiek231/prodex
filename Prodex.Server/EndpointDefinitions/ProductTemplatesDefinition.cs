@@ -7,17 +7,17 @@ using Prodex.Shared.Pagination;
 
 namespace Prodex.Server.Controllers;
 
-public class ProductsDefinition : IEndpointDefinition
+public class ProductTemplatesDefinition : IEndpointDefinition
 {
-    public string GroupName => "products";
+    public string GroupName => "product-templates";
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
-        /*group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) => 
+        group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) => 
             await mediator.Send(new GetListRequest<FilterModel, ListItemModel>(pager, model)))
             .RequireAuthorization();
 
         group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new CreateRequest<FormModel, object>(model)))
-            .RequireAuthorization();*/
+            .RequireAuthorization();
     }
 }
