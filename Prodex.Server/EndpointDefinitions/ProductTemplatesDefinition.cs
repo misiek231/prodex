@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Prodex.Bussines.Requests;
 using Prodex.Server.MinimalApiExtensions;
-using Prodex.Shared.Models.Products;
+using Prodex.Shared.Models.ProductTemplates;
 using Prodex.Shared.Pagination;
 
 namespace Prodex.Server.Controllers;

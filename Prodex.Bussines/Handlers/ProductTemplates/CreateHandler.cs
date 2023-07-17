@@ -2,9 +2,9 @@
 using Prodex.Bussines.HandlersHelpers;
 using Prodex.Data;
 using Prodex.Data.Models;
-using Prodex.Shared.Models.Products;
+using Prodex.Shared.Models.ProductTemplates;
 
-namespace Prodex.Bussines.Handlers.Products
+namespace Prodex.Bussines.Handlers.ProductTemplates
 {
     public class CreateHandler : BaseCreateHandler<FormModel, object>
     {
@@ -19,7 +19,7 @@ namespace Prodex.Bussines.Handlers.Products
 
         public override async Task<object> Create(FormModel form, CancellationToken cancellationToken)
         {
-            context.Products.Add(mapper.Map<Product>(form));
+            context.ProductTemplates.Add(mapper.Map<ProductTemplate>(form));
             await context.SaveChangesAsync(cancellationToken);
             return null; // Todo: return detils model
         }

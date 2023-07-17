@@ -1,20 +1,20 @@
-﻿@page "/product"
+﻿@page "/product-template"
 @using Microsoft.AspNetCore.Authorization;
 @using Prodex.Client.Coponents
 @using Prodex.Client.RestClients;
-@using Prodex.Shared.Models.Products;
+@using Prodex.Shared.Models.ProductTemplates;
 @using Prodex.Shared.Pagination;
-@inject ProductsClient Products
+@inject ProductTemplatesClient ProductTemplates
 
 <Card>
     <CardHeader>
-        <Button Type="ButtonType.Link" To="product/add" Color="Color.Primary">Dodaj</Button>
+        <Button Type="ButtonType.Link" To="product-template/add" Color="Color.Primary">Dodaj</Button>
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" Responsive>
             <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
             <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
-            <DataGridColumn Field="@nameof(ListItemModel.TemplateId)" Caption="TemplateId" Editable />
+            <DataGridColumn Field="@nameof(ListItemModel.ProcessXml)" Caption="ProcessXml" Editable />
         </DataGrid>
     </CardBody>
     <CardFooter>
@@ -37,7 +37,7 @@
         Loading = true;
         try
         {
-            var result = await Products.Get(pager, new FilterModel());
+            var result = await ProductTemplates.Get(pager, new FilterModel());
             items = result.Items.ToList();
             pager.TotalRows = result.TotalRows;
         }

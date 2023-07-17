@@ -15,12 +15,12 @@ namespace Prodex.Client.RestClients
         }
 
 
-        public async System.Threading.Tasks.Task<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Products.ListItemModel>> Get(Prodex.Shared.Pagination.Pager pager, Prodex.Shared.Models.Products.FilterModel model)
+        public async System.Threading.Tasks.Task<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.ProductTemplates.ListItemModel>> Get(Prodex.Shared.Pagination.Pager pager, Prodex.Shared.Models.ProductTemplates.FilterModel model)
         {
-            return await client.GetFromJsonAsync<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Products.ListItemModel>>("api/product-templates/", TypeMerger.TypeMerger.Merge(pager, model));
+            return await client.GetFromJsonAsync<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.ProductTemplates.ListItemModel>>("api/product-templates/", TypeMerger.TypeMerger.Merge(pager, model));
         }
 
-        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Post(Prodex.Shared.Models.Products.FormModel model)
+        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Post(Prodex.Shared.Models.ProductTemplates.FormModel model)
         {
             if (model.Validate(null).HasErrors)
                 return new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(System.Net.HttpStatusCode.BadRequest);

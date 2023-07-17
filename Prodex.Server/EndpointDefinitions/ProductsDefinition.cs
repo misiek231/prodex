@@ -13,11 +13,11 @@ public class ProductsDefinition : IEndpointDefinition
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
-        /*group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) => 
+        group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) => 
             await mediator.Send(new GetListRequest<FilterModel, ListItemModel>(pager, model)))
             .RequireAuthorization();
 
         group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new CreateRequest<FormModel, object>(model)))
-            .RequireAuthorization();*/
+            .RequireAuthorization();
     }
 }

@@ -4,18 +4,18 @@ using Prodex.Shared.Validation;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Prodex.Shared.Models.Products;
+namespace Prodex.Shared.Models.ProductTemplates;
 
 public class FormModel : FormBaseModel<FormModel>
 {
     [Description("Nazwa")]
     public string Name { get; set; }
-    [Description("Szablon")]
-    public long TemplateId { get; set; }
+    [Description("Proces")]
+    public string ProcessXml { get; set; }
 
     public override void Rules(ValidationContext validationContext, FluentValidator<FormModel> model)
     {
         model.RuleFor(p => p.Name).NotEmpty().LengthCheck(60);
-        model.RuleFor(p => p.TemplateId).NotNull();
+        model.RuleFor(p => p.ProcessXml).NotNull();
     }
 }

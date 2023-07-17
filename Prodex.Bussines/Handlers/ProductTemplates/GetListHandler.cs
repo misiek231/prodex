@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Prodex.Bussines.HandlersHelpers;
 using Prodex.Data;
 using Prodex.Data.Models;
-using Prodex.Shared.Models.Products;
+using Prodex.Shared.Models.ProductTemplates;
 
-namespace Prodex.Bussines.Handlers.Products
+namespace Prodex.Bussines.Handlers.ProductTemplates
 {
     public class GetListHandler : BaseGetListHandler<FilterModel, ListItemModel>
     {
@@ -15,9 +14,9 @@ namespace Prodex.Bussines.Handlers.Products
             this.context = context;
         }
 
-        public override IQueryable<Product> GetList(FilterModel filter, CancellationToken cancellationToken)
+        public override IQueryable<ProductTemplate> GetList(FilterModel filter, CancellationToken cancellationToken)
         {
-            return context.Products.AsQueryable();
+            return context.ProductTemplates.AsQueryable();
         }
     }
 }

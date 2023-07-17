@@ -39,8 +39,16 @@
   },
   {
     "name": "Produkcja",
-    "route": "production",
-    "icon": "fa-desktop"
+    "route": "product",
+    "icon": "fa-desktop",
+    "children": [
+      {
+        "name": "Rozpocznij nową produkcję",
+        "route": "add",
+        "icon": "",
+        "hidden": true
+      }
+    ]
   },
   {
     "name": "Procesy",

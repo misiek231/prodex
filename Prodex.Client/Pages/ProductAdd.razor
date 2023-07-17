@@ -1,4 +1,4 @@
-﻿@page "/product-template/add"
+﻿@page "/product/add"
 @using Prodex.Client.Coponents
 @using Prodex.Client.Coponents.Form
 @using Prodex.Client.RestClients;
@@ -11,70 +11,32 @@
 @inject ProcessesClient Processes
 
 
-<Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
-    <Items>
-        <Tab Name="basic">Informacje podstawowe</Tab>
-        <Tab Name="statuses">Statusy</Tab>
-        <Tab Name="actions">Akcje</Tab>
-        <Tab Name="fields">Pola</Tab>
-        <Tab Name="process">Proces</Tab>
-    </Items>
-    <Content>
-        <TabPanel Name="basic">
-            <Card>
-                <CardBody>
-                    <FormWrapper Form="Form">
-                        <FormInput Property="p => p.Name" />
-                    </FormWrapper>
-                </CardBody>
-                <CardFooter>
-                    <Button Color="Color.Primary" @onclick="Save">Zapisz</Button>
-                </CardFooter>
-            </Card>
-        </TabPanel>
-        <TabPanel Name="statuses">
-            Content for profile.
-        </TabPanel>
-        <TabPanel Name="actions">
-            Content for messages.
-        </TabPanel>
-        <TabPanel Name="fields">
-            Content for messages.
-        </TabPanel>
-        <TabPanel Name="process">
-            <Card>
-                <CardBody>
-                    <BpmnModeler @ref="modeler"></BpmnModeler>
-                </CardBody>
-                <CardFooter>
-                    <Button Color="Color.Primary" @onclick="Save">Zapisz diagram</Button>
-                </CardFooter>
-            </Card>
-        </TabPanel>
-    </Content>
-</Tabs>
+
+<Card>
+    <CardBody>
+        <FormWrapper Form="Form">
+            <FormInput Property="p => p.Name" />
+        </FormWrapper>
+    </CardBody>
+    <CardFooter>
+        <Button Color="Color.Primary" @onclick="Save">Zapisz</Button>
+    </CardFooter>
+</Card>
+
 
 @code {
     private FormModel Form = new FormModel();
-    string selectedTab = "basic";
 
     private BpmnModeler modeler;
 
     private async Task Save()
     {
-        Form.ProcessXml = await modeler.GetValueAsync();
+        Form.TemplateId = 1; // TODO
         var result = await Products.Post(Form);
 
         if (result.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("product-template");
+            Navigation.NavigateTo("product");
         }
-    }
-
-    private Task OnSelectedTabChanged(string name)
-    {
-        selectedTab = name;
-
-        return Task.CompletedTask;
     }
 }
