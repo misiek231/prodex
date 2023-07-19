@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Prodex.Shared\Prodex.Shared.csproj" />
+    <ProjectReference Include="..\Prodex.Utils\Prodex.Utils.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -29,6 +29,7 @@ namespace Prodex.Server
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddScoped<PasswordHasher>();
+            builder.Services.AddSingleton<ApiSelectCacheService>();
 
             builder.Services.AddFluentMigratorCore()
                 .ConfigureRunner(o => o.AddSqlServer()

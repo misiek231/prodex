@@ -1,4 +1,4 @@
-﻿@page "/product/add"
+﻿@page "/product/{id}"
 @using Prodex.Client.Coponents
 @using Prodex.Client.Coponents.Form
 @using Prodex.Client.RestClients;
@@ -9,8 +9,6 @@
 @inject NavigationManager Navigation
 @inject ProductsClient Products
 @inject ProcessesClient Processes
-
-
 
 <Card>
     <CardBody>

@@ -50,7 +50,7 @@ namespace Prodex.ClientGenerator
         {
             var methodInfo = item.Metadata.GetRequiredMetadata<MethodInfo>();
             var name = item.RoutePattern.RawText.Split("/").ElementAtOrDefault(2);
-            name = !string.IsNullOrEmpty(name) ? name.FirstLetterUpper() : null;
+            name = string.IsNullOrEmpty(name) || (name.First() == '{' && name.Last() == '}') ? null : name.FirstLetterUpper();
             var method = item.Metadata.GetRequiredMetadata<HttpMethodMetadata>().HttpMethods[0];
             var parameteters = item.Metadata.GetRequiredMetadata<MethodInfo>().GetParameters();
 
@@ -59,9 +59,16 @@ namespace Prodex.ClientGenerator
             Route = item.RoutePattern.RawText;
             ResponseType = methodInfo.ReturnParameter.ToString().FixTypeDefinition().RemoveTask();
             ReturnType = method == "POST" ? $"System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<{ResponseType}>>" : methodInfo.ReturnParameter.ToString().FixTypeDefinition();
-            Parameters = parameteters.Where(p => p.ParameterType.Assembly == typeof(FilterModel).Assembly)
-                    .Select(p => new Parameter(p)).ToList();
+            Parameters = parameteters.Where(IncludeTypeInParams)
+                    .Select(p => new Parameter(p, Route)).ToList();
             Validate = parameteters.Where(p => p.ParameterType.IsAssignableTo(typeof(FormBaseModel))).Any();
+        }
+
+        private bool IncludeTypeInParams(ParameterInfo p)
+        {
+            return p.ParameterType.Assembly == typeof(FilterModel).Assembly ||
+                p.ParameterType.IsPrimitive ||
+                p.ParameterType == typeof(string);
         }
     }
 
@@ -69,11 +76,13 @@ namespace Prodex.ClientGenerator
     {
         public string Type { get; set; }
         public string Name { get; set; }
+        public bool RouteParam { get; set; }
 
-        public Parameter(ParameterInfo param)
+        public Parameter(ParameterInfo param, string route)
         {
             Name = param.Name;
             Type = param.ParameterType.FullName;
+            RouteParam = route.Contains("{" + param.Name + "}");
         }
     }
 }

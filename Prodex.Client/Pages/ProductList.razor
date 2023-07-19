@@ -14,7 +14,7 @@
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" Responsive>
             <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
             <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
-            <DataGridColumn Field="@nameof(ListItemModel.TemplateId)" Caption="TemplateId" Editable />
+            <DataGridColumn Field="Template.Value" Caption="Szablon" Editable />@*TODO: Remove hardcoded string, best option is to make custom Grid and pass fields as func like in forms*@
         </DataGrid>
     </CardBody>
     <CardFooter>

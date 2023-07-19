@@ -6,5 +6,5 @@ public class ListItemModel
 {
     public long Id { get; set; }
     public string Name { get; set; }
-    public long TemplateId { get; set; }
+    public KeyValueResult Template { get; set; }
 }

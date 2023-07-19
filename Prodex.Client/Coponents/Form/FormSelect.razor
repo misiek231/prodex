@@ -1,17 +1,21 @@
-﻿@using Prodex.Shared.Forms;
+﻿@using Prodex.Client.RestClients;
+@using Prodex.Shared.Forms;
 @using Prodex.Shared.Pagination;
 @using Prodex.Shared.Utils;
 @using Blazorise.Components
 @using System.Linq.Expressions;
 @using System.Reflection;
+@using Prodex.Utils;
 @typeparam TForm where TForm : FormBaseModel
+@typeparam TField where TField : IApiSelect, new()
+@inject ApiSelectClient apiSelectClient;
 
 <Autocomplete TItem="KeyValueResult"
                 TValue="long?"
                 Data="@Options"
                 ValueField="@(item => item.Key)"
                 TextField="@(item => item.Value)"
-                SelectedValue="@Property.Compile()(Form)"
+                SelectedValue="@Property.Compile()(Form)?.Id"
                 SelectedValueChanged="ValueChanged"
                 ReadData="e => LoadData(e.SearchValue)"
                 Placeholder="Search..."
@@ -27,10 +31,7 @@
     public TForm Form { get; set; }
 
     [Parameter]
-    public Expression<Func<TForm, long?>> Property { get; set; }
-
-    [Parameter]
-    public Func<Pager, string, Task<Pagination<KeyValueResult>>> DataSource { get; set; }
+    public Expression<Func<TForm, TField>> Property { get; set; }
 
     private Pager pager = new Pager();
 
@@ -44,12 +45,21 @@
 
     private async Task LoadData(string search)
     {
-        Options = (await DataSource(pager, search)).Items.ToList();
+        // Options = (await DataSource(pager, search)).Items.ToList();
+
+        var name = GetProp().PropertyType.Name.PascalToKebab();
+
+        Options = await apiSelectClient.Get(name, pager, search);
     }
 
     private void ValueChanged(long? newValue)
     {
-        GetProp().SetValue(Form, newValue);
+        if (!newValue.HasValue) return;
+
+        var value = new TField();
+        value.Id = newValue.Value;
+        
+        GetProp().SetValue(Form, value);
     }
 
     private PropertyInfo GetProp()

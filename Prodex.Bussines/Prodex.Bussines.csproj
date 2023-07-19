@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Prodex.Data\Prodex.Data.csproj" />
     <ProjectReference Include="..\Prodex.Shared\Prodex.Shared.csproj" />
+    <ProjectReference Include="..\Prodex.Utils\Prodex.Utils.csproj" />
   </ItemGroup>
 
 </Project>

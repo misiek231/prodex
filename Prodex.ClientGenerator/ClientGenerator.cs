@@ -106,12 +106,14 @@ namespace Prodex.ClientGenerator
 
                 var sb = new StringBuilder();
 
-                sb.Append($"return await client.GetFromJsonAsync<{model.ResponseType}>(\"{model.Route}\"");
+                var interpolator = model.Parameters.Any(p => p.RouteParam) ? "$" : "";
+
+                sb.Append($"return await client.GetFromJsonAsync<{model.ResponseType}>({interpolator}\"{model.Route}\"");
 
                 if(model.Parameters.Count > 0)
                 {
                     sb.Append(", TypeMerger.TypeMerger.Merge(");
-                    sb.Append(string.Join(", ", model.Parameters.Select(p => p.Name)));
+                    sb.Append(string.Join(", ", model.Parameters.Where(p => !p.RouteParam).Select(p => p.Name)));
                     sb.Append(')');
                 }
 

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Prodex.Shared.Forms;
+using Prodex.Shared.Models.ProductTemplates;
 using Prodex.Shared.Validation;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,8 +11,9 @@ public class FormModel : FormBaseModel<FormModel>
 {
     [Description("Nazwa")]
     public string Name { get; set; }
+
     [Description("Szablon")]
-    public long TemplateId { get; set; }
+    public ApiTemplateSelect TemplateId { get; set; }
 
     public override void Rules(ValidationContext validationContext, FluentValidator<FormModel> model)
     {
