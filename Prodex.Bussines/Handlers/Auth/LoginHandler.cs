@@ -40,6 +40,11 @@ public class LoginHandler : BaseCreateHandler<LoginModel, TokenModel>
         };
     }
 
+    public override Task<TokenModel> Update(long id, LoginModel form, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     private string GenerateToken(User user)
     {
         var issuer = configuration["Jwt:Issuer"];

@@ -1,4 +1,4 @@
-﻿@page "/product-template/add"
+﻿@page "/product-template/form/{Id:long?}"
 @using Prodex.Client.Coponents
 @using Prodex.Client.Coponents.Form
 @using Prodex.Client.RestClients;
@@ -58,12 +58,27 @@
     private FormModel Form = new FormModel();
     string selectedTab = "basic";
 
+    [Parameter]
+    public long? Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            Form = await ProductsTemplates.Get(Id.Value);
+           await modeler.SetValueAsync(Form.ProcessXml);
+        }
+    }
+
     private BpmnModeler modeler;
 
     private async Task Save()
     {
         Form.ProcessXml = await modeler.GetValueAsync();
-        var result = await ProductsTemplates.Post(Form);
+        
+        var result = Id.HasValue ?
+        await ProductsTemplates.Put(Id.Value, Form) :
+        await ProductsTemplates.Post(Form);
 
         if (result.IsSuccessStatusCode)
         {

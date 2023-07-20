@@ -49,16 +49,14 @@ namespace Prodex.ClientGenerator
         public EndpointModel(RouteEndpoint item)
         {
             var methodInfo = item.Metadata.GetRequiredMetadata<MethodInfo>();
-            var name = item.RoutePattern.RawText.Split("/").ElementAtOrDefault(2);
-            name = string.IsNullOrEmpty(name) || (name.First() == '{' && name.Last() == '}') ? null : name.FirstLetterUpper();
             var method = item.Metadata.GetRequiredMetadata<HttpMethodMetadata>().HttpMethods[0];
             var parameteters = item.Metadata.GetRequiredMetadata<MethodInfo>().GetParameters();
 
             Method = method;
-            MethodName = name ?? method.FirstLetterUpper();
+            MethodName = GetMethdName(item, method);
             Route = item.RoutePattern.RawText;
             ResponseType = methodInfo.ReturnParameter.ToString().FixTypeDefinition().RemoveTask();
-            ReturnType = method == "POST" ? $"System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<{ResponseType}>>" : methodInfo.ReturnParameter.ToString().FixTypeDefinition();
+            ReturnType = method == "POST" || method == "PUT" ? $"System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<{ResponseType}>>" : methodInfo.ReturnParameter.ToString().FixTypeDefinition();
             Parameters = parameteters.Where(IncludeTypeInParams)
                     .Select(p => new Parameter(p, Route)).ToList();
             Validate = parameteters.Where(p => p.ParameterType.IsAssignableTo(typeof(FormBaseModel))).Any();
@@ -69,6 +67,19 @@ namespace Prodex.ClientGenerator
             return p.ParameterType.Assembly == typeof(FilterModel).Assembly ||
                 p.ParameterType.IsPrimitive ||
                 p.ParameterType == typeof(string);
+        }
+
+        private static string GetMethdName(RouteEndpoint item, string method)
+        {
+            if (!item.DisplayName.Contains("http", StringComparison.OrdinalIgnoreCase))
+                return item.DisplayName;
+
+            var name = item.RoutePattern.RawText.Split("/").ElementAtOrDefault(2);
+
+            if(!string.IsNullOrEmpty(name) && name.First() != '{' && name.Last() != '}')
+                return name.FirstLetterUpper();
+
+            return method.FirstLetterUpper();
         }
     }
 

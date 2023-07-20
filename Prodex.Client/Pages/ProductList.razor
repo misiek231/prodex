@@ -5,13 +5,14 @@
 @using Prodex.Shared.Models.Products;
 @using Prodex.Shared.Pagination;
 @inject ProductsClient Products
+@inject NavigationManager Navigation
 
 <Card>
     <CardHeader>
         <Button Type="ButtonType.Link" To="product/add" Color="Color.Primary">Dodaj</Button>
     </CardHeader>
     <CardBody>
-        <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" Responsive>
+        <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="RowSelected" Responsive>
             <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
             <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
             <DataGridColumn Field="Template.Value" Caption="Szablon" Editable />@*TODO: Remove hardcoded string, best option is to make custom Grid and pass fields as func like in forms*@
@@ -46,5 +47,10 @@
             // todo: find nice way to handle exceptions like that
         }
         Loading = false;
+    }
+
+    private void RowSelected(ListItemModel item)
+    {
+        Navigation.NavigateTo($"product/{item.Id}");
     }
 }

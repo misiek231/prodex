@@ -15,7 +15,7 @@ window.loadBpmn = () => {
     try {
         window.modeler.createDiagram();
 
-        console.log('rendered');
+        console.log('rendered dupa');
     } catch (err) {
         console.log('error rendering', err);
     }
@@ -23,8 +23,16 @@ window.loadBpmn = () => {
 
 window.getCurrentDiagram = async () => {
     if (!window.modeler) return null;
-
-    return (await window.modeler.saveXML({ format: true })).xml;
+    var xml = (await window.modeler.saveXML({ format: true })).xml
+    console.log(xml);
+    return xml;
 }
+
+window.setCurrentDiagram = async (xml) => {
+    if (!window.modeler) return;
+
+    await window.modeler.importXML(xml);
+}
+
 
 

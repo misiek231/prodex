@@ -12,6 +12,11 @@
     {
         return await _js.InvokeAsync<string>("getCurrentDiagram");
     }
+
+    public async Task SetValueAsync(string xml)
+    {
+        await _js.InvokeVoidAsync("setCurrentDiagram", xml);
+    }
 }
 
 <style>

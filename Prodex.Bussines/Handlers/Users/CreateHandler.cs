@@ -30,4 +30,9 @@ public class CreateHandler : BaseCreateHandler<FormModel, object>
         await context.SaveChangesAsync(cancellationToken);
         return null; // Todo: return detils model
     }
+
+    public override Task<object> Update(long id, FormModel form, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

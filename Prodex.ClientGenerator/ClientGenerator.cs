@@ -14,17 +14,6 @@ namespace Prodex.ClientGenerator
 
             var groups = apiEndpoints.GroupBy(p => p.RoutePattern.RawText.Split("/")[1]);
 
-            /*foreach (var group in groups)
-            {
-                var model = new ClientModel(group);
-                var text = new Client
-                {
-                    Model = model,
-                }.TransformText();
-
-                File.WriteAllText($"../../../../Prodex.Client/RestClients/{model.Name}Client.g.cs", text);
-            }
-*/
             var files = groups.Select(g => GenerateClient(new ClientModel(g)));
 
             var csGenerator = new CsGenerator();
@@ -77,52 +66,82 @@ namespace Prodex.ClientGenerator
                 BodyLines = GenerateBody(model)
             };
         }
-        
-        private List<string> GenerateBody(EndpointModel model)
+
+        private List<string> GenerateBody(EndpointModel model) => model.Method switch
+        {
+            "POST" => GeneratePost(model),
+            "GET" => GenerateGet(model),
+            "PUT" => GeneratePut(model),
+        };
+
+        private static List<string> GeneratePost(EndpointModel model)
         {
             var body = new List<string>();
 
-            if(model.Method == "POST")
+            if (model.Validate)
             {
-                if (model.Validate)
-                {
-                    body.Add("if (model.Validate(null).HasErrors)");
-                    body.Add($"    return new Prodex.Client.RestClients.HttpResponseMessage<{model.ResponseType}>(System.Net.HttpStatusCode.BadRequest);");
-                    body.Add("");
-                }
-
-                body.Add($"var result = new Prodex.Client.RestClients.HttpResponseMessage<{model.ResponseType}>(await client.PostAsJsonAsync(\"{model.Route}\", model));");
-                body.Add("await result.InitResultAsync();");
+                body.Add("if (model.Validate(null).HasErrors)");
+                body.Add($"    return new Prodex.Client.RestClients.HttpResponseMessage<{model.ResponseType}>(System.Net.HttpStatusCode.BadRequest);");
                 body.Add("");
-                body.Add("if (result.StatusCode == HttpStatusCode.BadRequest)");
-                body.Add("{");
-                body.Add("    model.WithErrors(await result.Content.ReadAsStringAsync());");
-                body.Add("}");
-                body.Add("");
-                body.Add("return result;");
-            } 
-            else if(model.Method == "GET") 
-            {
-
-                var sb = new StringBuilder();
-
-                var interpolator = model.Parameters.Any(p => p.RouteParam) ? "$" : "";
-
-                sb.Append($"return await client.GetFromJsonAsync<{model.ResponseType}>({interpolator}\"{model.Route}\"");
-
-                if(model.Parameters.Count > 0)
-                {
-                    sb.Append(", TypeMerger.TypeMerger.Merge(");
-                    sb.Append(string.Join(", ", model.Parameters.Where(p => !p.RouteParam).Select(p => p.Name)));
-                    sb.Append(')');
-                }
-
-                sb.Append(");");
-
-                body.Add(sb.ToString());
             }
 
+            body.Add($"var result = new Prodex.Client.RestClients.HttpResponseMessage<{model.ResponseType}>(await client.PostAsJsonAsync(\"{model.Route}\", model));");
+            body.Add("await result.InitResultAsync();");
+            body.Add("");
+            body.Add("if (result.StatusCode == HttpStatusCode.BadRequest)");
+            body.Add("{");
+            body.Add("    model.WithErrors(await result.Content.ReadAsStringAsync());");
+            body.Add("}");
+            body.Add("");
+            body.Add("return result;");
+            
+
             return body;
+        }
+
+        private static List<string> GeneratePut(EndpointModel model)
+        {
+            var body = new List<string>();
+
+            if (model.Validate)
+            {
+                body.Add("if (model.Validate(null).HasErrors)");
+                body.Add($"    return new Prodex.Client.RestClients.HttpResponseMessage<{model.ResponseType}>(System.Net.HttpStatusCode.BadRequest);");
+                body.Add("");
+            }
+
+            body.Add($"var result = new Prodex.Client.RestClients.HttpResponseMessage<{model.ResponseType}>(await client.PutAsJsonAsync($\"{model.Route}\", model));");
+            body.Add("await result.InitResultAsync();");
+            body.Add("");
+            body.Add("if (result.StatusCode == HttpStatusCode.BadRequest)");
+            body.Add("{");
+            body.Add("    model.WithErrors(await result.Content.ReadAsStringAsync());");
+            body.Add("}");
+            body.Add("");
+            body.Add("return result;");
+
+
+            return body;
+        }
+
+        private static List<string> GenerateGet(EndpointModel model)
+        {
+            var sb = new StringBuilder();
+
+            var interpolator = model.Parameters.Any(p => p.RouteParam) ? "$" : "";
+
+            sb.Append($"return await client.GetFromJsonAsync<{model.ResponseType}>({interpolator}\"{model.Route}\"");
+
+            if (model.Parameters.Count > 1)
+            {
+                sb.Append(", TypeMerger.TypeMerger.Merge(");
+                sb.Append(string.Join(", ", model.Parameters.Where(p => !p.RouteParam).Select(p => p.Name)));
+                sb.Append(')');
+            }
+
+            sb.Append(");");
+
+            return new List<string> { sb.ToString() };
         }
     }
 }

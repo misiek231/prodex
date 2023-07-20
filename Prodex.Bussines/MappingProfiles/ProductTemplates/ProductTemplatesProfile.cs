@@ -12,6 +12,7 @@ public class ProductsProfile : Profile
 
         CreateMap<FormModel, ProductTemplate>()
             .ForMember(p => p.Id, o => o.Ignore())
-            .ForMember(p => p.Products, o => o.Ignore());
+            .ForMember(p => p.Products, o => o.Ignore())
+            .ReverseMap();
     }
 }

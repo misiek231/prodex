@@ -23,5 +23,14 @@ namespace Prodex.Bussines.Handlers.ProductTemplates
             await context.SaveChangesAsync(cancellationToken);
             return null; // Todo: return detils model
         }
+
+        public override async Task<object> Update(long id, FormModel form, CancellationToken cancellationToken)
+        {
+            var entity = await context.ProductTemplates.FindAsync(new object[] { id }, cancellationToken: cancellationToken);
+            mapper.Map(form, entity);
+            context.SaveChanges();
+
+            return null;
+        }
     }
 }

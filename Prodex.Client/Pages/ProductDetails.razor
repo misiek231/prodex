@@ -1,4 +1,4 @@
-﻿@page "/product/{id}"
+﻿@page "/product/{Id:long}"
 @using Prodex.Client.Coponents
 @using Prodex.Client.Coponents.Form
 @using Prodex.Client.RestClients;
@@ -11,30 +11,70 @@
 @inject ProcessesClient Processes
 
 <Card>
+    <CardHeader>
+        @Details.Name
+    </CardHeader>
     <CardBody>
-        <FormWrapper Form="Form">
-            <FormInput Property="p => p.Name" />
-            <FormSelect Property="p => p.TemplateId" />
-        </FormWrapper>
+        
+        <Div Class="d-flex justify-content-between">
+            <Div Class="d-flex flex-column">
+                <p><b>ID: </b> @Details.Id</p>
+                <p><b>Nazwa: </b> @Details.Name</p>
+                <p><b>Szablon: </b> @Details.Template.Value</p>
+                <p><b>Tu będą: </b> Pola dynamiczne</p>
+            </Div>
+
+            <Div>
+                <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+                    <Items>
+                        <Tab Name="history">Historia</Tab>
+                        <Tab Name="process">Proces</Tab>
+                    </Items>
+                    <Content>
+                        <TabPanel Name="history">
+                    
+                        </TabPanel>
+                        <TabPanel Name="process">
+                            <BpmnModeler />
+                        </TabPanel>
+                    </Content>
+                </Tabs>
+            </Div>
+        </Div>
     </CardBody>
     <CardFooter>
-        <Button Color="Color.Primary" @onclick="Save">Zapisz</Button>
+        <Button Color="Color.Primary" @onclick="Save">Tu będą akcje procesowe</Button>
     </CardFooter>
 </Card>
 
 
 @code {
-    private FormModel Form = new FormModel();
+    private DetailsModel Details;
 
-    private BpmnModeler modeler;
+    [Parameter]
+    public long Id { get; set; }
+
+    string selectedTab = "history";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Details = new DetailsModel
+        {
+            Id = 1,
+            Name = "Test",
+            Template = new KeyValueResult(1, "Test")
+        };
+    }
 
     private async Task Save()
     {
-        var result = await Products.Post(Form);
+        
+    }
 
-        if (result.IsSuccessStatusCode)
-        {
-            Navigation.NavigateTo("product");
-        }
+    private Task OnSelectedTabChanged(string name)
+    {
+        selectedTab = name;
+
+        return Task.CompletedTask;
     }
 }
