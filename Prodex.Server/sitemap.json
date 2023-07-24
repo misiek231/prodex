@@ -55,18 +55,5 @@
         "hidden": true
       }
     ]
-  },
-  {
-    "name": "Procesy",
-    "route": "processes",
-    "icon": "fa-microchip",
-    "children": [
-      {
-        "name": "Dodaj Proces",
-        "route": "add",
-        "icon": "",
-        "hidden": true
-      }
-    ]
   }
 ]
