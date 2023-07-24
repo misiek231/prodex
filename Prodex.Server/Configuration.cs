@@ -8,6 +8,7 @@ using Prodex.Bussines.Handlers.Processes;
 using Prodex.Bussines.Services;
 using Prodex.Bussines.Sitemap;
 using Prodex.Data;
+using Prodex.Processes;
 using Prodex.Server.MinimalApiExtensions;
 using Prodex.Shared.Models.Processes;
 using System.Text;
@@ -29,6 +30,7 @@ namespace Prodex.Server
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddScoped<PasswordHasher>();
+            builder.Services.AddScoped<ProcessBuilderService>();
             builder.Services.AddSingleton<ApiSelectCacheService>();
 
             builder.Services.AddFluentMigratorCore()

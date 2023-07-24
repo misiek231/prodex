@@ -1,28 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Prodex.Processes
 {
     public class ProcessBuilderService
     {
-        public List<ProcessStep> BuildProcess(string xml)
+
+        public List<(long id, string name)> GetActions(string xml, long currentStep)
+        {
+            var steps = BuildProcess(xml);
+
+            var current = steps.Single(p => p.StepId == currentStep);
+
+            return steps
+                .Where(p => current.NextSteps.Contains(p.StepId))
+                .Select(p => (p.StepId, p.Name))
+                .ToList();
+        }
+
+        internal List<ProcessStep> BuildProcess(string xml)
         {
             Definitions def;
 
-            XmlSerializer serializer = new XmlSerializer(typeof(Definitions));
-            using (StringReader reader = new StringReader(xml))
+            var serializer = new XmlSerializer(typeof(Definitions));
+
+            using (var reader = new StringReader(xml))
             {
                 def = (Definitions)serializer.Deserialize(reader);
             }
 
 
-            List<ProcessStep> steps = new List<ProcessStep>();
+            var steps = new List<ProcessStep>();
 
 
             var start = def.Process.StartEvent;
@@ -74,7 +82,7 @@ namespace Prodex.Processes
             return nextSteps;
         }
 
-        private StepType MapStepType(BaseElement newStep) => newStep switch
+        private static StepType MapStepType(BaseElement newStep) => newStep switch
         {
             ExclusiveGateway => StepType.ExclusiveGateway,
             UserTask => StepType.UserTask,

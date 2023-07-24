@@ -12,15 +12,15 @@
 
 <Card>
     <CardHeader>
-        @Details.Name
+        @Details?.Name
     </CardHeader>
     <CardBody>
         
         <Div Class="d-flex justify-content-between">
             <Div Class="d-flex flex-column">
-                <p><b>ID: </b> @Details.Id</p>
-                <p><b>Nazwa: </b> @Details.Name</p>
-                <p><b>Szablon: </b> @Details.Template.Value</p>
+                <p><b>ID: </b> @Details?.Id</p>
+                <p><b>Nazwa: </b> @Details?.Name</p>
+                <p><b>Szablon: </b> @Details?.Template.Value</p>
                 <p><b>Tu będą: </b> Pola dynamiczne</p>
             </Div>
 
@@ -43,7 +43,12 @@
         </Div>
     </CardBody>
     <CardFooter>
-        <Button Color="Color.Primary" @onclick="Save">Tu będą akcje procesowe</Button>
+        <Div class="d-flex gap-1">
+            @foreach(var button in Details?.Buttons ?? new List<ApiButton>())
+            {
+                <Button Color="Color.Primary" @onclick="() => ActionButtonClick(button.ActionId)">@button.Name</Button>
+            }
+        </Div>
     </CardFooter>
 </Card>
 
@@ -58,17 +63,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Details = new DetailsModel
-        {
-            Id = 1,
-            Name = "Test",
-            Template = new KeyValueResult(1, "Test")
-        };
+        Details = await Products.Get(Id); 
     }
 
-    private async Task Save()
+    private async Task ActionButtonClick(long actionId)
     {
-        
+        await Products.Execute(Id, actionId);
+        Details = await Products.Get(Id);
     }
 
     private Task OnSelectedTabChanged(string name)

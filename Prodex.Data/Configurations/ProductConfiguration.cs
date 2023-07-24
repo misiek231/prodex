@@ -12,6 +12,7 @@ namespace Prodex.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Product> entity)
         {
+            entity.Property(e => e.CurrentStepId).HasDefaultValueSql("((1))");
             entity.Property(e => e.Name)
             .IsRequired()
             .HasMaxLength(60);

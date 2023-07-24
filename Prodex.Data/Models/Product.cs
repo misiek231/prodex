@@ -13,5 +13,7 @@ public partial class Product
 
     public long TemplateId { get; set; }
 
+    public long CurrentStepId { get; set; }
+
     public virtual ProductTemplate Template { get; set; }
 }

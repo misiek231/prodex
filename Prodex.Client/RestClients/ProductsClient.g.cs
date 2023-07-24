@@ -20,6 +20,11 @@ namespace Prodex.Client.RestClients
             return await client.GetFromJsonAsync<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Products.ListItemModel>>("api/products/", TypeMerger.TypeMerger.Merge(pager, model));
         }
 
+        public async System.Threading.Tasks.Task<Prodex.Shared.Models.Products.DetailsModel> Get(System.Int64 id)
+        {
+            return await client.GetFromJsonAsync<Prodex.Shared.Models.Products.DetailsModel>($"api/products/{id}");
+        }
+
         public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Post(Prodex.Shared.Models.Products.FormModel model)
         {
             if (model.Validate(null).HasErrors)
@@ -32,6 +37,14 @@ namespace Prodex.Client.RestClients
             {
                 model.WithErrors(await result.Content.ReadAsStringAsync());
             }
+            
+            return result;
+        }
+
+        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Execute(System.Int64 productId, System.Int64 stepId)
+        {
+            var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(await client.PostAsync($"api/products/execute/{productId}/{stepId}", null));
+            await result.InitResultAsync();
             
             return result;
         }

@@ -21,7 +21,6 @@ public class Tests
 
         var result = sut.BuildProcess(xml);
 
-
         var expected = new List<ProcessStep>
         {
             new ProcessStep

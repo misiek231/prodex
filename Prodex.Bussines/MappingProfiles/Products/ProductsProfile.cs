@@ -14,6 +14,11 @@ public class ProductsProfile : Profile
 
         CreateMap<FormModel, Product>()
             .ForMember(p => p.Id, o => o.Ignore())
-            .ForMember(p => p.Template, o => o.Ignore());
+            .ForMember(p => p.Template, o => o.Ignore())
+            .ForMember(p => p.CurrentStepId, o => o.Ignore());
+
+        CreateMap<Product, DetailsModel>()
+          .ForMember(p => p.Template, o => o.MapFrom(k => new KeyValueResult(k.Template.Id, k.Template.Name)))
+          .ForMember(p => p.Buttons, o => o.Ignore());
     }
 }
