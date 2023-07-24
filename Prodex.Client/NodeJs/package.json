@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bpmn-js": "^11.1.0"
+    "bpmn-js": "^13.2.2"
   },
   "devDependencies": {
     "webpack-cli": "^5.0.1"

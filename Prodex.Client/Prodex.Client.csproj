@@ -35,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\bpmnjs\font\bpmn.svg" />
-    <None Include="wwwroot\css\bpmnjs\font\bpmn.woff2" />
+    <None Include="wwwroot\css\bpmnjs\bpmn-font\font\bpmn.svg" />
+    <None Include="wwwroot\css\bpmnjs\bpmn-font\font\bpmn.woff2" />
   </ItemGroup>
 
 	<!--

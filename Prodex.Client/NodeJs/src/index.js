@@ -1,4 +1,4 @@
-﻿import BpmnModeler from 'bpmn-js/lib/Modeler';
+﻿import BpmnJS from 'bpmn-js/lib/Modeler';
 
 window.loadBpmn = () => {
 
@@ -7,7 +7,7 @@ window.loadBpmn = () => {
     if (canv.hasChildNodes())
         return;
 
-    window.modeler = new BpmnModeler({
+    window.modeler = new BpmnJS({
         container: '#bpmn-canvas'
     });
 
