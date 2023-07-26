@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace Prodex.Data.Models;
 
-public partial class ProductTemplate
+public partial class PtStatus
 {
     public long Id { get; set; }
 
     public string Name { get; set; }
 
-    public string ProcessXml { get; set; }
+    public string Color { get; set; }
 
-    public virtual ICollection<Product> Products { get; } = new List<Product>();
+    public long TemplateId { get; set; }
 
-    public virtual ICollection<PtStatus> PtStatuses { get; } = new List<PtStatus>();
+    public virtual ProductTemplate Template { get; set; }
 }

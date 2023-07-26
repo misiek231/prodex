@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Processes.Tests", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Bussines.Tests", "Prodex.Bussines.Tests\Prodex.Bussines.Tests.csproj", "{21819A92-2F93-4CC8-8021-F07577921867}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prodex.Utils", "Prodex.Utils\Prodex.Utils.csproj", "{C0275066-1BC0-4417-832F-E3D0ED0900EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Utils", "Prodex.Utils\Prodex.Utils.csproj", "{C0275066-1BC0-4417-832F-E3D0ED0900EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,80 @@
+﻿@using Blazorise.Components
+@using Prodex.Client.Coponents;
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.ProductTemplates.Statuses;
+@inherits ModalBase
+@inject PtStatusesClient StatusesClient
+
+
+<Modal @ref="modalRef">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Status</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <FormWrapper Form="Form">
+                <FormInput Property="p => p.Name" />
+                <FieldLabel>Kolor</FieldLabel>
+                <RadioGroup TValue="string" Name="colors" @bind-CheckedValue="Form.Color">
+                    @foreach(var color in Colors){
+                        <Radio Value="color.Name"><Badge Color="color">Status</Badge></Radio>
+                    }
+                </RadioGroup>
+            </FormWrapper>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@Hide">Close</Button>
+            <Button Color="Color.Primary" Clicked="@Save">Save Changes</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    private Modal modalRef;
+    protected override Modal ModalRef => modalRef;
+
+    private FormModel Form = new FormModel();
+
+    [Parameter]
+    public long TemplateId { get; set; }
+
+    [Parameter]
+    public EventCallback LoadData { get; set; }
+
+    private async Task Save()
+    {
+        Form.TemplateId = TemplateId;
+        if (Param.HasValue)
+            await StatusesClient.Put(Param.Value, Form);
+        else
+            await StatusesClient.Post(Form);
+
+        Hide();
+        await LoadData.InvokeAsync();
+    }
+
+    protected override void OnShow()
+    {
+        Form = new FormModel();
+    }
+
+    protected override async Task OnShowWithParam()
+    {
+        if (!Param.HasValue) return;
+
+        Form = await StatusesClient.Get(Param.Value);
+    }
+
+    private List<Color> Colors = new List<Color>
+    {
+        Color.Primary,
+        Color.Secondary,
+        Color.Success,
+        Color.Danger,
+        Color.Warning,
+        Color.Info,
+        Color.Light,
+        Color.Dark,
+    };
+}

@@ -1,0 +1,63 @@
+﻿@using Prodex.Client.Coponents
+@using Prodex.Client.Pages.ProductTemplates.Modals
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.ProductTemplates.Statuses;
+@using Prodex.Shared.Pagination;
+@inject PtStatusesClient StatusesClient
+
+
+<Card>
+    <CardHeader Class="d-flex justify-content-end">
+        <Button Type="ButtonType.Link" Color="Color.Primary" @onclick="createStatusModal.Show">Dodaj</Button>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="m => createStatusModal.Show(m.Id)" Responsive>
+            <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
+            <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
+            <DataGridColumn Field="@nameof(ListItemModel.Color)" Caption="Kolor" Editable >
+                <DisplayTemplate>
+                    <Badge Color="context.Color">@context.Name</Badge>
+                </DisplayTemplate>    
+            </DataGridColumn>
+        </DataGrid>
+    </CardBody>
+    <CardFooter>
+        <SimplePagination Pager="pager" LoadData="LoadData" />
+    </CardFooter>
+</Card>
+
+<CreateStatusModal @ref="createStatusModal" TemplateId="TemplateId" LoadData="LoadData"/>
+
+
+@code {
+
+    private Pager pager = new Pager(1, 10);
+    private List<ListItemModel> items = new List<ListItemModel>();
+
+    private ModalBase createStatusModal;
+
+    [Parameter]
+    public long TemplateId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            var result = await StatusesClient.Get(pager, new FilterModel
+            {
+                TemplateId = TemplateId
+            });
+            items = result.Items.ToList();
+            pager.TotalRows = result.TotalRows;
+        }
+        catch (HttpRequestException ex)
+        {
+            // todo: find nice way to handle exceptions like that
+        }
+    }
+}

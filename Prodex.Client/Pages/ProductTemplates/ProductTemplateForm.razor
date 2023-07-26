@@ -1,6 +1,7 @@
 ﻿@page "/product-template/form/{Id:long?}"
 @using Prodex.Client.Coponents
 @using Prodex.Client.Coponents.Form
+@using Prodex.Client.Pages.ProductTemplates.Components
 @using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.ProductTemplates;
 @using System.Net;
@@ -32,7 +33,7 @@
             </Card>
         </TabPanel>
         <TabPanel Name="statuses">
-            Content for profile.
+            <StatusesList TemplateId="Id.Value"/>
         </TabPanel>
         <TabPanel Name="actions">
             Content for messages.
@@ -62,11 +63,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (Id.HasValue)
-        {
-            Form = await ProductsTemplates.Get(Id.Value);
-           await modeler.SetValueAsync(Form.ProcessXml);
-        }
+        if (!Id.HasValue) return;
+        
+        Form = await ProductsTemplates.Get(Id.Value);
+        await modeler.SetValueAsync(Form.ProcessXml);
     }
 
     private BpmnModeler modeler;
