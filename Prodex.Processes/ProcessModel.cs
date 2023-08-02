@@ -1,5 +1,4 @@
 ﻿using System.Xml.Serialization;
-using System.Linq;
 
 namespace Prodex.Processes;
 
@@ -84,7 +83,7 @@ public class ExclusiveGateway : BaseElement
 }
 
 [XmlRoot(ElementName = "sequenceFlow", Namespace = Namespaces.MODEL)]
-public class SequenceFlow 
+public class SequenceFlow
 {
 
     [XmlAttribute(AttributeName = "id")]

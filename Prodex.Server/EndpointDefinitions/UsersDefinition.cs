@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Prodex.Bussines.Requests;
+using Prodex.Bussines.SimpleRequests.Base;
+using Prodex.Data.Models;
 using Prodex.Server.MinimalApiExtensions;
 using Prodex.Shared.Models.Users;
 using Prodex.Shared.Pagination;
@@ -13,11 +14,17 @@ public class UsersDefinition : IEndpointDefinition
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
-        group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) => 
-            await mediator.Send(new GetListRequest<FilterModel, ListItemModel>(pager, model)))
+        group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) =>
+            await mediator.Send(new SimpleGetList.Request<User, FilterModel, ListItemModel>(pager, model)))
             .RequireAuthorization();
 
-        group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new CreateRequest<FormModel, object>(model)))
+        group.MapGet("{id}", async (IMediator mediator, [FromRoute] long id) => await mediator.Send(new SimpleGetDetails.Request<User, FormModel>(id)))
+            .RequireAuthorization();
+
+        group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new SimpleCreate.Request<User, FormModel>(model)))
+            .RequireAuthorization();
+
+        group.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] FormModel model) => await mediator.Send(new SimpleUpdate.Request<User, FormModel>(id, model)))
             .RequireAuthorization();
     }
 }

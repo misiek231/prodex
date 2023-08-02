@@ -5,7 +5,7 @@ namespace Prodex.Client.Coponents;
 
 public abstract class ModalBase : ComponentBase
 {
-    protected abstract Modal ModalRef { get; } 
+    protected abstract Modal ModalRef { get; }
     protected long? Param { get; private set; }
 
     public void Show()

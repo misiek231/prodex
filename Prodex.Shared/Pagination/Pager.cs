@@ -18,8 +18,9 @@ public class Pager
     public int? TotalPages => TotalRows.HasValue ? ((TotalRows - 1) / PageSize) + 1 : null;
     [JsonIgnore]
     public int? TotalRows { get; set; }
-    public int PageIndex { 
-        get => pageIndex; 
+    public int PageIndex
+    {
+        get => pageIndex;
         set
         {
             pageIndex = value;

@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Prodex.Bussines.Requests;
-using Prodex.Bussines.Requests.ProductTemplates;
+using Prodex.Bussines.SimpleRequests.Base;
+using Prodex.Data.Models;
 using Prodex.Server.MinimalApiExtensions;
 using Prodex.Shared.Models.ProductTemplates;
 using Prodex.Shared.Pagination;
@@ -14,17 +14,17 @@ public class ProductTemplatesDefinition : IEndpointDefinition
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
-        group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) => 
-            await mediator.Send(new GetListRequest<FilterModel, ListItemModel>(pager, model)))
+        group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) =>
+            await mediator.Send(new SimpleGetList.Request<ProductTemplate, FilterModel, ListItemModel>(pager, model)))
             .RequireAuthorization();
 
-        group.MapGet("{id}", async (IMediator mediator, [FromRoute] long id) => await mediator.Send(new GetDetails(id)))
+        group.MapGet("{id}", async (IMediator mediator, [FromRoute] long id) => await mediator.Send(new SimpleGetDetails.Request<ProductTemplate, FormModel>(id)))
             .RequireAuthorization();
 
-        group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new CreateRequest<FormModel, object>(model)))
+        group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new SimpleCreate.Request<ProductTemplate, FormModel>(model)))
             .RequireAuthorization();
 
-        group.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] FormModel model) => await mediator.Send(new UpdateRequest<FormModel, object>(id, model)))
+        group.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] FormModel model) => await mediator.Send(new SimpleUpdate.Request<ProductTemplate, FormModel>(id, model)))
             .RequireAuthorization();
     }
 }

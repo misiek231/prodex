@@ -1,26 +1,35 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Prodex.Bussines.Requests.Products;
 using Prodex.Data;
 using Prodex.Processes;
-using Prodex.Shared.Models.Products;
 
-namespace Prodex.Bussines.Handlers.Products
+namespace Prodex.Bussines.Handlers.Products;
+
+public class ExecuteStep
 {
-    public class ExecuteStepHandler : IRequestHandler<ExecuteStepRequest, object>
+    public class Request : IRequest<object>
+    {
+        public long ProductId { get; set; }
+        public long StepId { get; set; }
+
+        public Request(long productId, long stepId)
+        {
+            ProductId = productId;
+            StepId = stepId;
+        }
+    }
+
+    public class ExecuteStepHandler : IRequestHandler<Request, object>
     {
         private readonly DataContext context;
-        private readonly IMapper mapper;
         private readonly ProcessBuilderService processBuilderService;
-        public ExecuteStepHandler(DataContext context, IMapper mapper, ProcessBuilderService processBuilderService)
+        public ExecuteStepHandler(DataContext context, ProcessBuilderService processBuilderService)
         {
             this.context = context;
-            this.mapper = mapper;
             this.processBuilderService = processBuilderService;
         }
 
-        public async Task<object> Handle(ExecuteStepRequest request, CancellationToken cancellationToken)
+        public async Task<object> Handle(Request request, CancellationToken cancellationToken)
         {
             var result = await context.Products.Include(p => p.Template).FirstOrDefaultAsync(p => p.Id == request.ProductId, cancellationToken);
 
@@ -31,7 +40,7 @@ namespace Prodex.Bussines.Handlers.Products
 
             result.CurrentStepId = request.StepId;
 
-            context.SaveChanges();
+            await context.SaveChangesAsync(cancellationToken);
 
             return Task.FromResult<object>("");
         }

@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.AspNetCore.Components;
-using Blazored.LocalStorage;
-using System.Net.Http.Headers;
+﻿using Blazored.LocalStorage;
 using Blazorise.LoadingIndicator;
+using Microsoft.AspNetCore.Components;
+using System.Net.Http.Headers;
 
 namespace Prodex.Client.Services.Auth;
 
@@ -24,7 +23,7 @@ public class CustomMessageHandler : DelegatingHandler
     {
         await _loadingIndicator.Show();
         var token = await _localStorage.GetItemAsStringAsync("token", cancellationToken);
-        if (!string.IsNullOrEmpty(token)) 
+        if (!string.IsNullOrEmpty(token))
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
 
         var response = await base.SendAsync(request, cancellationToken);

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Routing;
 using Prodex.Shared.Forms;
-using Prodex.Shared.Models.Processes;
+using Prodex.Shared.Models.Products;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Prodex.ClientGenerator
 {
@@ -12,7 +11,7 @@ namespace Prodex.ClientGenerator
         public string Name { get; set; }
         public List<EndpointModel> Endpoints { get; set; }
 
-        public ClientModel(IGrouping<string, RouteEndpoint> group) 
+        public ClientModel(IGrouping<string, RouteEndpoint> group)
         {
             Name = ConvertKebabCaseToPascalCase(group.Key);
             Endpoints = group.Select(item => new EndpointModel(item)).ToList();
@@ -76,7 +75,7 @@ namespace Prodex.ClientGenerator
 
             var name = item.RoutePattern.RawText.Split("/").ElementAtOrDefault(2);
 
-            if(!string.IsNullOrEmpty(name) && name.First() != '{' && name.Last() != '}')
+            if (!string.IsNullOrEmpty(name) && name.First() != '{' && name.Last() != '}')
                 return name.FirstLetterUpper();
 
             return method.FirstLetterUpper();

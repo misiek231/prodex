@@ -5,7 +5,7 @@ namespace Prodex.Shared.Forms;
 public class ValidationErrors
 {
     public ValidationErrors() { }
-    public ValidationErrors(List<ValidationFailure> errors) 
+    public ValidationErrors(List<ValidationFailure> errors)
     {
         Errors = errors.Select(p => new ValidationError
         {

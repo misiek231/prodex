@@ -1,23 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Prodex.Bussines.HandlersHelpers;
-using Prodex.Bussines.Requests;
-using Prodex.Bussines.Services;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Prodex.Data;
 using Prodex.Shared.Models.ProductTemplates;
+using Prodex.Shared.Pagination;
 using Prodex.Shared.Utils;
 
-namespace Prodex.Bussines.Handlers.ProductTemplates
-{
-    public class SelectHandler : BaseGetSelectValuesHandler<ApiTemplateSelect>
-    {
+namespace Prodex.Bussines.Handlers.ProductTemplates;
 
+public class GetSelectValues
+{
+    public class Request : IRequest<List<KeyValueResult>>
+    {
+        public string Search { get; set; }
+        public Pager Pager { get; set; }
+    }
+
+    public class Request<T> : Request
+    {
+    }
+
+    public class SelectHandler : IRequestHandler<Request<ApiTemplateSelect>, List<KeyValueResult>>
+    {
         private readonly DataContext context;
-        public SelectHandler(ApiSelectCacheService apiSelectCache, DataContext context) : base(apiSelectCache)
+
+        public SelectHandler(DataContext context)
         {
             this.context = context;
         }
-
-        public override async Task<List<KeyValueResult>> GetValues(GetSelectValuesRequest<ApiTemplateSelect> request, CancellationToken cancellationToken)
+        public async Task<List<KeyValueResult>> Handle(Request<ApiTemplateSelect> request, CancellationToken cancellationToken)
         {
             var query = context.ProductTemplates.AsQueryable();
 

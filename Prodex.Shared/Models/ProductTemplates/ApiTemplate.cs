@@ -1,9 +1,4 @@
 ﻿using Prodex.Shared.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Prodex.Shared.Models.ProductTemplates
 {
@@ -11,5 +6,18 @@ namespace Prodex.Shared.Models.ProductTemplates
     {
         public long Id { get; set; }
         public string Value { get; set; }
+
+        public ApiTemplateSelect() { }
+
+        public ApiTemplateSelect(long id)
+        {
+            Id = id;
+        }
+
+        public ApiTemplateSelect(long id, string value)
+        {
+            Id = id;
+            Value = value;
+        }
     }
 }

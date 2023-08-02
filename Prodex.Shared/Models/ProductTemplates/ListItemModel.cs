@@ -1,6 +1,4 @@
-﻿using Prodex.Shared.Utils;
-
-namespace Prodex.Shared.Models.ProductTemplates;
+﻿namespace Prodex.Shared.Models.ProductTemplates;
 
 public class ListItemModel
 {

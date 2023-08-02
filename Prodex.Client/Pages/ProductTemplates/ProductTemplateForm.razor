@@ -14,9 +14,12 @@
 <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
     <Items>
         <Tab Name="basic">Informacje podstawowe</Tab>
-        <Tab Name="statuses">Statusy</Tab>
-        <Tab Name="actions">Akcje</Tab>
-        <Tab Name="fields">Pola</Tab>
+        @if (Id.HasValue)
+        {
+            <Tab Name="statuses">Statusy</Tab>
+            <Tab Name="actions">Akcje</Tab>
+            <Tab Name="fields">Pola</Tab>
+        }
         <Tab Name="process">Proces</Tab>
     </Items>
     <Content>
@@ -32,15 +35,18 @@
                 </CardFooter>
             </Card>
         </TabPanel>
-        <TabPanel Name="statuses">
-            <StatusesList TemplateId="Id.Value"/>
-        </TabPanel>
-        <TabPanel Name="actions">
-            Content for messages.
-        </TabPanel>
-        <TabPanel Name="fields">
-            Content for messages.
-        </TabPanel>
+        @if (Id.HasValue)
+        {
+            <TabPanel Name="statuses">
+                <StatusesList TemplateId="Id.Value"/>
+            </TabPanel>
+            <TabPanel Name="actions">
+                Content for messages.
+            </TabPanel>
+            <TabPanel Name="fields">
+                Content for messages.
+            </TabPanel>
+        }
         <TabPanel Name="process">
             <Card>
                 <CardBody>

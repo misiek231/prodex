@@ -1,16 +1,14 @@
-﻿using AutoMapper;
-using FluentMigrator.Runner;
+﻿using FluentMigrator.Runner;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Prodex.Bussines.Handlers.Processes;
 using Prodex.Bussines.Services;
+using Prodex.Bussines.SimpleRequests.Base;
 using Prodex.Bussines.Sitemap;
 using Prodex.Data;
 using Prodex.Processes;
 using Prodex.Server.MinimalApiExtensions;
-using Prodex.Shared.Models.Processes;
 using System.Text;
 
 namespace Prodex.Server
@@ -25,9 +23,9 @@ namespace Prodex.Server
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             // Todo: Register handlers in better way
-            builder.Services.AddMediatR(typeof(Program).Assembly, typeof(FilterModel).Assembly, typeof(LoginHandler).Assembly, typeof(SitemapHandler).Assembly);
+            builder.Services.AddMediatR(typeof(Program).Assembly, typeof(Shared.Models.ProductTemplates.FilterModel).Assembly, typeof(GetSitemap).Assembly);
 
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.RegisterSimpleRequests();
 
             builder.Services.AddScoped<PasswordHasher>();
             builder.Services.AddScoped<ProcessBuilderService>();
@@ -66,12 +64,12 @@ namespace Prodex.Server
             using (var services = app.Services.CreateScope())
             {
                 services.ServiceProvider.GetRequiredService<IMigrationRunner>().MigrateUp();
-                services.ServiceProvider.GetRequiredService<IMapper>().ConfigurationProvider.AssertConfigurationIsValid();
             }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
             }
             else

@@ -1,8 +1,7 @@
-﻿using CsCodeGenerator.Enums;
-using CsCodeGenerator;
+﻿using CsCodeGenerator;
+using CsCodeGenerator.Enums;
 using Microsoft.AspNetCore.Routing;
 using System.Text;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Prodex.ClientGenerator
 {
@@ -19,7 +18,7 @@ namespace Prodex.ClientGenerator
             var csGenerator = new CsGenerator();
             csGenerator.OutputDirectory = "../../../../Prodex.Client/RestClients";
             csGenerator.Files.AddRange(files);
-            csGenerator.CreateFiles(); 
+            csGenerator.CreateFiles();
         }
 
         public FileModel GenerateClient(ClientModel client)
@@ -32,13 +31,13 @@ namespace Prodex.ClientGenerator
                 "System.Net;",
                 "System.Net.Http.Json;"
             });
-            
+
             clientFile.Namespace = "Prodex.Client.RestClients";
 
             var clientClass = new ClassModel(client.Name + "Client");
 
             clientClass.Attributes.Add(new AttributeModel("Prodex.Client.DiHelpers.RegisterScoped"));
-            
+
             var conts = new Constructor(clientClass.Name);
             conts.Parameters.Add(new CsCodeGenerator.Parameter("HttpClient", "client"));
             conts.BodyLines.Add("this.client = client;");
@@ -50,7 +49,7 @@ namespace Prodex.ClientGenerator
             };
 
             clientClass.Methods = client.Endpoints.Select(GenerateMethod).ToList();
-                        
+
             clientFile.Classes.Add(clientClass);
 
             return clientFile;
@@ -94,7 +93,7 @@ namespace Prodex.ClientGenerator
             body.Add("}");
             body.Add("");
             body.Add("return result;");
-            
+
 
             return body;
         }

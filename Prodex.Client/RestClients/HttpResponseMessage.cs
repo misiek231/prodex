@@ -1,5 +1,4 @@
-﻿using Prodex.Shared.Models.Auth;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 
 namespace Prodex.Client.RestClients;

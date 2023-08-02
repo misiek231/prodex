@@ -1,11 +1,8 @@
 ﻿using Blazorise;
-using Prodex.Shared.Models.Processes;
 using Prodex.Shared.Validation;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Prodex.Shared.Forms
 {
@@ -13,7 +10,7 @@ namespace Prodex.Shared.Forms
     public abstract class FormBaseModel
     {
         protected ValidationErrors _errors;
-        
+
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public IEnumerable<ValidationError> Errors => _errors?.Errors;
         [JsonIgnore]
@@ -26,8 +23,8 @@ namespace Prodex.Shared.Forms
         public void Status(ValidatorEventArgs a, string propName)
         {
             a.Status = _errors?.Errors.Any(p => p.Name.Equals(propName, StringComparison.OrdinalIgnoreCase)) == true ? ValidationStatus.Error : ValidationStatus.Success;
-            
-            if(a.Status == ValidationStatus.Error)
+
+            if (a.Status == ValidationStatus.Error)
             {
                 a.ErrorText = Message(propName);
             }

@@ -1,8 +1,7 @@
-﻿using AutoMapper;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Prodex.Bussines.HandlersHelpers;
 using Prodex.Bussines.Services;
 using Prodex.Data;
 using Prodex.Data.Models;
@@ -11,62 +10,71 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Prodex.Bussines.Handlers.Processes;
+namespace Prodex.Bussines.Handlers.Auth;
 
-public class LoginHandler : BaseCreateHandler<LoginModel, TokenModel>
+public class Login
 {
-    private readonly DataContext context;
-    private readonly IConfiguration configuration;
-    private readonly PasswordHasher hasher;
 
-    public LoginHandler(DataContext context, IConfiguration configuration, PasswordHasher hasher)
+    public class Request : IRequest<TokenModel>
     {
-        this.context = context;
-        this.configuration = configuration;
-        this.hasher = hasher;
-    }
+        public LoginModel LoginModel { get; set; }
 
-    public override async Task<TokenModel> Create(LoginModel form, CancellationToken cancellationToken)
-    {
-        var user = await context.Users.SingleOrDefaultAsync(p => p.Username == form.Username);
-
-        if (user is null) return null;
-
-        if(!hasher.VerifyHashedPassword(user.Password, form.Password)) return null;
-
-        return new TokenModel
+        public Request(LoginModel loginModel)
         {
-            Token = GenerateToken(user)
-        };
+            LoginModel = loginModel;
+        }
     }
 
-    public override Task<TokenModel> Update(long id, LoginModel form, CancellationToken cancellationToken)
+    public class LoginHandler : IRequestHandler<Request, TokenModel>
     {
-        throw new NotImplementedException();
-    }
+        private readonly DataContext context;
+        private readonly IConfiguration configuration;
+        private readonly PasswordHasher hasher;
 
-    private string GenerateToken(User user)
-    {
-        var issuer = configuration["Jwt:Issuer"];
-        var audience = configuration["Jwt:Audience"];
-        var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]);
-        var tokenDescriptor = new SecurityTokenDescriptor
+        public LoginHandler(DataContext context, IConfiguration configuration, PasswordHasher hasher)
         {
-            Subject = new ClaimsIdentity(new[]
+            this.context = context;
+            this.configuration = configuration;
+            this.hasher = hasher;
+        }
+
+        public async Task<TokenModel> Handle(Request request, CancellationToken cancellationToken)
+        {
+            var user = await context.Users.SingleOrDefaultAsync(p => p.Username == request.LoginModel.Username);
+
+            if (user is null) return null;
+
+            if (!hasher.VerifyHashedPassword(user.Password, request.LoginModel.Password)) return null;
+
+            return new TokenModel
             {
+                Token = GenerateToken(user)
+            };
+        }
+
+        private string GenerateToken(User user)
+        {
+            var issuer = configuration["Jwt:Issuer"];
+            var audience = configuration["Jwt:Audience"];
+            var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString())
             }),
-            Expires = DateTime.UtcNow.AddMinutes(5),
-            Issuer = issuer,
-            Audience = audience,
-            SigningCredentials = new SigningCredentials
-            (new SymmetricSecurityKey(key),
-            SecurityAlgorithms.HmacSha512Signature)
-        };
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+                Expires = DateTime.UtcNow.AddMinutes(5),
+                Issuer = issuer,
+                Audience = audience,
+                SigningCredentials = new SigningCredentials
+                (new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha512Signature)
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
     }
 }
