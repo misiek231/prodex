@@ -21,6 +21,11 @@
             "hidden": true
           }
         ]
+      },
+      {
+        "name": "Słowniki",
+        "route": "dictionary",
+        "icon": "fa-book"
       }
     ]
   },
@@ -30,8 +35,8 @@
     "icon": "fa-desktop",
     "children": [
       {
-        "name": "Dodaj szablon",
-        "route": "add",
+        "name": "Formularz",
+        "route": "form",
         "icon": "",
         "hidden": true
       }

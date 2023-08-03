@@ -1,0 +1,35 @@
+﻿@page "/administration/dictionary"
+@using Microsoft.AspNetCore.Authorization;
+@using Prodex.Client.Coponents
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.Dictionary;
+@using Prodex.Shared.Pagination;
+@using Prodex.Client.Pages.Dictionary.Modals;
+@using Prodex.Client.Pages.Dictionary.Components;
+
+<Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+    <Items>
+        <Tab Name="dictionary">Kategorie słowników</Tab>
+        <Tab Name="dictionaryTerms">Wartości słowników</Tab>
+    </Items>
+    <Content>
+        <TabPanel Name="dictionary">
+            <DictionaryList />
+        </TabPanel>
+        <TabPanel Name="dictionaryTerms">
+            <DictionaryTermsList />
+        </TabPanel>
+    </Content>
+</Tabs>
+
+@code {
+
+    string selectedTab = "dictionary";
+
+    private Task OnSelectedTabChanged(string name)
+    {
+        selectedTab = name;
+
+        return Task.CompletedTask;
+    }
+}

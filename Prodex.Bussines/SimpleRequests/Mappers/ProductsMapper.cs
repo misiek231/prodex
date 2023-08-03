@@ -4,7 +4,7 @@ using Prodex.Shared.Models.Products;
 using Prodex.Shared.Utils;
 using Riok.Mapperly.Abstractions;
 
-namespace Prodex.Bussines.MappingProfiles.Products;
+namespace Prodex.Bussines.Mappers;
 
 [Mapper]
 public partial class ProductsMapper : IListMapper<Product, ListItemModel>, ICreateMapper<Product, FormModel>, IUpdateMapper<Product, FormModel>, IDetailsMapper<Product, DetailsModel>

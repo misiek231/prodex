@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+@using Prodex.Client.Coponents
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.Dictionary;
+@using Prodex.Shared.Pagination;
+@using Prodex.Client.Pages.Dictionary.Modals;
+@inject DictionaryClient Dictionary
+
+<Card>
+    <CardHeader Class="d-flex justify-content-end">
+        <Button Type="ButtonType.Link" Color="Color.Primary" @onclick="createDictionaryModal.Show">Dodaj</Button>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="m => createDictionaryModal.Show(m.Id)" Responsive>
+            <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
+            <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" />
+        </DataGrid>
+    </CardBody>
+    <CardFooter>
+        <SimplePagination Pager="pager" LoadData="LoadData" />
+    </CardFooter>
+</Card>
+
+<CreateDictionaryModal @ref="createDictionaryModal" LoadData="LoadData" />
+
+@code {
+
+    private ModalBase createDictionaryModal;
+
+    private List<ListItemModel> items = new List<ListItemModel>();
+    private Pager pager = new Pager(1, 10);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            var result = await Dictionary.Get(pager, new FilterModel());
+            items = result.Items.ToList();
+            pager.TotalRows = result.TotalRows;
+        }
+        catch (HttpRequestException ex)
+        {
+            // todo: find nice way to handle exceptions like that
+        }
+    }
+}

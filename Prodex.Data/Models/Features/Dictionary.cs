@@ -2,6 +2,5 @@
 
 namespace Prodex.Data.Models;
 
-public partial class User : IEntity
-{
-}
+public partial class Dictionary : IEntity
+{ }

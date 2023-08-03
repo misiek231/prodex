@@ -6,29 +6,40 @@
 @using System.Linq.Expressions;
 @using System.Reflection;
 @using Prodex.Utils;
+@using System.ComponentModel;
 @typeparam TForm where TForm : FormBaseModel
 @typeparam TField where TField : IApiSelect, new()
 @inject ApiSelectClient apiSelectClient;
 
-<Autocomplete TItem="KeyValueResult"
-                TValue="long?"
-                Data="@Options"
-                ValueField="@(item => item.Key)"
-                TextField="@(item => item.Value)"
-                SelectedValue="@Property.Compile()(Form)?.Id"
-                SelectedValueChanged="ValueChanged"
-                ReadData="e => LoadData(e.SearchValue)"
-                Placeholder="Search..."
-                Validator="(a) => Form.Status(a, GetProp().Name)"
-                Debounce="true"
-                MinLength="0">
-    <NotFoundContent> Brak wyników </NotFoundContent>
-</Autocomplete>
+
+
+<Validation Validator="(a) => Form.Status(a, GetProp().Name)">
+    <Field>
+        <FieldLabel>@GetLabel()</FieldLabel>
+        <Autocomplete TItem="KeyValueResult"
+                      TValue="long?"
+                      Data="@Options"
+                      ValueField="@(item => item.Key)"
+                      TextField="@(item => item.Value)"
+                      SelectedValue="@Property.Compile()(Form)?.Id"
+                      SelectedValueChanged="ValueChanged"
+                      ReadData="e => LoadData(e.SearchValue)"
+                      Placeholder="Search..."
+                      Validator="(a) => Form.Status(a, GetProp().Name)"
+                      Debounce="true"
+                      MinLength="0">
+            <NotFoundContent> Brak wyników </NotFoundContent>
+        </Autocomplete>
+    </Field>
+</Validation>
 
 @code {
 
     [CascadingParameter]
     public TForm Form { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
 
     [Parameter]
     public Expression<Func<TForm, TField>> Property { get; set; }
@@ -60,6 +71,13 @@
         value.Id = newValue.Value;
         
         GetProp().SetValue(Form, value);
+    }
+
+    private string GetLabel()
+    {
+        if (!string.IsNullOrEmpty(Label)) return Label;
+
+        return GetProp().GetCustomAttribute<DescriptionAttribute>()?.Description ?? "";
     }
 
     private PropertyInfo GetProp()

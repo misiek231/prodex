@@ -15,6 +15,10 @@ public partial class DataContext : DbContext
     {
     }
 
+    public virtual DbSet<Dictionary> Dictionaries { get; set; }
+
+    public virtual DbSet<DictionaryTerm> DictionaryTerms { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductTemplate> ProductTemplates { get; set; }
@@ -25,6 +29,8 @@ public partial class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+            modelBuilder.ApplyConfiguration(new Configurations.DictionaryConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.DictionaryTermConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ProductConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ProductTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.PtStatusConfiguration());

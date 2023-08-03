@@ -3,7 +3,7 @@ using Prodex.Data.Models;
 using Prodex.Shared.Models.ProductTemplates.Statuses;
 using Riok.Mapperly.Abstractions;
 
-namespace Prodex.Bussines.MappingProfiles.ProductTemplates;
+namespace Prodex.Bussines.Mappers;
 
 [Mapper]
 public partial class PtStatusMapper : IListMapper<PtStatus, ListItemModel>, ICreateMapper<PtStatus, FormModel>, IUpdateMapper<PtStatus, FormModel>, IDetailsMapper<PtStatus, FormModel>

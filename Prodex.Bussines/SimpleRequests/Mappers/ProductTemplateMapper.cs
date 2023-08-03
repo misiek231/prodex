@@ -3,7 +3,7 @@ using Prodex.Data.Models;
 using Prodex.Shared.Models.ProductTemplates;
 using Riok.Mapperly.Abstractions;
 
-namespace Prodex.Bussines.MappingProfiles.ProductTemplates;
+namespace Prodex.Bussines.Mappers;
 
 [Mapper]
 public partial class ProductTemplateMapper :

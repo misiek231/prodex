@@ -4,7 +4,7 @@ using Prodex.Data.Models;
 using Prodex.Shared.Models.Users;
 using Riok.Mapperly.Abstractions;
 
-namespace Prodex.Bussines.MappingProfiles.Users;
+namespace Prodex.Bussines.Mappers;
 
 [Mapper]
 public partial class UsersMapper : IListMapper<User, ListItemModel>, ICreateMapper<User, FormModel>, IUpdateMapper<User, FormModel>, IDetailsMapper<User, FormModel>

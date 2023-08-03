@@ -41,6 +41,22 @@ namespace Prodex.Client.RestClients
             return result;
         }
 
+        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Put(System.Int64 id, Prodex.Shared.Models.Products.FormModel model)
+        {
+            if (model.Validate(null).HasErrors)
+                return new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(System.Net.HttpStatusCode.BadRequest);
+            
+            var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(await client.PutAsJsonAsync($"api/products/{id}", model));
+            await result.InitResultAsync();
+            
+            if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                model.WithErrors(await result.Content.ReadAsStringAsync());
+            }
+            
+            return result;
+        }
+
         public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Execute(System.Int64 productId, System.Int64 stepId)
         {
             var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(await client.PostAsync($"api/products/execute/{productId}/{stepId}", null));

@@ -1,0 +1,58 @@
+﻿@using Blazorise.Components
+@using Prodex.Client.Coponents;
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.Dictionary;
+@inherits ModalBase
+@inject DictionaryClient DictionaryClient
+
+
+<Modal @ref="modalRef">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Kategoria słownika</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <FormWrapper Form="Form">
+                <FormInput Property="p => p.Name" />
+            </FormWrapper>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@Hide">Anuluj</Button>
+            <Button Color="Color.Primary" Clicked="@Save">Zapisz</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    private Modal modalRef;
+    protected override Modal ModalRef => modalRef;
+
+    private FormModel Form = new FormModel();
+
+    [Parameter]
+    public EventCallback LoadData { get; set; }
+
+    private async Task Save()
+    {
+        if (Param.HasValue)
+            await DictionaryClient.Put(Param.Value, Form);
+        else
+            await DictionaryClient.Post(Form);
+
+        Hide();
+        await LoadData.InvokeAsync();
+    }
+
+    protected override void OnShow()
+    {
+        Form = new FormModel();
+    }
+
+    protected override async Task OnShowWithParam()
+    {
+        if (!Param.HasValue) return;
+
+        Form = await DictionaryClient.Get(Param.Value);
+    }
+}

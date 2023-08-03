@@ -15,7 +15,11 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[dbo].[Processes]",
+         "Name": "[dbo].[Dictionaries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DictionaryTerms]",
          "ObjectType": 0
       },
       {
