@@ -25,6 +25,8 @@ public class AuthDefinition : IEndpointDefinition
         }).RequireAuthorization();
 
         group.MapPost("login", async (IMediator mediator, [FromBody] LoginModel model) =>
-            await mediator.Send(new Login.Request(model)));
+            (await mediator.Send(new Login.Request(model)))
+                .Match(p => Results.Ok(p), p => Results.UnprocessableEntity(p.Value))
+            );
     }
 }

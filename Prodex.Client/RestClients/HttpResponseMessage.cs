@@ -16,7 +16,8 @@ public class HttpResponseMessage<TResult> : HttpResponseMessage
 
     public async Task InitResultAsync()
     {
-        Result = JsonSerializer.Deserialize<TResult>(await Content.ReadAsStringAsync(),
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (IsSuccessStatusCode)
+            Result = JsonSerializer.Deserialize<TResult>(await Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 }

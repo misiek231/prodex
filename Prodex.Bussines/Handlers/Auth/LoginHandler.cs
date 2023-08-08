@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using OneOf;
+using OneOf.Types;
 using Prodex.Bussines.Services;
 using Prodex.Data;
 using Prodex.Data.Models;
@@ -15,7 +17,7 @@ namespace Prodex.Bussines.Handlers.Auth;
 public class Login
 {
 
-    public class Request : IRequest<TokenModel>
+    public class Request : IRequest<OneOf<TokenModel, Error<string>>>
     {
         public LoginModel LoginModel { get; set; }
 
@@ -25,7 +27,7 @@ public class Login
         }
     }
 
-    public class LoginHandler : IRequestHandler<Request, TokenModel>
+    public class LoginHandler : IRequestHandler<Request, OneOf<TokenModel, Error<string>>>
     {
         private readonly DataContext context;
         private readonly IConfiguration configuration;
@@ -38,13 +40,12 @@ public class Login
             this.hasher = hasher;
         }
 
-        public async Task<TokenModel> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<OneOf<TokenModel, Error<string>>> Handle(Request request, CancellationToken cancellationToken)
         {
             var user = await context.Users.SingleOrDefaultAsync(p => p.Username == request.LoginModel.Username);
 
-            if (user is null) return null;
-
-            if (!hasher.VerifyHashedPassword(user.Password, request.LoginModel.Password)) return null;
+            if (user is null || !hasher.VerifyHashedPassword(user.Password, request.LoginModel.Password)) 
+                return new Error<string>("Nieprawidłowy login lub hasło");
 
             return new TokenModel
             {

@@ -4,6 +4,7 @@
 @using Prodex.Client.Services.Auth;
 @using Prodex.Shared.Models.Auth;
 @using System.Text.Json;
+@using System.Net;
 @inject AuthClient Auth
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigation
@@ -31,18 +32,17 @@
         Err = null;
         var result = await Auth.Login(Form);
 
-        if (result.IsSuccessStatusCode)
+        if (!result.IsSuccessStatusCode)
         {
-            if (result?.Result?.Token == null) {
-                Err = new string[] { "Nieprawidłowy login lub hasło" };
-                return;
-            }
-
-            var token = await result.Content.ReadAsStringAsync();
-            await LocalStorage.SetItemAsStringAsync("token", result.Result.Token);
-            ((CustomAuthenticationStateProvider)AuthProvider).NotifyAuthStateChanged();
-            Navigation.NavigateTo("");
+            if(result.StatusCode == HttpStatusCode.UnprocessableEntity)
+                Err = new string[] { await result.Content.ReadAsStringAsync() };
+            
+            return;
         }
-        else Err = null;
+
+        var token = await result.Content.ReadAsStringAsync();
+        await LocalStorage.SetItemAsStringAsync("token", result.Result.Token);
+        ((CustomAuthenticationStateProvider)AuthProvider).NotifyAuthStateChanged();
+        Navigation.NavigateTo("");
     }
 }
