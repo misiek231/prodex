@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Prodex.Data;
+using Prodex.Data.Models;
 using Prodex.Processes;
 
 namespace Prodex.Bussines.Handlers.Products;
@@ -11,11 +12,13 @@ public class ExecuteStep
     {
         public long ProductId { get; set; }
         public long StepId { get; set; }
+        public long UserId { get; set; }
 
-        public Request(long productId, long stepId)
+        public Request(long productId, long stepId, long userId)
         {
             ProductId = productId;
             StepId = stepId;
+            UserId = userId;
         }
     }
 
@@ -35,8 +38,18 @@ public class ExecuteStep
 
             var actions = processBuilderService.GetActions(result.Template.ProcessXml, result.CurrentStepId);
 
-            if (!actions.Any(p => p.id == request.StepId))
+            var action = actions.FirstOrDefault(p => p.Key == request.StepId);
+
+            if (action is null)
                 throw new InvalidOperationException();
+
+            context.Histories.Add(new History
+            {
+                ActionName = action.Value,
+                ProductId = request.ProductId,
+                UserId = request.UserId,
+                DateCreated = DateTime.Now,
+            });
 
             result.CurrentStepId = request.StepId;
 

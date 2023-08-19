@@ -18,4 +18,5 @@ public partial class ProductTemplateMapper :
     public partial void ToEntity(FormModel form, ProductTemplate entity);
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<ProductTemplate> prod);
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<ProductTemplate> query);
+    public partial FormModel ToDetailsModel(ProductTemplate model);
 }

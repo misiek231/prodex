@@ -19,6 +19,8 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<DictionaryTerm> DictionaryTerms { get; set; }
 
+    public virtual DbSet<History> Histories { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductTemplate> ProductTemplates { get; set; }
@@ -31,6 +33,7 @@ public partial class DataContext : DbContext
     {
             modelBuilder.ApplyConfiguration(new Configurations.DictionaryConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.DictionaryTermConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.HistoryConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ProductConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ProductTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.PtStatusConfiguration());

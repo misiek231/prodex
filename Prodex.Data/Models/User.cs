@@ -16,4 +16,6 @@ public partial class User
     public string GivenName { get; set; }
 
     public string Surname { get; set; }
+
+    public virtual ICollection<History> Histories { get; } = new List<History>();
 }

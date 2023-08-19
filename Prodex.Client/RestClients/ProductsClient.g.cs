@@ -20,6 +20,11 @@ namespace Prodex.Client.RestClients
             return await client.GetFromJsonAsync<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Products.ListItemModel>>("api/products/", TypeMerger.TypeMerger.Merge(pager, model));
         }
 
+        public async System.Threading.Tasks.Task<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Products.History.ListItemModel>> History(Prodex.Shared.Pagination.Pager pager, System.Int64 productId)
+        {
+            return await client.GetFromJsonAsync<Prodex.Shared.Pagination.Pagination<Prodex.Shared.Models.Products.History.ListItemModel>>($"api/products/{productId}/history", pager);
+        }
+
         public async System.Threading.Tasks.Task<Prodex.Shared.Models.Products.DetailsModel> Get(System.Int64 id)
         {
             return await client.GetFromJsonAsync<Prodex.Shared.Models.Products.DetailsModel>($"api/products/{id}");

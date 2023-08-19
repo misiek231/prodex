@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+@using Prodex.Client.Coponents
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.Products.History;
+@using Prodex.Shared.Pagination;
+@inject ProductsClient Products
+
+<DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" Responsive>
+    <DataGridColumn Field="User.Value" Caption="Użytkownik" Sortable="false" />
+    <DataGridColumn Field="@nameof(ListItemModel.ActionName)" Caption="Akcja" />
+    <DataGridColumn Field="@nameof(ListItemModel.DateCreated)" Caption="Data" />
+</DataGrid>
+
+@code {
+    private List<ListItemModel> items = new List<ListItemModel>();
+    private Pager pager = new Pager(1, 1000);
+
+    [Parameter]
+    public long ProductId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            var result = await Products.History(pager, ProductId);
+            items = result.Items.ToList();
+            pager.TotalRows = result.TotalRows;
+        }
+        catch (HttpRequestException ex)
+        {
+            // todo: find nice way to handle exceptions like that
+        }
+    }
+
+    public async Task Reload()
+    {
+        await LoadData();
+        StateHasChanged();
+    }
+}

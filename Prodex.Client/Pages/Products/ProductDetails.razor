@@ -1,6 +1,7 @@
 ﻿@page "/product/{Id:long}"
 @using Prodex.Client.Coponents
 @using Prodex.Client.Coponents.Form
+@using Prodex.Client.Pages.Products.Components
 @using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.Products;
 @using System.Net;
@@ -31,7 +32,7 @@
                     </Items>
                     <Content>
                         <TabPanel Name="history">
-                    
+                            <HistoryList @ref="historyList" ProductId="Id" />
                         </TabPanel>
                         <TabPanel Name="process">
                             <BpmnModeler />
@@ -60,6 +61,8 @@
 
     string selectedTab = "history";
 
+    private HistoryList historyList;
+
     protected override async Task OnInitializedAsync()
     {
         Details = await Products.Get(Id); 
@@ -69,6 +72,7 @@
     {
         await Products.Execute(Id, actionId);
         Details = await Products.Get(Id);
+        await historyList.Reload();
     }
 
     private Task OnSelectedTabChanged(string name)

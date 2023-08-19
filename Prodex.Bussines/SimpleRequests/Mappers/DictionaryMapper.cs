@@ -18,4 +18,5 @@ public partial class DictionaryMapper :
     public partial void ToEntity(FormModel form, Dictionary entity);
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<Dictionary> prod);
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<Dictionary> query);
+    public partial FormModel ToDetailsModel(Dictionary model);
 }

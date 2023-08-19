@@ -81,6 +81,16 @@ public class SimpleRequestConfig
 
         return this;
     }
+
+    public SimpleRequestConfig AddDetailsConfig<TEntity, TDetails, TCustomHandler>() 
+        where TEntity : class, IEntity
+        where TCustomHandler : class, IRequestHandler<SimpleGetDetails.Request<TEntity, TDetails>, TDetails>
+    {
+        Services.AddScoped<IRequestHandler<SimpleGetDetails.Request<TEntity, TDetails>, TDetails>,
+            TCustomHandler>();
+
+        return this;
+    }
 }
 
 public interface IConfigurator

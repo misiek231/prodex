@@ -30,4 +30,6 @@ public partial class DictionaryTermMapper :
     public partial void ToEntity(FormModel form, DictionaryTerm entity);
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<DictionaryTerm> prod);
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<DictionaryTerm> query);
+
+    public partial FormModel ToDetailsModel(DictionaryTerm model);
 }

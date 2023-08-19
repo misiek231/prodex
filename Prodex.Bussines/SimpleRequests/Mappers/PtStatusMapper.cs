@@ -14,4 +14,5 @@ public partial class PtStatusMapper : IListMapper<PtStatus, ListItemModel>, ICre
     public partial void ToEntity(FormModel form, PtStatus entity);
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<PtStatus> prod);
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<PtStatus> query);
+    public partial FormModel ToDetailsModel(PtStatus model);
 }

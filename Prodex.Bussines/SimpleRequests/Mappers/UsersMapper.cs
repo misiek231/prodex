@@ -38,4 +38,6 @@ public partial class UsersMapper : IListMapper<User, ListItemModel>, ICreateMapp
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<User> prod);
 
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<User> query);
+
+    public partial FormModel ToDetailsModel(User model);
 }

@@ -1,4 +1,5 @@
-﻿using Prodex.Bussines.SimpleRequests.Base;
+﻿using Prodex.Bussines.Handlers.Products;
+using Prodex.Bussines.SimpleRequests.Base;
 using Prodex.Data.Models;
 using Prodex.Shared.Models.Products;
 
@@ -12,6 +13,6 @@ public class ProductsConfiguration : IConfigurator
         config.AddListConfig<Product, FilterModel, ListItemModel>()
             .AddCreateConfig<Product, FormModel>()
             .AddUpdateConfig<Product, FormModel>()
-            .AddDetailsConfig<Product, DetailsModel>();
+            .AddDetailsConfig<Product, DetailsModel, GetProductDetailsHandler>();
     }
 }

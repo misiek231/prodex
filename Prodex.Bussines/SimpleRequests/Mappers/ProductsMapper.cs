@@ -28,4 +28,6 @@ public partial class ProductsMapper : IListMapper<Product, ListItemModel>, ICrea
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<Product> prod);
 
     public partial IQueryable<DetailsModel> ToDetailsModel(IQueryable<Product> query);
+
+    public partial DetailsModel ToDetailsModel(Product model);
 }

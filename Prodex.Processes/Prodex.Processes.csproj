@@ -9,4 +9,8 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="Prodex.Processes.Tests" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Prodex.Shared\Prodex.Shared.csproj" />
+	</ItemGroup>
 </Project>

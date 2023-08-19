@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Prodex.Shared.Utils;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Prodex.Processes
@@ -6,7 +7,7 @@ namespace Prodex.Processes
     public class ProcessBuilderService
     {
 
-        public List<(long id, string name)> GetActions(string xml, long currentStep)
+        public List<KeyValueResult> GetActions(string xml, long currentStep)
         {
             var steps = BuildProcess(xml);
 
@@ -14,7 +15,7 @@ namespace Prodex.Processes
 
             return steps
                 .Where(p => current.NextSteps.Contains(p.StepId))
-                .Select(p => (p.StepId, p.Name))
+                .Select(p => new KeyValueResult(p.StepId, p.Name))
                 .ToList();
         }
 
