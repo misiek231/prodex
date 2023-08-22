@@ -2,6 +2,7 @@
 @using Prodex.Client.Coponents
 @using Prodex.Client.Coponents.Form
 @using Prodex.Client.Pages.ProductTemplates.Components
+@using Prodex.Client.Pages.ProductTemplates.Models;
 @using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.ProductTemplates;
 @using System.Net;
@@ -48,14 +49,7 @@
             </TabPanel>
         }
         <TabPanel Name="process">
-            <Card>
-                <CardBody>
-                    <BpmnModeler @ref="modeler"></BpmnModeler>
-                </CardBody>
-                <CardFooter>
-                    <Button Color="Color.Primary" @onclick="Save">Zapisz diagram</Button>
-                </CardFooter>
-            </Card>
+            <ProcessDesigner @ref="designer" Save="Save"/>
         </TabPanel>
     </Content>
 </Tabs>
@@ -67,20 +61,20 @@
     [Parameter]
     public long? Id { get; set; }
 
+    private ProcessDesigner designer;
+
     protected override async Task OnInitializedAsync()
     {
         if (!Id.HasValue) return;
-        
-        Form = await ProductsTemplates.Get(Id.Value);
-        await modeler.SetValueAsync(Form.ProcessXml);
-    }
 
-    private BpmnModeler modeler;
+        Form = await ProductsTemplates.Get(Id.Value);
+        await designer.SetValueAsync(Form.ProcessXml);
+    }
 
     private async Task Save()
     {
-        Form.ProcessXml = await modeler.GetValueAsync();
-        
+        Form.ProcessXml = await designer.GetValueAsync();
+
         var result = Id.HasValue ?
         await ProductsTemplates.Put(Id.Value, Form) :
         await ProductsTemplates.Post(Form);

@@ -1,0 +1,17 @@
+﻿@using Prodex.Shared.Models.ProductTemplates.ElementOptions;
+
+<Div class="mt-3">
+
+    <FormWrapper Form="Form">
+        <FormEnumSelect Property="p => p.Action" />
+        <FormSelect Property="p => p.Status" />
+    </FormWrapper>
+
+</Div>
+
+@code {
+
+
+    ServiceTaskOptionsModel Form = new ServiceTaskOptionsModel();
+
+}

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Prodex.Client;
 using Prodex.Client.DiHelpers;
 using Prodex.Client.Services.Auth;
+using Prodex.Utils;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -36,6 +37,5 @@ builder.Services
     .AddFontAwesomeIcons();
 
 builder.Services.AddSingleton<ILoadingIndicatorService, LoadingIndicatorService>();
-
 
 await builder.Build().RunAsync();

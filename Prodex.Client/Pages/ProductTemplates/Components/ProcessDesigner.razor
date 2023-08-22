@@ -1,0 +1,57 @@
+﻿@using Prodex.Client.Coponents;
+@using Prodex.Client.Pages.ProductTemplates.Components.ElementOptions
+@using Prodex.Client.Pages.ProductTemplates.Models;
+<Card>
+    <CardBody>
+        <BpmnModeler @ref="modeler" SelectedElementChanged="SelectedElementChanged"></BpmnModeler>
+
+
+        @switch (elementType)
+        {
+            case ElementType.ServiceTaks: 
+                <ServiceTaskOptions />
+            break;
+
+            case ElementType.UserTask: 
+                <UserTaskOptions />
+            break;
+
+            case ElementType.SendTask:
+                <SendTaskOptions />
+            break;
+
+            default: 
+                <Div></Div>
+            break;
+        }
+
+    </CardBody>
+    <CardFooter>
+        <Button Color="Color.Primary" @onclick="Save">Zapisz diagram</Button>
+    </CardFooter>
+</Card>
+
+
+@code {
+    private BpmnModeler modeler;
+    private ElementType elementType;
+
+    [Parameter]
+    public EventCallback Save { get; set; }
+
+    public Task<string> GetValueAsync()
+    {
+        return modeler.GetValueAsync();
+    }
+
+    public Task SetValueAsync(string xml)
+    {
+        return modeler.SetValueAsync(xml);
+    }
+
+    private void SelectedElementChanged(BpmnElement element)
+    {
+        Console.WriteLine(element.Type);
+        elementType = element.TypeEnum;
+    }
+}

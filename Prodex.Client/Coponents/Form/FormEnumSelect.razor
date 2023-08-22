@@ -1,0 +1,81 @@
+﻿@using Prodex.Client.RestClients;
+@using Prodex.Shared.Forms;
+@using Prodex.Shared.Pagination;
+@using Prodex.Shared.Utils;
+@using Blazorise.Components
+@using System.Linq.Expressions;
+@using System.Reflection;
+@using Prodex.Utils;
+@using System.ComponentModel;
+@typeparam TForm where TForm : FormBaseModel
+@typeparam TField where TField : Enum
+@inject ApiSelectClient apiSelectClient;
+
+
+
+<Validation Validator="(a) => Form.Status(a, GetProp().Name)">
+    <Field>
+        <FieldLabel>@GetLabel()</FieldLabel>
+        <Autocomplete TItem="KeyValuePair<TField, string>"
+                      TValue="TField"
+                      Data="@Options"
+                      ValueField="@(item => item.Key)"
+                      TextField="@(item => item.Value)"
+                      SelectedValue="@Property.Compile()(Form)"
+                      SelectedValueChanged="ValueChanged"
+                      ReadData="e => LoadData(e.SearchValue)"
+                      Placeholder="Search..."
+                      Validator="(a) => Form.Status(a, GetProp().Name)"
+                      Debounce="true"
+                      MinLength="0">
+            <NotFoundContent> Brak wyników </NotFoundContent>
+        </Autocomplete>
+    </Field>
+</Validation>
+
+@code {
+
+    [CascadingParameter]
+    public TForm Form { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public Expression<Func<TForm, TField>> Property { get; set; }
+
+    private Pager pager = new Pager();
+
+    private List<KeyValuePair<TField, string>> Options { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        LoadData("");
+
+        return Task.CompletedTask;
+    }
+
+    private void LoadData(string search)
+    {
+        Options = EnumExtensions.GetValuesWithDescription<TField>().Where(p => p.Value.Contains(search)).ToList();
+    }
+
+    private void ValueChanged(TField newValue)
+    {
+        Console.WriteLine(newValue);
+
+        GetProp().SetValue(Form, newValue);
+    }
+
+    private string GetLabel()
+    {
+        if (!string.IsNullOrEmpty(Label)) return Label;
+
+        return GetProp().GetCustomAttribute<DescriptionAttribute>()?.Description ?? "";
+    }
+
+    private PropertyInfo GetProp()
+    {
+        return (Property.Body as MemberExpression).Member as PropertyInfo;
+    }
+}

@@ -1,11 +1,16 @@
-﻿@inject IJSRuntime _js
+﻿@using Prodex.Client.Pages.ProductTemplates.Models;
+@inject IJSRuntime _js
 
 <Div id="bpmn-canvas"></Div>
 
 @code {
+    
+    [Parameter]
+    public EventCallback<BpmnElement> SelectedElementChanged { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await _js.InvokeVoidAsync("loadBpmn");
+        await _js.InvokeVoidAsync("loadBpmn", DotNetObjectReference.Create(this));
     }
 
     public async Task<string> GetValueAsync()
@@ -16,6 +21,14 @@
     public async Task SetValueAsync(string xml)
     {
         await _js.InvokeVoidAsync("setCurrentDiagram", xml);
+    }
+
+    [JSInvokable]
+    public Task OnElementClick(BpmnElement e)
+    {
+        SelectedElementChanged.InvokeAsync(e);
+        
+        return Task.CompletedTask;
     }
 }
 

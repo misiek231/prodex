@@ -1,6 +1,6 @@
 ﻿import BpmnJS from 'bpmn-js/lib/Modeler';
 
-window.loadBpmn = () => {
+window.loadBpmn = (currentInstance) => {
 
     var canv = document.querySelector('#bpmn-canvas');
 
@@ -11,11 +11,13 @@ window.loadBpmn = () => {
         container: '#bpmn-canvas'
     });
 
+    window.modeler.on('element.click', async (e) => {
+        await currentInstance.invokeMethodAsync('OnElementClick', e.element);
+    });
+
 
     try {
         window.modeler.createDiagram();
-
-        console.log('rendered dupa');
     } catch (err) {
         console.log('error rendering', err);
     }
