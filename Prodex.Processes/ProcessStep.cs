@@ -15,6 +15,7 @@
         ExclusiveGateway,
         UserTask,
         ServiceTask,
+        SendTask,
         End
     }
 }

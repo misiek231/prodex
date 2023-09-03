@@ -17,6 +17,10 @@ namespace Prodex.Data.Configurations
             .IsRequired()
             .HasMaxLength(60);
 
+            entity.HasOne(d => d.Status).WithMany(p => p.Products)
+            .HasForeignKey(d => d.StatusId)
+            .HasConstraintName("FK_Products_StatusId_PtStatuses_Id");
+
             entity.HasOne(d => d.Template).WithMany(p => p.Products)
             .HasForeignKey(d => d.TemplateId)
             .OnDelete(DeleteBehavior.ClientSetNull)

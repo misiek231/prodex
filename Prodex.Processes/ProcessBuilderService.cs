@@ -1,4 +1,5 @@
-﻿using Prodex.Shared.Utils;
+﻿using MediatR;
+using Prodex.Shared.Utils;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
@@ -6,20 +7,7 @@ namespace Prodex.Processes
 {
     public class ProcessBuilderService
     {
-
-        public List<KeyValueResult> GetActions(string xml, long currentStep)
-        {
-            var steps = BuildProcess(xml);
-
-            var current = steps.Single(p => p.StepId == currentStep);
-
-            return steps
-                .Where(p => current.NextSteps.Contains(p.StepId))
-                .Select(p => new KeyValueResult(p.StepId, p.Name))
-                .ToList();
-        }
-
-        internal List<ProcessStep> BuildProcess(string xml)
+        public BuildedProcess BuildProcess(string xml)
         {
             Definitions def;
 
@@ -30,10 +18,7 @@ namespace Prodex.Processes
                 def = (Definitions)serializer.Deserialize(reader);
             }
 
-
             var steps = new List<ProcessStep>();
-
-
             var start = def.Process.StartEvent;
 
             steps.Add(new ProcessStep
@@ -46,7 +31,7 @@ namespace Prodex.Processes
 
             steps.Last().NextSteps = CalculateNextSteps(def.Process, steps, start);
 
-            return steps;
+            return new BuildedProcess(steps);
         }
 
         private List<long> CalculateNextSteps(Process process, List<ProcessStep> steps, BaseElement currentElement)
@@ -90,6 +75,7 @@ namespace Prodex.Processes
             ServiceTask => StepType.ServiceTask,
             EndEvent => StepType.End,
             StartEvent => StepType.Start,
+            SendTask => StepType.SendTask,
             _ => throw new InvalidEnumArgumentException()
         };
     }

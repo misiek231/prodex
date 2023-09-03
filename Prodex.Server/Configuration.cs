@@ -9,6 +9,7 @@ using Prodex.Bussines.Sitemap;
 using Prodex.Data;
 using Prodex.Processes;
 using Prodex.Server.MinimalApiExtensions;
+using System.Reflection;
 using System.Text;
 
 namespace Prodex.Server
@@ -23,7 +24,14 @@ namespace Prodex.Server
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             // Todo: Register handlers in better way
-            builder.Services.AddMediatR(typeof(Program).Assembly, typeof(Shared.Models.ProductTemplates.FilterModel).Assembly, typeof(GetSitemap).Assembly);
+            builder.Services.AddMediatR(cfg =>
+                {
+                    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+                    cfg.RegisterServicesFromAssembly(typeof(Shared.Models.ProductTemplates.FilterModel).Assembly);
+                    cfg.RegisterServicesFromAssembly(typeof(GetSitemap).Assembly);
+                    cfg.RegisterServicesFromAssembly(typeof(AfterStepExecutedRequest).Assembly);
+                }
+            );
 
             builder.Services.RegisterSimpleRequests();
 

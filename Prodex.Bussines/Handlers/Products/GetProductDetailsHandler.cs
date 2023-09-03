@@ -27,11 +27,14 @@ namespace Prodex.Bussines.Handlers.Products
         {
             var result = await context.Products
                 .Include(p => p.Template)
+                .Include(p => p.Status)
                 .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
             var model = Mapper.ToDetailsModel(result);
 
-            var actions = processBuilderService.GetActions(result.Template.ProcessXml, result.CurrentStepId);
+            var actions = processBuilderService
+                .BuildProcess(result.Template.ProcessXml)
+                .GetActions(result);
 
             model.Buttons = actions.Select(p => new ApiButton { ActionId = p.Key, Name = p.Value }).ToList();
 

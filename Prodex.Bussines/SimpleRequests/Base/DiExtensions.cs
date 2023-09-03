@@ -4,6 +4,7 @@ using Prodex.Data.Interfaces;
 using Prodex.Shared.Pagination;
 using Riok.Mapperly.Abstractions;
 using System.Reflection;
+using static Prodex.Bussines.SimpleRequests.Base.SimpleCreate;
 
 namespace Prodex.Bussines.SimpleRequests.Base;
 
@@ -62,6 +63,15 @@ public class SimpleRequestConfig
     {
         Services.AddScoped<IRequestHandler<SimpleCreate.Request<TEntity, TForm>, object>,
             SimpleCreate.Handler<TEntity, TForm>>();
+
+        return this;
+    }
+
+    public SimpleRequestConfig AddCreateConfig<TEntity, TForm, TAfterCreateRequest>() where TEntity : class, IEntity
+    where TAfterCreateRequest : IAfterCreateRequest<TEntity>, new()
+    {
+        Services.AddScoped<IRequestHandler<SimpleCreate.Request<TEntity, TForm>, object>,
+            SimpleCreate.Handler<TEntity, TForm, TAfterCreateRequest>>();
 
         return this;
     }

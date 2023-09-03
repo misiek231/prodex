@@ -15,7 +15,11 @@ public partial class Product
 
     public long CurrentStepId { get; set; }
 
+    public long? StatusId { get; set; }
+
     public virtual ICollection<History> Histories { get; } = new List<History>();
+
+    public virtual PtStatus Status { get; set; }
 
     public virtual ProductTemplate Template { get; set; }
 }

@@ -13,6 +13,9 @@ public partial class ProductsMapper : IListMapper<Product, ListItemModel>, ICrea
     private static KeyValueResult CreateKeyValueResult(ProductTemplate t) => new(t.Id, t.Name);
 
     [ObjectFactory]
+    private static KeyValueResult CreateKeyValueResult(PtStatus t) => t == null ? null : new(t.Id, t.Name);
+
+    [ObjectFactory]
     private static Shared.Models.ProductTemplates.ApiTemplateSelect CreateApiTemplate(long templateId) => new(templateId);
 
     public partial ListItemModel ToListItemModel(Product prod);

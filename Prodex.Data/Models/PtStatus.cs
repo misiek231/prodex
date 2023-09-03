@@ -15,5 +15,7 @@ public partial class PtStatus
 
     public long TemplateId { get; set; }
 
+    public virtual ICollection<Product> Products { get; } = new List<Product>();
+
     public virtual ProductTemplate Template { get; set; }
 }

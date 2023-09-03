@@ -40,6 +40,9 @@ public class Process : BaseElement
     [XmlElement(ElementName = "serviceTask", Namespace = Namespaces.MODEL)]
     public List<ServiceTask> ServiceTask { get; set; }
 
+    [XmlElement(ElementName = "sendTask", Namespace = Namespaces.MODEL)]
+    public List<SendTask> SendTask { get; set; }
+
     [XmlElement(ElementName = "endEvent", Namespace = Namespaces.MODEL)]
     public EndEvent EndEvent { get; set; }
 
@@ -49,6 +52,7 @@ public class Process : BaseElement
     public List<BaseElement> All => ExclusiveGateway.Cast<BaseElement>()
                                 .Concat(UserTask.Cast<BaseElement>())
                                 .Concat(ServiceTask.Cast<BaseElement>())
+                                .Concat(SendTask.Cast<BaseElement>())
                                 .Append(EndEvent)
                                 .Append(StartEvent)
                                 .ToList();
@@ -107,6 +111,12 @@ public class UserTask : BaseElement
 
 [XmlRoot(ElementName = "serviceTask", Namespace = Namespaces.MODEL)]
 public class ServiceTask : BaseElement
+{
+
+}
+
+[XmlRoot(ElementName = "sendTask", Namespace = Namespaces.MODEL)]
+public class SendTask : BaseElement
 {
 
 }

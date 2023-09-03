@@ -11,7 +11,7 @@ namespace Prodex.Data.Migrations
                 .WithColumn("Id").AsInt64().PrimaryKey().Identity()
                 .WithColumn("TemplateId").AsInt64().NotNullable().ForeignKey("ProductTemplates", "Id")
                 .WithColumn("StepId").AsString(20).Unique().NotNullable()
-                .WithColumn("ActionType").AsInt32().Unique().NotNullable()
+                .WithColumn("ActionType").AsInt32().NotNullable()
                 .WithColumn("ConfigJson").AsString(2048).NotNullable();
         }
 

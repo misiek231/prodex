@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Prodex.Data;
-using Prodex.Data.Models;
 using Prodex.Processes;
 
 namespace Prodex.Bussines.Handlers.Products;
@@ -26,32 +25,21 @@ public class ExecuteStep
     {
         private readonly DataContext context;
         private readonly ProcessBuilderService processBuilderService;
-        public ExecuteStepHandler(DataContext context, ProcessBuilderService processBuilderService)
+        private readonly IMediator mediator;
+        public ExecuteStepHandler(DataContext context, ProcessBuilderService processBuilderService, IMediator mediator)
         {
             this.context = context;
             this.processBuilderService = processBuilderService;
+            this.mediator = mediator;
         }
 
         public async Task<object> Handle(Request request, CancellationToken cancellationToken)
         {
             var result = await context.Products.Include(p => p.Template).FirstOrDefaultAsync(p => p.Id == request.ProductId, cancellationToken);
 
-            var actions = processBuilderService.GetActions(result.Template.ProcessXml, result.CurrentStepId);
-
-            var action = actions.FirstOrDefault(p => p.Key == request.StepId);
-
-            if (action is null)
-                throw new InvalidOperationException();
-
-            context.Histories.Add(new History
-            {
-                ActionName = action.Value,
-                ProductId = request.ProductId,
-                UserId = request.UserId,
-                DateCreated = DateTime.Now,
-            });
-
-            result.CurrentStepId = request.StepId;
+            await processBuilderService
+                .BuildProcess(result.Template.ProcessXml)
+                .ExecuteUserTask(mediator, result, request.StepId, request.UserId);
 
             await context.SaveChangesAsync(cancellationToken);
 

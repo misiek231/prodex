@@ -24,9 +24,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("OnInitializedAsync Options");
-        Form = await Service.Get(TemplateId, ElementId) ?? Form;
+        await LoadData();
         await base.OnInitializedAsync();
+    }
+
+    private async Task LoadData()
+    {
+        Form = await Service.Get(TemplateId, ElementId) ?? Form;
     }
 
     private async Task Save()
@@ -35,5 +39,7 @@
             await Service.Put(Form.Id.Value, Form);
         else
             await Service.Post(TemplateId, ElementId, Form);
+
+        await LoadData();
     }
 }

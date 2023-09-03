@@ -12,8 +12,6 @@ namespace Prodex.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ServiceTaskConfig> entity)
         {
-            entity.HasIndex(e => e.ActionType, "IX_ServiceTaskConfigs_ActionType").IsUnique();
-
             entity.HasIndex(e => e.StepId, "IX_ServiceTaskConfigs_StepId").IsUnique();
 
             entity.Property(e => e.ConfigJson)
@@ -21,7 +19,7 @@ namespace Prodex.Data.Configurations
             .HasMaxLength(2048);
             entity.Property(e => e.StepId)
             .IsRequired()
-            .HasMaxLength(15);
+            .HasMaxLength(20);
 
             entity.HasOne(d => d.Template).WithMany(p => p.ServiceTaskConfigs)
             .HasForeignKey(d => d.TemplateId)
