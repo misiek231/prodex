@@ -4,7 +4,7 @@ using Prodex.Shared.Models.ProductTemplates;
 
 namespace Prodex.Bussines.SimpleRequests.Configuration;
 
-public class ProductTeplatesConfiguration : IConfigurator
+public class ProductTemplatesConfiguration : IConfigurator
 {
 
     public void Configure(SimpleRequestConfig config)

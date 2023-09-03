@@ -1,4 +1,6 @@
-﻿@using Prodex.Shared.Models.ProductTemplates.ElementOptions;
+﻿@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.ProductTemplates.ElementOptions;
+@inject ProductTemplatesConfigsClient Service;
 
 <Div class="mt-3">
 
@@ -7,11 +9,31 @@
         <FormSelect Property="p => p.Status" />
     </FormWrapper>
 
+    <Button Color="Color.Primary" Clicked="@Save">Zapisz konfigurację</Button>
+
 </Div>
 
 @code {
+    ServiceTaskConfigFormModel Form = new ServiceTaskConfigFormModel();
 
+    [Parameter]
+    public string ElementId { get; set; }
 
-    ServiceTaskOptionsModel Form = new ServiceTaskOptionsModel();
+    [Parameter]
+    public long TemplateId { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("OnInitializedAsync Options");
+        Form = await Service.Get(TemplateId, ElementId) ?? Form;
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Save()
+    {
+        if (Form.Id.HasValue)
+            await Service.Put(Form.Id.Value, Form);
+        else
+            await Service.Post(TemplateId, ElementId, Form);
+    }
 }

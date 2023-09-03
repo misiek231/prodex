@@ -9,7 +9,7 @@
         @switch (elementType)
         {
             case ElementType.ServiceTaks: 
-                <ServiceTaskOptions />
+                <ServiceTaskOptions TemplateId="@TemplateId" ElementId="@elementId"/>
             break;
 
             case ElementType.UserTask: 
@@ -35,9 +35,13 @@
 @code {
     private BpmnModeler modeler;
     private ElementType elementType;
+    private string elementId;
 
     [Parameter]
     public EventCallback Save { get; set; }
+
+    [Parameter]
+    public long TemplateId { get; set; }
 
     public Task<string> GetValueAsync()
     {
@@ -53,5 +57,6 @@
     {
         Console.WriteLine(element.Type);
         elementType = element.TypeEnum;
+        elementId = element.Id;
     }
 }

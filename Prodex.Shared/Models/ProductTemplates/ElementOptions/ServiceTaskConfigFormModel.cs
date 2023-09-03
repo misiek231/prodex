@@ -1,29 +1,26 @@
 ﻿using Prodex.Shared.Forms;
 using Prodex.Shared.Validation;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Prodex.Shared.Models.ProductTemplates.ElementOptions;
 
-public class ServiceTaskOptionsModel : FormBaseModel<ServiceTaskOptionsModel>
+public class ServiceTaskConfigFormModel : FormBaseModel<ServiceTaskConfigFormModel>
 {
+    public long? Id { get; set; }
+
     [Description("Akcja")]
-    public UserTaskAction Action { get; set; }
+    public ServiceTaskAction Action { get; set; }
 
     [Description("Status")]
     public ApiStatusSelect Status { get; set; }
 
-    public override void Rules(ValidationContext validationContext, FluentValidator<ServiceTaskOptionsModel> model)
+    public override void Rules(ValidationContext validationContext, FluentValidator<ServiceTaskConfigFormModel> model)
     {
     }
 }
 
-public enum UserTaskAction
+public enum ServiceTaskAction
 {
     [Description("Brak")]
     None,

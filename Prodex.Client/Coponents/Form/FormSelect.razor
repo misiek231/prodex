@@ -49,15 +49,8 @@
     private List<KeyValueResult> Options { get; set; }
     private long value;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadData("");
-    }
-
     private async Task LoadData(string search)
     {
-        // Options = (await DataSource(pager, search)).Items.ToList();
-
         var name = GetProp().PropertyType.Name.PascalToKebab();
 
         Options = await apiSelectClient.Get(name, pager, search);

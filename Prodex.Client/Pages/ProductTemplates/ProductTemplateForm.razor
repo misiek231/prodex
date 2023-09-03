@@ -47,10 +47,10 @@
             <TabPanel Name="fields">
                 Content for messages.
             </TabPanel>
+            <TabPanel Name="process">
+                <ProcessDesigner @ref="designer" Save="Save" TemplateId="Id.Value"/>
+            </TabPanel>
         }
-        <TabPanel Name="process">
-            <ProcessDesigner @ref="designer" Save="Save"/>
-        </TabPanel>
     </Content>
 </Tabs>
 
@@ -69,6 +69,8 @@
 
         Form = await ProductsTemplates.Get(Id.Value);
         await designer.SetValueAsync(Form.ProcessXml);
+
+        await base.OnInitializedAsync();
     }
 
     private async Task Save()
