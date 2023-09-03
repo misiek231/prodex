@@ -20,7 +20,7 @@ namespace Prodex.Shared.Forms
         public Validations Validations;
         public abstract ValidationErrors Validate(ValidationContext validationContext);
 
-        public void Status(ValidatorEventArgs a, string propName)
+        public void GetState(ValidatorEventArgs a, string propName)
         {
             a.Status = _errors?.Errors.Any(p => p.Name.Equals(propName, StringComparison.OrdinalIgnoreCase)) == true ? ValidationStatus.Error : ValidationStatus.Success;
 

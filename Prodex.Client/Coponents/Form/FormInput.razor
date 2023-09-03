@@ -4,7 +4,7 @@
 @using System.ComponentModel;
 @typeparam TForm where TForm : FormBaseModel
 
-<Validation Validator="(a) => Form.Status(a, GetProp().Name)">
+<Validation Validator="(a) => Form.GetState(a, GetProp().Name)">
     <Field>
         <FieldLabel>@GetLabel()</FieldLabel>
         <TextEdit Text="@Property.Compile()(Form)" TextChanged="TextChanged" Role="Role">

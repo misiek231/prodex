@@ -13,7 +13,7 @@
 
 
 
-<Validation Validator="(a) => Form.Status(a, GetProp().Name)">
+<Validation Validator="(a) => Form.GetState(a, GetProp().Name)">
     <Field>
         <FieldLabel>@GetLabel()</FieldLabel>
         <Autocomplete TItem="KeyValuePair<TField, string>"
@@ -25,7 +25,7 @@
                       SelectedValueChanged="ValueChanged"
                       ReadData="e => LoadData(e.SearchValue)"
                       Placeholder="Search..."
-                      Validator="(a) => Form.Status(a, GetProp().Name)"
+                      Validator="(a) => Form.GetState(a, GetProp().Name)"
                       Debounce="true"
                       MinLength="0">
             <NotFoundContent> Brak wyników </NotFoundContent>
