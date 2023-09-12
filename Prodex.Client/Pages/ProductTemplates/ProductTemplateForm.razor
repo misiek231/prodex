@@ -68,14 +68,17 @@
         if (!Id.HasValue) return;
 
         Form = await ProductsTemplates.Get(Id.Value);
-        await designer.SetValueAsync(Form.ProcessXml);
+        await designer?.SetValueAsync(Form.ProcessXml);
 
         await base.OnInitializedAsync();
     }
 
     private async Task Save()
     {
-        Form.ProcessXml = await designer.GetValueAsync();
+        if (designer is not null)
+            Form.ProcessXml = await designer.GetValueAsync();
+        else
+            Form.ProcessXml = "blank";
 
         var result = Id.HasValue ?
         await ProductsTemplates.Put(Id.Value, Form) :
