@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Prodex.Data;
+using Prodex.Data.Interfaces;
 using Prodex.Shared.Pagination;
 
 namespace Prodex.Bussines.SimpleRequests.Base;
@@ -21,7 +22,7 @@ public class SimpleGetList
     }
 
     public class Handler<TEntity, TFilter, TListItemModel> : IRequestHandler<Request<TEntity, TFilter, TListItemModel>, Pagination<TListItemModel>>
-        where TEntity : class
+        where TEntity : class, IEntity
     {
         private readonly IListMapper<TEntity, TListItemModel> Mapper;
         private readonly IFilter<TEntity, TFilter> Filter;
@@ -38,6 +39,7 @@ public class SimpleGetList
         {
             var mapped = await Context.Set<TEntity>()
                 .Filter(Filter, request.Filter)
+                .OrderByDescending(p => p.Id)
                 .Paginate(request.Pager)
                 .ToListItemModel(Mapper)
                 .ToListAsync(cancellationToken);

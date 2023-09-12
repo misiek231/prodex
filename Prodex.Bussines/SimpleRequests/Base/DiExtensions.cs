@@ -51,7 +51,7 @@ public class SimpleRequestConfig
         Services = services;
     }
 
-    public SimpleRequestConfig AddListConfig<TEntity, TFilter, TListItemModel>() where TEntity : class
+    public SimpleRequestConfig AddListConfig<TEntity, TFilter, TListItemModel>() where TEntity : class, IEntity
     {
         Services.AddScoped<IRequestHandler<SimpleGetList.Request<TEntity, TFilter, TListItemModel>, Pagination<TListItemModel>>,
             SimpleGetList.Handler<TEntity, TFilter, TListItemModel>>();
