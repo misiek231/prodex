@@ -13,3 +13,9 @@ public class SelectRequest : IRequest<List<KeyValueResult>>
 public class SelectRequest<T> : SelectRequest
 {
 }
+
+public class SelectStatusRequest : SelectRequest<ApiStatus>
+{
+    public long TemplateId { get; set; }
+}
+

@@ -1,12 +1,13 @@
 ﻿@using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.ProductTemplates.ElementOptions;
+@using Prodex.Shared.Models.ProductTemplates.Statuses;
 @inject ProductTemplatesConfigsClient Service;
 
 <Div class="mt-3">
 
     <FormWrapper Form="Form">
         <FormEnumSelect Property="p => p.Action" />
-        <FormSelect Property="p => p.Status" />
+        <FormSelect Property="p => p.Status" AdditionalFilter="StatusFilter" />
     </FormWrapper>
 
     <Button Color="Color.Primary" Clicked="@Save">Zapisz konfigurację</Button>
@@ -21,6 +22,8 @@
 
     [Parameter]
     public long TemplateId { get; set; }
+
+    private FilterModel StatusFilter => new FilterModel { TemplateId = TemplateId };
 
     protected override async Task OnInitializedAsync()
     {

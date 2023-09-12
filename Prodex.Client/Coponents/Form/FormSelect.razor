@@ -48,6 +48,9 @@
     [Parameter]
     public Expression<Func<TForm, TField>> Property { get; set; }
 
+    [Parameter]
+    public object AdditionalFilter { get; set; }
+
     private Pager pager = new Pager();
 
     private List<KeyValueResult> Options { get; set; }
@@ -57,7 +60,7 @@
     {
         var name = GetProp().PropertyType.Name.PascalToKebab();
 
-        Options = await apiSelectClient.Get(name, pager, search);
+        Options = await apiSelectClient.Get(name, pager, search, AdditionalFilter);
     }
 
     private void ValueChanged(long? newValue)

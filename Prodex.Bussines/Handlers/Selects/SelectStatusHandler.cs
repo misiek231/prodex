@@ -7,7 +7,7 @@ using Prodex.Shared.Utils;
 namespace Prodex.Bussines.Handlers.Selects;
 
 
-public class SelectStatusHandler : IRequestHandler<SelectRequest<ApiStatusSelect>, List<KeyValueResult>>
+public class SelectStatusHandler : IRequestHandler<SelectStatusRequest, List<KeyValueResult>>
 {
     private readonly DataContext context;
 
@@ -15,9 +15,9 @@ public class SelectStatusHandler : IRequestHandler<SelectRequest<ApiStatusSelect
     {
         this.context = context;
     }
-    public async Task<List<KeyValueResult>> Handle(SelectRequest<ApiStatusSelect> request, CancellationToken cancellationToken)
+    public async Task<List<KeyValueResult>> Handle(SelectStatusRequest request, CancellationToken cancellationToken)
     {
-        var query = context.PtStatuses.AsQueryable();
+        var query = context.PtStatuses.Where(p => p.TemplateId == request.TemplateId).AsQueryable();
 
         if (!string.IsNullOrEmpty(request.Search))
             query = query.Where(p => p.Name.Contains(request.Search));
