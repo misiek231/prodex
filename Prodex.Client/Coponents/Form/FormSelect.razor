@@ -11,7 +11,11 @@
 @typeparam TField where TField : IApiSelect, new()
 @inject ApiSelectClient apiSelectClient;
 
-
+<style>
+    .dropdown-menu {
+        margin: 2.5rem 0 0;
+    }
+</style>
 
 <Validation Validator="(a) => Form.GetState(a, GetProp().Name)">
     <Field>
