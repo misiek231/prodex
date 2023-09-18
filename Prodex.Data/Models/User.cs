@@ -18,4 +18,6 @@ public partial class User
     public string Surname { get; set; }
 
     public virtual ICollection<History> Histories { get; } = new List<History>();
+
+    public virtual ICollection<SendTaskConfig> SendTaskConfigs { get; } = new List<SendTaskConfig>();
 }

@@ -27,8 +27,6 @@
 @code {
     private FormModel Form = new FormModel();
 
-    private BpmnModeler modeler;
-
     private async Task Save()
     {
         var result = await Products.Post(Form);

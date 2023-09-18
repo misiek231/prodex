@@ -26,7 +26,6 @@
 @code {
     private List<ListItemModel> items = new List<ListItemModel>();
     private Pager pager = new Pager(1, 10);
-    private bool Loading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,18 +34,16 @@
 
     private async Task LoadData()
     {
-        Loading = true;
         try
         {
             var result = await Products.Get(pager, new FilterModel());
             items = result.Items.ToList();
             pager.TotalRows = result.TotalRows;
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
             // todo: find nice way to handle exceptions like that
         }
-        Loading = false;
     }
 
     private void RowSelected(ListItemModel item)

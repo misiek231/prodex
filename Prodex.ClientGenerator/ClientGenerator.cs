@@ -71,6 +71,7 @@ namespace Prodex.ClientGenerator
             "POST" => GeneratePost(model),
             "GET" => GenerateGet(model),
             "PUT" => GeneratePut(model),
+            _ => throw new NotImplementedException(),
         };
 
         private static List<string> GeneratePost(EndpointModel model)

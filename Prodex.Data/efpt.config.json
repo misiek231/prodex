@@ -39,6 +39,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[SendTaskConfigs]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[ServiceTaskConfigs]",
          "ObjectType": 0
       },

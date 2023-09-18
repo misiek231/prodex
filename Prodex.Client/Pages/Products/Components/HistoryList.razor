@@ -31,7 +31,7 @@
             items = result.Items.ToList();
             pager.TotalRows = result.TotalRows;
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
             // todo: find nice way to handle exceptions like that
         }

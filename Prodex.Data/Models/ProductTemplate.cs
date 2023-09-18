@@ -17,5 +17,7 @@ public partial class ProductTemplate
 
     public virtual ICollection<PtStatus> PtStatuses { get; } = new List<PtStatus>();
 
+    public virtual ICollection<SendTaskConfig> SendTaskConfigs { get; } = new List<SendTaskConfig>();
+
     public virtual ICollection<ServiceTaskConfig> ServiceTaskConfigs { get; } = new List<ServiceTaskConfig>();
 }

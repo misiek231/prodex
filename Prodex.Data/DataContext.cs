@@ -27,6 +27,8 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<PtStatus> PtStatuses { get; set; }
 
+    public virtual DbSet<SendTaskConfig> SendTaskConfigs { get; set; }
+
     public virtual DbSet<ServiceTaskConfig> ServiceTaskConfigs { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -39,6 +41,7 @@ public partial class DataContext : DbContext
             modelBuilder.ApplyConfiguration(new Configurations.ProductConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ProductTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.PtStatusConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.SendTaskConfigConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ServiceTaskConfigConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.UserConfiguration());
 

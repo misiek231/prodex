@@ -33,15 +33,15 @@
 
     private async Task LoadData()
     {
-        Form = await Service.Get(TemplateId, ElementId) ?? Form;
+        Form = await Service.GetServiceTaskConfig(TemplateId, ElementId) ?? Form;
     }
 
     private async Task Save()
     {
         if (Form.Id.HasValue)
-            await Service.Put(Form.Id.Value, Form);
+            await Service.UpdateServiceTaskConfig(Form.Id.Value, Form);
         else
-            await Service.Post(TemplateId, ElementId, Form);
+            await Service.CreateServiceTaskConfig(TemplateId, ElementId, Form);
 
         await LoadData();
     }

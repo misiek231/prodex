@@ -17,7 +17,7 @@ namespace Prodex.Client.RestClients
 
         public async System.Threading.Tasks.Task<System.Collections.Generic.List<Prodex.Shared.Utils.KeyValueResult>> Get(System.String name, Prodex.Shared.Pagination.Pager pager, System.String search, object additionalFilter)
         {
-            return await client.GetFromJsonAsync<System.Collections.Generic.List<Prodex.Shared.Utils.KeyValueResult>>($"api/api-select/{name}", TypeMerger.TypeMerger.Merge(additionalFilter, TypeMerger.TypeMerger.Merge(pager, search)));
+            return await client.GetFromJsonAsync<System.Collections.Generic.List<Prodex.Shared.Utils.KeyValueResult>>($"api/api-select/{name}", TypeMerger.TypeMerger.Merge(additionalFilter ?? new object(), TypeMerger.TypeMerger.Merge(pager, search)));
         }
     }
 }

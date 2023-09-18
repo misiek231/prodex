@@ -8,10 +8,10 @@ using Prodex.Shared.Models.ProductTemplates.ElementOptions;
 namespace Prodex.Bussines.Handlers.ProductTemplatesConfigs;
 
 
-public static class GetServiceTaskDetails
+public static class GetSendTaskDetails
 {
 
-    public class Request : IRequest<ServiceTaskConfigFormModel>
+    public class Request : IRequest<SendTaskConfigFormModel>
     {
         public long TemplateId { get; set; }
         public string StepId { get; set; }
@@ -23,20 +23,21 @@ public static class GetServiceTaskDetails
         }
     }
 
-    public class GetServiceTaskDetailsHandler : IRequestHandler<Request, ServiceTaskConfigFormModel>
+    public class GetSendTaskDetailsHandler : IRequestHandler<Request, SendTaskConfigFormModel>
     {
         private readonly DataContext context;
-        private readonly IDetailsMapper<ServiceTaskConfig, ServiceTaskConfigFormModel> mapper;
+        private readonly IDetailsMapper<SendTaskConfig, SendTaskConfigFormModel> mapper;
 
-        public GetServiceTaskDetailsHandler(DataContext context, IDetailsMapper<ServiceTaskConfig, ServiceTaskConfigFormModel> mapper)
+        public GetSendTaskDetailsHandler(DataContext context, IDetailsMapper<SendTaskConfig, SendTaskConfigFormModel> mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        public async Task<ServiceTaskConfigFormModel> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<SendTaskConfigFormModel> Handle(Request request, CancellationToken cancellationToken)
         {
-            var result = await context.ServiceTaskConfigs
+            var result = await context.SendTaskConfigs
+                .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.TemplateId == request.TemplateId && p.StepId == request.StepId, cancellationToken);
 
             if (result == null) return null;

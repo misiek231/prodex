@@ -1,5 +1,46 @@
-﻿<h3>SendTaskOptions</h3>
+﻿@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.ProductTemplates.ElementOptions;
+@using Prodex.Shared.Models.ProductTemplates.Statuses;
+@inject ProductTemplatesConfigsClient Service;
+
+<Div class="mt-3">
+
+    <FormWrapper Form="Form">
+        <FormEnumSelect Property="p => p.Target" />
+        <FormSelect Property="p => p.User" />
+    </FormWrapper>
+
+    <Button Color="Color.Primary" Clicked="@Save">Zapisz konfigurację</Button>
+
+</Div>
 
 @code {
+    SendTaskConfigFormModel Form = new SendTaskConfigFormModel();
 
+    [Parameter]
+    public string ElementId { get; set; }
+
+    [Parameter]
+    public long TemplateId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task LoadData()
+    {
+        Form = await Service.GetSendTaskConfig(TemplateId, ElementId) ?? Form;
+    }
+
+    private async Task Save()
+    {
+        if (Form.Id.HasValue)
+            await Service.UpdateSendTaskConfig(Form.Id.Value, Form);
+        else
+            await Service.CreateSendTaskConfig(TemplateId, ElementId, Form);
+
+        await LoadData();
+    }
 }
