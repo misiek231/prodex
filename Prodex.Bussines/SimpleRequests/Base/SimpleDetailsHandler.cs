@@ -11,10 +11,12 @@ public class SimpleGetDetails
         where TEntity : class
     {
         public long Id { get; set; }
+        public long UserId { get; set; }
 
-        public Request(long id)
+        public Request(long id, long userId)
         {
             Id = id;
+            UserId = userId;
         }
     }
 

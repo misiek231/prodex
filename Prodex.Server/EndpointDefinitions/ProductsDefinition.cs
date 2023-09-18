@@ -27,8 +27,8 @@ public class ProductsDefinition : IEndpointDefinition
             .WithDisplayName("History")
             .RequireAuthorization();
 
-        group.MapGet("{id}", async (IMediator mediator, [FromRoute] long id) =>
-            await mediator.Send(new SimpleGetDetails.Request<Product, DetailsModel>(id)))
+        group.MapGet("{id}", async (IMediator mediator, ClaimsPrincipal user, [FromRoute] long id) =>
+            await mediator.Send(new SimpleGetDetails.Request<Product, DetailsModel>(id, user.Id())))
             .RequireAuthorization();
 
         group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new SimpleCreate.Request<Product, FormModel>(model)))

@@ -19,6 +19,8 @@ public partial class Product
 
     public virtual ICollection<History> Histories { get; } = new List<History>();
 
+    public virtual ICollection<ProductTarget> ProductTargets { get; } = new List<ProductTarget>();
+
     public virtual PtStatus Status { get; set; }
 
     public virtual ProductTemplate Template { get; set; }

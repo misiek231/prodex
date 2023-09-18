@@ -35,7 +35,13 @@ public class ExecuteStep
 
         public async Task<object> Handle(Request request, CancellationToken cancellationToken)
         {
-            var result = await context.Products.Include(p => p.Template).FirstOrDefaultAsync(p => p.Id == request.ProductId, cancellationToken);
+            var result = await context.Products
+                .Include(p => p.Template)
+                .Include(p => p.ProductTargets)
+                .FirstOrDefaultAsync(p => p.Id == request.ProductId, cancellationToken);
+
+            if (!result.ProductTargets.Select(p => p.UserId).Contains(request.UserId))
+                throw new UnauthorizedAccessException(); // TODO: return 301 from api
 
             await processBuilderService
                 .BuildProcess(result.Template.ProcessXml)

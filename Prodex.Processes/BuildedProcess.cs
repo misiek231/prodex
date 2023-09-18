@@ -67,8 +67,7 @@ public class BuildedProcess
                 break;
 
             case StepType.SendTask:
-
-                // ExecuteSendTask(processable, step);
+                await mediator.Send(new ExecuteSendTaskRequest(processable, step, userId));
                 break;
 
             case StepType.ExclusiveGateway:

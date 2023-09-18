@@ -23,6 +23,8 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductTarget> ProductTargets { get; set; }
+
     public virtual DbSet<ProductTemplate> ProductTemplates { get; set; }
 
     public virtual DbSet<PtStatus> PtStatuses { get; set; }
@@ -39,6 +41,7 @@ public partial class DataContext : DbContext
             modelBuilder.ApplyConfiguration(new Configurations.DictionaryTermConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.HistoryConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.ProductTargetConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ProductTemplateConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.PtStatusConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.SendTaskConfigConfiguration());

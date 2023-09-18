@@ -28,15 +28,25 @@ namespace Prodex.Bussines.Handlers.Products
             var result = await context.Products
                 .Include(p => p.Template)
                 .Include(p => p.Status)
+                .Include(p => p.ProductTargets)
                 .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
             var model = Mapper.ToDetailsModel(result);
 
-            var actions = processBuilderService
-                .BuildProcess(result.Template.ProcessXml)
-                .GetActions(result);
+            // Przyciski są dostępne tylko dla targetów
+            if (result.ProductTargets.Select(p => p.UserId).Contains(request.UserId))
+            {
+                var actions = processBuilderService
+                    .BuildProcess(result.Template.ProcessXml)
+                    .GetActions(result);
 
-            model.Buttons = actions.Select(p => new ApiButton { ActionId = p.Key, Name = p.Value }).ToList();
+                model.Buttons = actions.Select(p => new ApiButton { ActionId = p.Key, Name = p.Value }).ToList();
+            }
+            else
+            {
+                model.Buttons = new List<ApiButton>();
+            }
+
 
             return model;
         }

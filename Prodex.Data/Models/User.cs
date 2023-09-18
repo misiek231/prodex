@@ -19,5 +19,7 @@ public partial class User
 
     public virtual ICollection<History> Histories { get; } = new List<History>();
 
+    public virtual ICollection<ProductTarget> ProductTargets { get; } = new List<ProductTarget>();
+
     public virtual ICollection<SendTaskConfig> SendTaskConfigs { get; } = new List<SendTaskConfig>();
 }
