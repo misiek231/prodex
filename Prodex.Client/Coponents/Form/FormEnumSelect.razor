@@ -11,8 +11,6 @@
 @typeparam TField where TField : Enum
 @inject ApiSelectClient apiSelectClient;
 
-
-
 <Validation Validator="(a) => Form.GetState(a, GetProp().Name)">
     <Field>
         <FieldLabel>@GetLabel()</FieldLabel>

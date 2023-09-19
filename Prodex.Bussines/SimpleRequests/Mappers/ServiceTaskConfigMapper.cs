@@ -18,7 +18,7 @@ public partial class ServiceTaskConfigMapper :
     public void ToEntity(ServiceTaskConfigFormModelExtended form, ServiceTaskConfig entity)
     {
         entity.ActionTypeEnum = form.ActionTypeEnum;
-        entity.ConfigJson = form.ConfigJson;
+        entity.ConfigJson =  JsonConvert.SerializeObject(form.ConfigObject);
     }
 
     public IQueryable<ServiceTaskConfigFormModel> ToDetailsModel(IQueryable<ServiceTaskConfig> query)

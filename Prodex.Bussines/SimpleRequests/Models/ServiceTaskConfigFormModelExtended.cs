@@ -5,16 +5,15 @@ namespace Prodex.Bussines.SimpleRequests.Models;
 
 public class ServiceTaskConfigFormModelExtended
 {
-
     public ServiceTaskAction ActionTypeEnum { get; set; }
     public long? TemplateId { get; set; }
     public string StepId { get; set; }
-    public string ConfigJson { get; set; }
+    public object ConfigObject { get; set; }
 
     public ServiceTaskConfigFormModelExtended(ServiceTaskConfigFormModel model)
     {
         ActionTypeEnum = model.Action;
-        ConfigJson = JsonConvert.SerializeObject(GetConfigModel(model));
+        ConfigObject = GetConfigModel(model);
     }
 
     public ServiceTaskConfigFormModelExtended(ServiceTaskConfigFormModel model, long templateId, string stepId)
@@ -22,7 +21,7 @@ public class ServiceTaskConfigFormModelExtended
         ActionTypeEnum = model.Action;
         TemplateId = templateId;
         StepId = stepId;
-        ConfigJson = JsonConvert.SerializeObject(GetConfigModel(model));
+        ConfigObject = GetConfigModel(model);
     }
 
     private object GetConfigModel(ServiceTaskConfigFormModel model) => model.Action switch

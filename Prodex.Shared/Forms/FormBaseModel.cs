@@ -47,6 +47,8 @@ namespace Prodex.Shared.Forms
                 PropertyNameCaseInsensitive = true
             };
             _errors = JsonSerializer.Deserialize<ValidationErrors>(errors, options);
+
+            Validations?.ValidateAll();
         }
 
         public void ClearErrors()

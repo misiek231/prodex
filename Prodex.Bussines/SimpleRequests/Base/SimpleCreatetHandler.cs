@@ -1,13 +1,16 @@
 ﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using OneOf;
 using Prodex.Data;
 using Prodex.Data.Interfaces;
+using Prodex.Shared.Forms;
 
 namespace Prodex.Bussines.SimpleRequests.Base;
 
 public class SimpleCreate
 {
 
-    public class Request<TEntity, TForm> : IRequest<object>
+    public class Request<TEntity, TForm> : IRequest<OneOf<TEntity, ValidationErrors>>
         where TEntity : class
     {
         public TForm Form { get; set; }
@@ -18,26 +21,35 @@ public class SimpleCreate
         }
     }
 
-    public class Handler<TEntity, TForm> : IRequestHandler<Request<TEntity, TForm>, object>
+    public class Handler<TEntity, TForm> : IRequestHandler<Request<TEntity, TForm>, OneOf<TEntity,ValidationErrors>>
     where TEntity : class
     {
         private readonly ICreateMapper<TEntity, TForm> Mapper;
+        private readonly IValidatorCreate<TForm> Validator;
         private readonly DataContext Context;
 
-        public Handler(ICreateMapper<TEntity, TForm> mapper, DataContext context)
+        public Handler(ICreateMapper<TEntity, TForm> mapper, DataContext context, IServiceProvider services)
         {
             Mapper = mapper;
             Context = context;
+            Validator = services.GetService<IValidatorCreate<TForm>>();
         }
 
-        public async Task<object> Handle(Request<TEntity, TForm> request, CancellationToken cancellationToken)
+        public async Task<OneOf<TEntity, ValidationErrors>> Handle(Request<TEntity, TForm> request, CancellationToken cancellationToken)
         {
-            Context.Add(Mapper.ToEntity(request.Form));
+            var validationResult = Validator.ValidateCreate(request.Form);
+            
+            if (validationResult.HasErrors)
+            {
+                return validationResult;
+            }
+
+            var entity = Mapper.ToEntity(request.Form);
+
+            Context.Add(entity);
             await Context.SaveChangesAsync(cancellationToken);
-
-
-
-            return null; // Todo: return detils model
+            
+            return entity;
         }
     }
 
@@ -47,14 +59,13 @@ public class SimpleCreate
         public TEnity Enity { get; set; }
     }
 
-    public class Handler<TEntity, TForm, TAfterCreateRequest> : IRequestHandler<Request<TEntity, TForm>, object>
+    public class Handler<TEntity, TForm, TAfterCreateRequest> : IRequestHandler<Request<TEntity, TForm>, OneOf<TEntity, ValidationErrors>>
     where TEntity : class, IEntity
     where TAfterCreateRequest : IAfterCreateRequest<TEntity>, new()
     {
         private readonly ICreateMapper<TEntity, TForm> Mapper;
         private readonly DataContext Context;
         private readonly IMediator Mediator;
-
 
         public Handler(ICreateMapper<TEntity, TForm> mapper, DataContext context, IMediator mediator)
         {
@@ -63,7 +74,7 @@ public class SimpleCreate
             Mediator = mediator;
         }
 
-        public async Task<object> Handle(Request<TEntity, TForm> request, CancellationToken cancellationToken)
+        public async Task<OneOf<TEntity, ValidationErrors>> Handle(Request<TEntity, TForm> request, CancellationToken cancellationToken)
         {
             var entity = Mapper.ToEntity(request.Form);
             Context.Add(entity);
@@ -71,7 +82,7 @@ public class SimpleCreate
 
             await Mediator.Send(new TAfterCreateRequest() { Enity = entity }, cancellationToken);
 
-            return null; // Todo: return detils model
+            return entity;
         }
     }
 }

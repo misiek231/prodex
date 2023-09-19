@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using OneOf;
 using Prodex.Data.Interfaces;
+using Prodex.Shared.Forms;
 using Prodex.Shared.Pagination;
 using Riok.Mapperly.Abstractions;
 using System.Reflection;
@@ -29,6 +31,13 @@ public static class DiExtensions
             .Where(p => p.IsClass && p.GetInterfaces().Any(p => p.Name.Contains("IFilter")))
             .ToList()
             .ForEach(p => services.AddScoped(p.GetInterfaces().Single(), p));
+
+        typeof(DiExtensions).Assembly
+            .GetTypes()
+            .Where(p => p.IsClass && p.GetInterfaces().Any(p => p.Name.Contains("IValidator")))
+            .SelectMany(p => p.GetInterfaces().Where(k => k.Name.Contains("IValidator")).Select(k => (k, p)))
+            .ToList()
+            .ForEach(x => services.AddScoped(x.k, x.p));
 
         typeof(DiExtensions).Assembly
             .GetTypes()
@@ -61,7 +70,7 @@ public class SimpleRequestConfig
 
     public SimpleRequestConfig AddCreateConfig<TEntity, TForm>() where TEntity : class
     {
-        Services.AddScoped<IRequestHandler<SimpleCreate.Request<TEntity, TForm>, object>,
+        Services.AddScoped<IRequestHandler<SimpleCreate.Request<TEntity, TForm>, OneOf<TEntity, ValidationErrors>>,
             SimpleCreate.Handler<TEntity, TForm>>();
 
         return this;
@@ -70,7 +79,7 @@ public class SimpleRequestConfig
     public SimpleRequestConfig AddCreateConfig<TEntity, TForm, TAfterCreateRequest>() where TEntity : class, IEntity
     where TAfterCreateRequest : IAfterCreateRequest<TEntity>, new()
     {
-        Services.AddScoped<IRequestHandler<SimpleCreate.Request<TEntity, TForm>, object>,
+        Services.AddScoped<IRequestHandler<SimpleCreate.Request<TEntity, TForm>, OneOf<TEntity, ValidationErrors>>,
             SimpleCreate.Handler<TEntity, TForm, TAfterCreateRequest>>();
 
         return this;
@@ -78,7 +87,7 @@ public class SimpleRequestConfig
 
     public SimpleRequestConfig AddUpdateConfig<TEntity, TForm>() where TEntity : class
     {
-        Services.AddScoped<IRequestHandler<SimpleUpdate.Request<TEntity, TForm>, object>,
+        Services.AddScoped<IRequestHandler<SimpleUpdate.Request<TEntity, TForm>, OneOf<TEntity, ValidationErrors>>,
             SimpleUpdate.Handler<TEntity, TForm>>();
 
         return this;

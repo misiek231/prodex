@@ -50,13 +50,19 @@ public class ProductTemplatesConfigsDefinition : IEndpointDefinition
             .RequireAuthorization();
 
         serviceTask.MapPost("{templateId}/{stepId}", async (IMediator mediator, [FromRoute] long templateId, [FromRoute] string stepId, [FromBody] ServiceTaskConfigFormModel model) =>
-            await mediator.Send(new SimpleCreate.Request<ServiceTaskConfig, ServiceTaskConfigFormModelExtended>(new ServiceTaskConfigFormModelExtended(model, templateId, stepId))))
-            .WithDisplayName("CreateServiceTaskConfig")
-            .RequireAuthorization();
+        {
+            var result = await mediator.Send(new SimpleCreate.Request<ServiceTaskConfig, ServiceTaskConfigFormModelExtended>(new ServiceTaskConfigFormModelExtended(model, templateId, stepId)));
+            return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
+        })
+        .WithDisplayName("CreateServiceTaskConfig")
+        .RequireAuthorization();
 
         serviceTask.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] ServiceTaskConfigFormModel model) =>
-            await mediator.Send(new SimpleUpdate.Request<ServiceTaskConfig, ServiceTaskConfigFormModelExtended>(id, new ServiceTaskConfigFormModelExtended(model))))
-            .WithDisplayName("UpdateServiceTaskConfig")
-            .RequireAuthorization();
+        {
+            var result = await mediator.Send(new SimpleUpdate.Request<ServiceTaskConfig, ServiceTaskConfigFormModelExtended>(id, new ServiceTaskConfigFormModelExtended(model)));
+            return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
+        })
+        .WithDisplayName("UpdateServiceTaskConfig")
+        .RequireAuthorization();
     }
 }
