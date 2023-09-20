@@ -21,7 +21,7 @@ public class SimpleCreate
         }
     }
 
-    public class Handler<TEntity, TForm> : IRequestHandler<Request<TEntity, TForm>, OneOf<TEntity,ValidationErrors>>
+    public class Handler<TEntity, TForm> : IRequestHandler<Request<TEntity, TForm>, OneOf<TEntity, ValidationErrors>>
     where TEntity : class
     {
         private readonly ICreateMapper<TEntity, TForm> Mapper;

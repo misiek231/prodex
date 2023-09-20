@@ -1,32 +1,19 @@
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Prodex.Bussines.SimpleRequests.Base;
 using Prodex.Data.Models;
-using Prodex.Server.Extensions;
+using Prodex.Server.EndpointDefinitions;
 using Prodex.Server.MinimalApiExtensions;
 using Prodex.Shared.Models.Dictionary;
-using Prodex.Shared.Pagination;
-using System.Security.Claims;
 
 namespace Prodex.Server.Controllers;
 
-public class DictionaryDefinition : IEndpointDefinition
+public class DictionaryDefinition : SimpleRequestsBaseDefinition, IEndpointDefinition
 {
     public string GroupName => "dictionary";
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
-        group.MapGet("", async (IMediator mediator, [AsParameters] Pager pager, [AsParameters] FilterModel model) =>
-            await mediator.Send(new SimpleGetList.Request<Dictionary, FilterModel, ListItemModel>(pager, model)))
-            .RequireAuthorization();
-
-        group.MapGet("{id}", async (IMediator mediator, ClaimsPrincipal user, [FromRoute] long id) => await mediator.Send(new SimpleGetDetails.Request<Dictionary, FormModel>(id, user.Id())))
-            .RequireAuthorization();
-
-        group.MapPost("", async (IMediator mediator, [FromBody] FormModel model) => await mediator.Send(new SimpleCreate.Request<Dictionary, FormModel>(model)))
-            .RequireAuthorization();
-
-        group.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] FormModel model) => await mediator.Send(new SimpleUpdate.Request<Dictionary, FormModel>(id, model)))
-            .RequireAuthorization();
+        DefineGetList<Dictionary, FilterModel, ListItemModel>(group);
+        DefineGetDetails<Dictionary, FormModel>(group);
+        DefineCreate<Dictionary, FormModel>(group);
+        DefineUpdate<Dictionary, FormModel>(group);
     }
 }
