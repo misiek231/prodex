@@ -23,6 +23,14 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[DynamicFieldValues]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FieldConfigs]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[History]",
          "ObjectType": 0
       },

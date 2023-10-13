@@ -6,10 +6,17 @@
 @using System.Linq.Expressions;
 @using System.Reflection;
 @using Prodex.Utils;
+@using Prodex.Client.Extensions;
 @using System.ComponentModel;
 @typeparam TForm where TForm : FormBaseModel
 @typeparam TField where TField : Enum
 @inject ApiSelectClient apiSelectClient;
+
+<style>
+    .dropdown-menu {
+        margin: 2.5rem 0 0;
+    }
+</style>
 
 <Validation Validator="(a) => Form.GetState(a, GetProp().Name)">
     <Field>
@@ -22,9 +29,10 @@
                       SelectedValue="@Property.Compile()(Form)"
                       SelectedValueChanged="ValueChanged"
                       ReadData="e => LoadData(e.SearchValue)"
-                      Placeholder="Search..."
+                      Placeholder="Wyszukaj..."
                       Validator="(a) => Form.GetState(a, GetProp().Name)"
                       Debounce="true"
+                      Disabled="Disabled"
                       MinLength="0">
             <NotFoundContent> Brak wyników </NotFoundContent>
         </Autocomplete>
@@ -38,6 +46,9 @@
 
     [Parameter]
     public string Label { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
 
     [Parameter]
     public Expression<Func<TForm, TField>> Property { get; set; }
@@ -61,8 +72,7 @@
     private void ValueChanged(TField newValue)
     {
         Console.WriteLine(newValue);
-
-        GetProp().SetValue(Form, newValue);
+        Property.SetValue(Form, newValue);
     }
 
     private string GetLabel()

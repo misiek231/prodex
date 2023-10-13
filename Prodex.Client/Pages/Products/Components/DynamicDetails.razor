@@ -1,0 +1,66 @@
+﻿@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.Products.DynamicFields;
+@inject FieldsDetailsClient client;
+
+<CardBody>
+    @for(int k = 0; k < Fields.Count; k++)
+    {
+        int i = k;
+        if(EditingField == i)
+        {
+            <Div Class="d-flex align-items-end">
+                <FieldLabel><b>@(Fields[i].DisplayName):</b></FieldLabel>
+                <Button @onclick="() => ExitEditMode(true)"><Icon Name="IconName.Save" /></Button>
+                <Button @onclick="() => ExitEditMode(false)"><Icon Name="IconName.Undo" /></Button>
+            </Div>
+            <TextEdit @bind-Text="EditingValue" />
+        }
+        else
+        {
+
+            <b>@(Fields[i].DisplayName): </b>@(Fields[i].Value ?? "-")
+            <Button @onclick="() => SetEditMode(i)"><Icon Name="IconName.Edit" /></Button><br />
+        }
+    }
+</CardBody>
+
+@code {
+
+
+    public List<DynamicFieldDetailsModel> Fields = new();
+
+    public int? EditingField { get; set; }
+
+    [Parameter]
+    public long ProductId { get; set; }
+
+    public string EditingValue { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    public async Task LoadData()
+    {
+        Fields = await client.Get(ProductId);
+    }
+
+    private void SetEditMode(int index)
+    {
+        EditingValue = Fields[index].Value;
+        EditingField = index;
+    }
+
+    public async Task ExitEditMode(bool save)
+    {
+        if (save && EditingField.HasValue)
+        {
+            await client.Post(ProductId, Fields[EditingField.Value].FieldConfigId, new SetProductFieldFormModel { NewValue = EditingValue });
+            await LoadData();
+        }
+
+        EditingValue = null;
+        EditingField = null;
+    }
+}

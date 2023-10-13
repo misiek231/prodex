@@ -17,6 +17,8 @@ public partial class Product
 
     public long? StatusId { get; set; }
 
+    public virtual ICollection<DynamicFieldValue> DynamicFieldValues { get; } = new List<DynamicFieldValue>();
+
     public virtual ICollection<History> Histories { get; } = new List<History>();
 
     public virtual ICollection<ProductTarget> ProductTargets { get; } = new List<ProductTarget>();

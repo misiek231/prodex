@@ -12,4 +12,6 @@ public partial class Dictionary
     public string Name { get; set; }
 
     public virtual ICollection<DictionaryTerm> DictionaryTerms { get; } = new List<DictionaryTerm>();
+
+    public virtual ICollection<FieldConfig> FieldConfigs { get; } = new List<FieldConfig>();
 }

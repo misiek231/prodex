@@ -14,34 +14,44 @@
     <CardHeader>
         @Details?.Name
     </CardHeader>
-    <CardBody>
+    <CardBody Class="d-flex flex-wrap gap-3">
         
-        <Div Class="d-flex justify-content-between">
-            <Div Class="d-flex flex-column">
+        <Card Style="min-width: 20rem">
+            <CardHeader>
+                <b>Informacje podstawowe</b>
+            </CardHeader>
+            <CardBody>
                 <p><b>ID: </b> @Details?.Id</p>
                 <p><b>Nazwa: </b> @Details?.Name</p>
                 <p><b>Szablon: </b> @Details?.Template?.Value</p>
                 <p><b>Status: </b> <Badge Color="Details?.Status?.Color">@Details?.Status?.Value</Badge> </p>
-                <p><b>Tu będą: </b> Pola dynamiczne</p>
-            </Div>
+            </CardBody>
+        </Card>
 
-            <Div>
-                <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
-                    <Items>
-                        <Tab Name="history">Historia</Tab>
-                        <Tab Name="process">Proces</Tab>
-                    </Items>
-                    <Content>
-                        <TabPanel Name="history">
-                            <HistoryList @ref="historyList" ProductId="Id" />
-                        </TabPanel>
-                        <TabPanel Name="process">
-                            <BpmnModeler />
-                        </TabPanel>
-                    </Content>
-                </Tabs>
-            </Div>
-        </Div>
+        <Card Style="min-width: 20rem">
+            <CardHeader>
+                <b>Szczegóły</b>
+            </CardHeader>
+            <DynamicDetails ProductId="Id" />
+        </Card>
+
+        <Card Style="min-width: 30rem">
+            <CardHeader>
+                <b>Historia</b>
+            </CardHeader>
+            <CardBody>
+                <HistoryList @ref="historyList" ProductId="Id" />
+            </CardBody>
+        </Card>
+
+        <Card Style="min-width: 50rem">
+            <CardHeader>
+                <b>Proces</b>
+            </CardHeader>
+            <CardBody>
+                <BpmnModeler />
+            </CardBody>
+        </Card>
     </CardBody>
     <CardFooter>
         <Div class="d-flex gap-1">
@@ -60,8 +70,6 @@
     [Parameter]
     public long Id { get; set; }
 
-    string selectedTab = "history";
-
     private HistoryList historyList;
 
     protected override async Task OnInitializedAsync()
@@ -74,12 +82,5 @@
         await Products.Execute(Id, actionId);
         Details = await Products.Get(Id);
         await historyList.Reload();
-    }
-
-    private Task OnSelectedTabChanged(string name)
-    {
-        selectedTab = name;
-
-        return Task.CompletedTask;
     }
 }

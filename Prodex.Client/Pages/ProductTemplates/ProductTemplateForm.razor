@@ -1,7 +1,7 @@
 ﻿@page "/product-template/form/{Id:long?}"
-@using Prodex.Client.Coponents
-@using Prodex.Client.Coponents.Form
-@using Prodex.Client.Pages.ProductTemplates.Components
+@using Prodex.Client.Coponents;
+@using Prodex.Client.Coponents.Form;
+@using Prodex.Client.Pages.ProductTemplates.Components;
 @using Prodex.Client.Pages.ProductTemplates.Models;
 @using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.ProductTemplates;
@@ -45,7 +45,7 @@
                 Content for messages.
             </TabPanel>
             <TabPanel Name="fields">
-                Content for messages.
+                <FieldsConfigurator TemplateId="Id.Value"/>
             </TabPanel>
             <TabPanel Name="process">
                 <ProcessDesigner @ref="designer" Save="Save" TemplateId="Id.Value"/>

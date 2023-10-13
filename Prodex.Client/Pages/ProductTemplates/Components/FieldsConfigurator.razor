@@ -1,0 +1,61 @@
+﻿@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.ProductTemplates.FieldsConfig;
+@using Prodex.Shared.Pagination;
+@inject FieldsClient Client;
+
+<Card>
+    <CardBody>
+    
+        <FormWrapper Form="Form">
+            @for (int i = 0; i < Form.Fields.Count; i++)
+            {
+                var index = i;
+                <Div Class="d-flex gap-3 align-items-end mt-3">
+                    <FormInput Label="Nazwa" Property="p => p.Fields[index].DisplayName" />
+                    <FormEnumSelect Label="Typ" Disabled="Form.Fields[index].Id.HasValue" Property="p => p.Fields[index].Type"/>
+                    <Button Class="form-group" Color="Color.Danger" @onclick="_ => Form.Fields.RemoveAt(index)"><Icon Name="IconName.Remove" /></Button>
+                </Div>
+            }
+        </FormWrapper>
+
+        <Button Class="mt-3" Color="Color.Success" @onclick="_ => Form.Fields.Add(new())"><Icon Name="IconName.Add" /></Button>
+    
+    </CardBody>
+    <CardFooter>
+        <Button Color="Color.Primary" @onclick="Save">Zapisz konfigurację</Button>
+    </CardFooter>
+</Card>
+
+@code {
+
+    [Parameter]
+    public long TemplateId { get; set; }
+
+    private Pager pager = new Pager(1, int.MaxValue);
+
+    private FieldsConfigFormModel Form { get; set; } = new();
+
+    private async Task Save()
+    {
+        await Client.Post(TemplateId, Form);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            var result = await Client.Get(TemplateId, pager);
+            Form.Fields = result.Items.ToList();
+            pager.TotalRows = result.TotalRows;
+        }
+        catch (HttpRequestException)
+        {
+            // todo: find nice way to handle exceptions like that
+        }
+    }
+}

@@ -13,6 +13,8 @@ public partial class ProductTemplate
 
     public string ProcessXml { get; set; }
 
+    public virtual ICollection<FieldConfig> FieldConfigs { get; } = new List<FieldConfig>();
+
     public virtual ICollection<Product> Products { get; } = new List<Product>();
 
     public virtual ICollection<PtStatus> PtStatuses { get; } = new List<PtStatus>();
