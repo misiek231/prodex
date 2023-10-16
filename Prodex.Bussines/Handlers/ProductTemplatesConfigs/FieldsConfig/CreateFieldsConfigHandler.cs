@@ -58,13 +58,7 @@ public static class UpdateFieldsConfigHandler
                     newField.TemplateId = request.TemplateId;
                     context.Add(newField);
                 }
-            } 
-
-            //var entities = mapper.ToEntity(request.Model.Fields).ToList();
-
-            //entities.ForEach(p => p.TemplateId = request.TemplateId);
-
-           // await context.AddRangeAsync(entities, cancellationToken);
+            }
 
             await context.SaveChangesAsync(cancellationToken);
 
