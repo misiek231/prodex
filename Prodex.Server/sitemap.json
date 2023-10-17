@@ -26,38 +26,19 @@
         "name": "Słowniki",
         "route": "dictionary",
         "icon": "fa-book"
-      }
-    ]
-  },
-  {
-    "name": "Szablony produktów",
-    "route": "product-template",
-    "icon": "fa-desktop",
-    "children": [
-      {
-        "name": "Formularz",
-        "route": "form",
-        "icon": "",
-        "hidden": true
-      }
-    ]
-  },
-  {
-    "name": "Produkcja",
-    "route": "product",
-    "icon": "fa-desktop",
-    "children": [
-      {
-        "name": "Rozpocznij nową produkcję",
-        "route": "add",
-        "icon": "",
-        "hidden": true
       },
       {
-        "name": "Szczegóły produkcji",
-        "route": "{Id}",
-        "icon": "",
-        "hidden": true
+        "name": "Szablony produktów",
+        "route": "product-template",
+        "icon": "fa-desktop",
+        "children": [
+          {
+            "name": "Formularz",
+            "route": "form",
+            "icon": "",
+            "hidden": true
+          }
+        ]
       }
     ]
   }

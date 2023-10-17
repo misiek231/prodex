@@ -1,4 +1,4 @@
-﻿@page "/product/{Id:long}"
+﻿@page "/product/{TemplateId:long}/details/{Id:long}"
 @using Prodex.Client.Coponents
 @using Prodex.Client.Coponents.Form
 @using Prodex.Client.Pages.Products.Components
@@ -71,6 +71,9 @@
     public long Id { get; set; }
 
     private HistoryList historyList;
+
+    [Parameter]
+    public long TemplateId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

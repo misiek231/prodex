@@ -26,6 +26,19 @@ public class SitemapNode
 
         if (path.Count == 0) return;
 
-        Children.Single(p => p.Route == path.First()).Breadcrumb(path, result);
+        var node = Children.Single(p => p.Route == FixedPath(p.Route, path));
+        var toSkip = node.Route.Count(p => p == '/');
+        node.Breadcrumb(path.Skip(toSkip).ToList(), result);
+    }
+
+    private string FixedPath(string route, List<string> path)
+    {
+        if (route.EndsWith("/{Id}"))
+        {
+            path[^1] = "{Id}";
+        }
+            
+        int v = route.Count(p => p == '/');
+        return string.Join("/", path.Take(v + 1));
     }
 }

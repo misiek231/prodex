@@ -11,10 +11,20 @@
             {
                 var result = new List<BreadcrumbItemModel>();
                 var path = route.TrimEnd('/').TrimStart('/').Split('/').ToList();
-                Nodes.Single(p => p.Route == path[0]).Breadcrumb(path, result);
+                var node = Nodes.Single(p => p.Route == FixedPath(p.Route, path));
+
+                var toSkip = node.Route.Count(p => p == '/');
+
+                node.Breadcrumb(path.Skip(toSkip).ToList(), result);
                 return result;
             }
             catch { return null; }
+        }
+
+        private string FixedPath(string route, List<string> path)
+        {
+            int v = route.Count(p => p == '/');
+            return string.Join("/", path.Take(v+1));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@page "/product-template"
+﻿@page "/administration/product-template"
 @using Microsoft.AspNetCore.Authorization;
 @using Prodex.Client.Coponents
 @using Prodex.Client.RestClients;
@@ -9,7 +9,7 @@
 
 <Card>
     <CardHeader>
-        <Button Type="ButtonType.Link" To="product-template/form" Color="Color.Primary">Dodaj</Button>
+        <Button Type="ButtonType.Link" To="administration/product-template/form" Color="Color.Primary">Dodaj</Button>
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="RowSelected" Responsive>
@@ -47,6 +47,6 @@
 
     private void RowSelected(ListItemModel item)
     {
-        Navigation.NavigateTo($"product-template/form/{item.Id}");
+        Navigation.NavigateTo($"administration/product-template/form/{item.Id}");
     }
 }

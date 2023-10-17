@@ -8,6 +8,11 @@ public class ProductFilter : IFilter<Product, FilterModel>
 {
     public IQueryable<Product> Filter(IQueryable<Product> query, FilterModel filterModel)
     {
+        if (filterModel.TemplateId.HasValue)
+        {
+            query = query.Where(p => p.TemplateId == filterModel.TemplateId.Value);
+        }
+
         return query;
     }
 }

@@ -1,4 +1,4 @@
-﻿@page "/product"
+﻿@page "/product/{TemplateId:long}"
 @using Microsoft.AspNetCore.Authorization;
 @using Prodex.Client.Coponents
 @using Prodex.Client.RestClients;
@@ -9,7 +9,7 @@
 
 <Card>
     <CardHeader>
-        <Button Type="ButtonType.Link" To="product/add" Color="Color.Primary">Dodaj</Button>
+        <Button Type="ButtonType.Link" To="@($"product/{TemplateId}/add")" Color="Color.Primary">Dodaj</Button>
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="RowSelected" Responsive>
@@ -23,12 +23,16 @@
     </CardFooter>
 </Card>
 
-@code {
+ @code {
     private List<ListItemModel> items = new List<ListItemModel>();
     private Pager pager = new Pager(1, 10);
 
-    protected override async Task OnInitializedAsync()
+    [Parameter]
+    public long TemplateId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
     {
+        pager = new Pager(1, 10);
         await LoadData();
     }
 
@@ -36,7 +40,7 @@
     {
         try
         {
-            var result = await Products.Get(pager, new FilterModel());
+            var result = await Products.Get(pager, new FilterModel { TemplateId = TemplateId });
             items = result.Items.ToList();
             pager.TotalRows = result.TotalRows;
         }
@@ -48,6 +52,6 @@
 
     private void RowSelected(ListItemModel item)
     {
-        Navigation.NavigateTo($"product/{item.Id}");
+        Navigation.NavigateTo($"product/{TemplateId}/details/{item.Id}");
     }
 }

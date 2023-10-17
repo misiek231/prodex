@@ -1,4 +1,4 @@
-﻿@page "/product/add"
+﻿@page "/product/{TemplateId:long}/add"
 @using Prodex.Client.Coponents
 @using Prodex.Client.Coponents.Form
 @using Prodex.Client.RestClients;
@@ -15,7 +15,7 @@
     <CardBody>
         <FormWrapper Form="Form">
             <FormInput Property="p => p.Name" />
-            <FormSelect Property="p => p.TemplateId" />
+            @* <FormSelect Property="p => p.TemplateId" /> *@
         </FormWrapper>
     </CardBody>
     <CardFooter>
@@ -25,10 +25,16 @@
 
 
 @code {
+
+    [Parameter]
+    public long TemplateId { get; set; }
+
     private FormModel Form = new FormModel();
 
     private async Task Save()
     {
+        Form.TemplateId = new(TemplateId);
+
         var result = await Products.Post(Form);
 
         if (result.IsSuccessStatusCode)
