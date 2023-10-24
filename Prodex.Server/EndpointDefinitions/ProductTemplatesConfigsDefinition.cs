@@ -30,12 +30,19 @@ public class ProductTemplatesConfigsDefinition : IEndpointDefinition
             .RequireAuthorization();
 
         sendTask.MapPost("{templateId}/{stepId}", async (IMediator mediator, [FromRoute] long templateId, [FromRoute] string stepId, [FromBody] SendTaskConfigFormModel model) =>
-            await mediator.Send(new SimpleCreate.Request<SendTaskConfig, SendTaskConfigFormModelExtended>(new SendTaskConfigFormModelExtended(model, templateId, stepId))))
+            {
+                var result = await mediator.Send(new SimpleCreate.Request<SendTaskConfig, SendTaskConfigFormModelExtended>(new SendTaskConfigFormModelExtended(model, templateId, stepId)));
+
+                return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
+            })
             .WithDisplayName("CreateSendTaskConfig")
             .RequireAuthorization();
 
         sendTask.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] SendTaskConfigFormModel model) =>
-            await mediator.Send(new SimpleUpdate.Request<SendTaskConfig, SendTaskConfigFormModelExtended>(id, new SendTaskConfigFormModelExtended(model))))
+            {
+                var result = await mediator.Send(new SimpleUpdate.Request<SendTaskConfig, SendTaskConfigFormModelExtended>(id, new SendTaskConfigFormModelExtended(model)));
+                return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
+            })
             .WithDisplayName("UpdateSendTaskConfig")
             .RequireAuthorization();
     }

@@ -14,6 +14,9 @@ namespace Prodex.Data.Configurations
         {
             entity.ToTable("History");
 
+            entity.Property(e => e.ActionId)
+            .IsRequired()
+            .HasMaxLength(255);
             entity.Property(e => e.ActionName)
             .IsRequired()
             .HasMaxLength(255);

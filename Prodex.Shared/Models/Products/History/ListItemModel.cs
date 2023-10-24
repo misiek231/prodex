@@ -6,5 +6,6 @@ public class ListItemModel
 {
     public KeyValueResult User { get; set; }
     public string ActionName { get; set; }
+    public string ActionId { get; set; }
     public DateTime DateCreated { get; set; }
 }

@@ -12,16 +12,16 @@
 </DataGrid>
 
 @code {
-    private List<ListItemModel> items = new List<ListItemModel>();
+    public List<ListItemModel> items = new List<ListItemModel>();
     private Pager pager = new Pager(1, 1000);
 
     [Parameter]
     public long ProductId { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadData();
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+      //  await LoadData();
+    //}
 
     private async Task LoadData()
     {

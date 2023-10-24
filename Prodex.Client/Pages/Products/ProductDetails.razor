@@ -49,7 +49,7 @@
                 <b>Proces</b>
             </CardHeader>
             <CardBody>
-                <BpmnModeler />
+                <BpmnViewer @ref="modeler" />
             </CardBody>
         </Card>
     </CardBody>
@@ -71,13 +71,17 @@
     public long Id { get; set; }
 
     private HistoryList historyList;
+    private BpmnViewer modeler;
 
     [Parameter]
     public long TemplateId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Details = await Products.Get(Id); 
+        Details = await Products.Get(Id);
+        await modeler.SetValueAsync(Details.Template.Xml);
+        await historyList.Reload();
+        await SetColors(historyList.items);
     }
 
     private async Task ActionButtonClick(long actionId)
@@ -85,5 +89,59 @@
         await Products.Execute(Id, actionId);
         Details = await Products.Get(Id);
         await historyList.Reload();
+        await SetColors(historyList.items);
+    }
+
+    private async Task SetColors(List<Prodex.Shared.Models.Products.History.ListItemModel> list)
+    {
+        await modeler.SetColor("StartEvent_1", "#2eb85c");
+
+        var colors = new Dictionary<string, string>();
+
+        foreach (var i in list)
+        {
+            if(colors.TryGetValue(i.ActionId, out string color))
+            {
+                System.Drawing.Color colorIn = (System.Drawing.Color)new System.Drawing.ColorConverter().ConvertFromString(color);
+
+                var col = ChangeColorBrightness(colorIn, -0.2f);
+
+                string darkerHexColor = "#" + (col.ToArgb() & 0x00FFFFFF).ToString("X6");
+
+                colors[i.ActionId] = darkerHexColor;
+            }
+            else
+            {
+                color = "#52BAE8";
+                colors.Add(i.ActionId, color);
+            }
+
+            await modeler.SetColor(i.ActionId, colors[i.ActionId]);
+        }
+    }
+
+    public static System.Drawing.Color ChangeColorBrightness(System.Drawing.Color color, float correctionFactor)
+    {
+        float red = (float)color.R;
+        float green = (float)color.G;
+        float blue = (float)color.B;
+
+        if (correctionFactor < 0)
+        {
+            correctionFactor = 1 + correctionFactor;
+            red /= correctionFactor;
+            if (red > 255) red = 255;
+
+            green *= correctionFactor;
+            blue *= correctionFactor;
+        }
+        else
+        {
+            red = (255 - red) * correctionFactor + red;
+            green = (255 - green) * correctionFactor + green;
+            blue = (255 - blue) * correctionFactor + blue;
+        }
+
+        return System.Drawing.Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
     }
 }

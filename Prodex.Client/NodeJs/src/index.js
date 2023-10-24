@@ -1,4 +1,5 @@
 ﻿import BpmnJS from 'bpmn-js/lib/Modeler';
+import './viewer.js';
 
 window.loadBpmn = (currentInstance) => {
 
@@ -26,7 +27,6 @@ window.loadBpmn = (currentInstance) => {
 window.getCurrentDiagram = async () => {
     if (!window.modeler) return null;
     var xml = (await window.modeler.saveXML({ format: true })).xml
-    console.log(xml);
     return xml;
 }
 

@@ -17,6 +17,8 @@ public partial class History
 
     public DateTime DateCreated { get; set; }
 
+    public string ActionId { get; set; }
+
     public virtual Product Product { get; set; }
 
     public virtual User User { get; set; }

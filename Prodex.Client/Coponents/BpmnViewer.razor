@@ -1,0 +1,31 @@
+﻿@using Prodex.Client.Pages.ProductTemplates.Models;
+@inject IJSRuntime _js
+
+<Div id="bpmn-canvas"></Div>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await _js.InvokeVoidAsync("loadBpmnViewer");
+    }
+
+    public async Task SetValueAsync(string xml)
+    {
+        await _js.InvokeVoidAsync("setCurrentDiagramViewer", xml);
+    }
+
+    public async Task SetColor(string elementId, string color)
+    {
+        await _js.InvokeVoidAsync("setColorViewer", elementId, color);
+    }
+}
+
+<style>
+
+    #bpmn-canvas{
+        height: 800px;
+        border: 1px solid black;
+    }
+
+</style>

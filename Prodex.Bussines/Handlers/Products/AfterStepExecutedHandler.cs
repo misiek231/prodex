@@ -22,6 +22,7 @@ public class AfterStepExecutedHandler : IRequestHandler<AfterStepExecutedRequest
             ProductId = request.Processable.Id,
             UserId = request.UserId,
             DateCreated = DateTime.Now,
+            ActionId = request.ExecutedStep.Id
         });
 
         await context.SaveChangesAsync(cancellationToken);

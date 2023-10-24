@@ -23,6 +23,11 @@
         await _js.InvokeVoidAsync("setCurrentDiagram", xml);
     }
 
+    public async Task SetColor(string elementId, string color)
+    {
+        await _js.InvokeVoidAsync("setColor", elementId, color);
+    }
+
     [JSInvokable]
     public Task OnElementClick(BpmnElement e)
     {

@@ -10,6 +10,9 @@ namespace Prodex.Bussines.Mappers;
 public partial class ProductsMapper : IListMapper<Product, ListItemModel>, ICreateMapper<Product, FormModel>, IUpdateMapper<Product, FormModel>, IDetailsMapper<Product, DetailsModel>
 {
     [ObjectFactory]
+    private static TemplateDetailsModel CreateTemplateDetailsModel(ProductTemplate t) => new(t.Id, t.Name, t.ProcessXml);
+
+    [ObjectFactory]
     private static KeyValueResult CreateKeyValueResult(ProductTemplate t) => new(t.Id, t.Name);
 
     [ObjectFactory]

@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <None Remove="NodeJs\src\index.js" />
+    <None Remove="NodeJs\src\viewer.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="NodeJs\src\viewer.js" />
   </ItemGroup>
 
   <ItemGroup>

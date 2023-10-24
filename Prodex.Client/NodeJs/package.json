@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bpmn-js": "^13.2.2"
+    "bpmn-js": "^13.2.2",
+    "bpmn-js-token-simulation": "^0.31.1"
   },
   "devDependencies": {
     "webpack-cli": "^5.0.1"
