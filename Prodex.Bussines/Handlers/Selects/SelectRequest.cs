@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Prodex.Shared.Models.ProductTemplates;
 using Prodex.Shared.Pagination;
 using Prodex.Shared.Utils;
 
@@ -15,6 +16,11 @@ public class SelectRequest<T> : SelectRequest
 }
 
 public class SelectStatusRequest : SelectRequest<ApiStatus>
+{
+    public long TemplateId { get; set; }
+}
+
+public class SelectDynamicFieldRequest : SelectRequest<ApiFieldConfig>
 {
     public long TemplateId { get; set; }
 }

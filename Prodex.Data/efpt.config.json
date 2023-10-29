@@ -55,6 +55,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[SequenceFlowConfigs]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[ServiceTaskConfigs]",
          "ObjectType": 0
       },

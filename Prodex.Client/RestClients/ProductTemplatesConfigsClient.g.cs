@@ -88,5 +88,42 @@ namespace Prodex.Client.RestClients
             
             return result;
         }
+
+        public async System.Threading.Tasks.Task<Prodex.Shared.Models.ProductTemplates.ElementOptions.SequenceFlowConfigFormModel> GetSequenceFlowConfig(System.Int64 templateId, System.String flowId)
+        {
+            return await client.GetFromJsonAsync<Prodex.Shared.Models.ProductTemplates.ElementOptions.SequenceFlowConfigFormModel>($"api/product-templates-configs/sequence-flow/{templateId}/{flowId}");
+        }
+
+        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> CreateSequenceFlowConfig(System.Int64 templateId, System.String flowId, Prodex.Shared.Models.ProductTemplates.ElementOptions.SequenceFlowConfigFormModel model)
+        {
+            if (model.Validate(null).HasErrors)
+                return new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(System.Net.HttpStatusCode.BadRequest);
+            
+            var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(await client.PostAsJsonAsync($"api/product-templates-configs/sequence-flow/{templateId}/{flowId}", model));
+            await result.InitResultAsync();
+            
+            if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                model.WithErrors(await result.Content.ReadAsStringAsync());
+            }
+            
+            return result;
+        }
+
+        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> UpdateSequenceFlowConfig(System.Int64 id, Prodex.Shared.Models.ProductTemplates.ElementOptions.SequenceFlowConfigFormModel model)
+        {
+            if (model.Validate(null).HasErrors)
+                return new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(System.Net.HttpStatusCode.BadRequest);
+            
+            var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(await client.PutAsJsonAsync($"api/product-templates-configs/sequence-flow/{id}", model));
+            await result.InitResultAsync();
+            
+            if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                model.WithErrors(await result.Content.ReadAsStringAsync());
+            }
+            
+            return result;
+        }
     }
 }

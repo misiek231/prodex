@@ -6,10 +6,10 @@
         <BpmnModeler @ref="modeler" SelectedElementChanged="SelectedElementChanged"></BpmnModeler>
 
 
-        @switch (elementType)
+        @switch (element?.TypeEnum)
         {
             case ElementType.ServiceTaks: 
-                <ServiceTaskOptions TemplateId="@TemplateId" ElementId="@elementId"/>
+                <ServiceTaskOptions TemplateId="@TemplateId" ElementId="@element.Id"/>
             break;
 
             case ElementType.UserTask: 
@@ -17,7 +17,11 @@
             break;
 
             case ElementType.SendTask:
-                <SendTaskOptions TemplateId="@TemplateId" ElementId="@elementId" />
+                <SendTaskOptions TemplateId="@TemplateId" ElementId="@element.Id" />
+            break;
+
+            case ElementType.SequenceFlow:
+                <SequenceFlowOptions TemplateId="@TemplateId" Element="@element" />
             break;
 
             default: 
@@ -34,8 +38,7 @@
 
 @code {
     private BpmnModeler modeler;
-    private ElementType elementType;
-    private string elementId;
+    private BpmnElement element;
 
     [Parameter]
     public EventCallback Save { get; set; }
@@ -56,7 +59,6 @@
     private void SelectedElementChanged(BpmnElement element)
     {
         Console.WriteLine(element.Type);
-        elementType = element.TypeEnum;
-        elementId = element.Id;
+        this.element = element;
     }
 }

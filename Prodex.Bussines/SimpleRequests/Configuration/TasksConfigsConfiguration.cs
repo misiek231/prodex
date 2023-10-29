@@ -13,5 +13,8 @@ public class TasksConfigsConfiguration : IConfigurator
 
         config.AddCreateConfig<SendTaskConfig, SendTaskConfigFormModelExtended>()
             .AddUpdateConfig<SendTaskConfig, SendTaskConfigFormModelExtended>();
+
+        config.AddCreateConfig<SequenceFlowConfig, SequenceFlowConfigFormModelExtended>()
+            .AddUpdateConfig<SequenceFlowConfig, SequenceFlowConfigFormModelExtended>();
     }
 }

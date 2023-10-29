@@ -4,7 +4,7 @@
 <Div id="bpmn-canvas"></Div>
 
 @code {
-    
+
     [Parameter]
     public EventCallback<BpmnElement> SelectedElementChanged { get; set; }
 
@@ -29,8 +29,10 @@
     }
 
     [JSInvokable]
-    public Task OnElementClick(BpmnElement e)
+    public Task OnElementClick(BpmnElement e, SourceRef sourceRef)
     {
+        e.SourceRef = sourceRef;
+
         SelectedElementChanged.InvokeAsync(e);
         
         return Task.CompletedTask;
