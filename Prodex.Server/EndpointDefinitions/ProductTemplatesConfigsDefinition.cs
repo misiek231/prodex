@@ -18,6 +18,7 @@ public class ProductTemplatesConfigsDefinition : IEndpointDefinition
     {
         DefineServiceTask(group);
         DefineSendTask(group);
+        DefineSequenceFlow(group);
     }
 
     private static void DefineSendTask(RouteGroupBuilder group)
@@ -72,4 +73,30 @@ public class ProductTemplatesConfigsDefinition : IEndpointDefinition
         .WithDisplayName("UpdateServiceTaskConfig")
         .RequireAuthorization();
     }
+
+   private static void DefineSequenceFlow(RouteGroupBuilder group)
+   {
+        var sequenceFlow = group.MapGroup("sequence-flow");
+
+        sequenceFlow.MapGet("{templateId}/{flowId}", async (IMediator mediator, [FromRoute] long templateId, [FromRoute] string flowId) =>
+        await mediator.Send(new GetSequenceFlowDetails.Request(templateId, flowId)))
+            .WithDisplayName("GetSequenceFlowConfig")
+            .RequireAuthorization();
+
+        sequenceFlow.MapPost("{templateId}/{flowId}", async (IMediator mediator, [FromRoute] long templateId, [FromRoute] string flowId, [FromBody] SequenceFlowConfigFormModel model) =>
+        {
+            var result = await mediator.Send(new SimpleCreate.Request<SequenceFlowConfig, SequenceFlowConfigFormModelExtended>(new SequenceFlowConfigFormModelExtended(model, templateId, flowId)));
+            return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
+        })
+        .WithDisplayName("CreateSequenceFlowConfig")
+        .RequireAuthorization();
+
+        sequenceFlow.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] SequenceFlowConfigFormModel model) =>
+        {
+            var result = await mediator.Send(new SimpleUpdate.Request<SequenceFlowConfig, SequenceFlowConfigFormModelExtended>(id, new SequenceFlowConfigFormModelExtended(model)));
+            return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
+        })
+        .WithDisplayName("UpdateSequenceFlowConfig")
+        .RequireAuthorization();
+   }
 }

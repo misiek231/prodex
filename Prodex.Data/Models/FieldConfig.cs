@@ -21,5 +21,9 @@ public partial class FieldConfig
 
     public virtual ICollection<DynamicFieldValue> DynamicFieldValues { get; } = new List<DynamicFieldValue>();
 
+    public virtual ICollection<SequenceFlowConfig> SequenceFlowConfigLdynamicFieldNavigations { get; } = new List<SequenceFlowConfig>();
+
+    public virtual ICollection<SequenceFlowConfig> SequenceFlowConfigRdynamicFieldNavigations { get; } = new List<SequenceFlowConfig>();
+
     public virtual ProductTemplate Template { get; set; }
 }

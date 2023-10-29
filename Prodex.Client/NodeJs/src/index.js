@@ -13,7 +13,7 @@ window.loadBpmn = (currentInstance) => {
     });
 
     window.modeler.on('element.click', async (e) => {
-        await currentInstance.invokeMethodAsync('OnElementClick', e.element);
+        await currentInstance.invokeMethodAsync('OnElementClick', e.element, e.element.businessObject.sourceRef);
     });
 
 

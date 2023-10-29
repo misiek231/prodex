@@ -1,0 +1,76 @@
+﻿@using Prodex.Client.Pages.ProductTemplates.Models;
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.ProductTemplates.ElementOptions;
+@using Prodex.Shared.Models.ProductTemplates.FieldsConfig;
+@inject ProductTemplatesConfigsClient Service;
+
+@if (HasOptions())
+{
+    <Div class="mt-3">
+
+        <FormWrapper Form="Form">
+            <FormEnumSelect Property="p => p.LOperandType" />
+
+               @*  @if(Form.LOperandType == OperandType.Value)
+                { *@
+                    <FormInput Property="p => p.Lvalue"/>
+                @* } *@ 
+                @* else if(Form.LOperandType == OperandType.DynamicField)
+                { *@
+                <FormSelect Property="p => p.LdynamicField" AdditionalFilter="Filter" />
+                @* } *@
+            
+            <FormEnumSelect Property="p => p.OperatorType" />
+            
+            <FormEnumSelect Property="p => p.ROperandType" />
+            @* @if(Form.ROperandType == OperandType.Value)
+            { *@
+                <FormInput Property="p => p.Rvalue" />
+            @* }
+            else if (Form.ROperandType == OperandType.DynamicField)
+            { *@
+                <FormSelect Property="p => p.RdynamicField" AdditionalFilter="Filter" />
+            @* } *@
+        </FormWrapper>
+
+        <Button Color="Color.Primary" Clicked="@Save">Zapisz konfigurację</Button>
+    </Div>
+}
+@code {
+    SequenceFlowConfigFormModel Form = new SequenceFlowConfigFormModel();
+    private FilterModel Filter => new FilterModel { TemplateId = TemplateId };
+
+    [Parameter]
+    public BpmnElement Element { get; set; }
+
+    [Parameter]
+    public long TemplateId { get; set; }
+
+    private FilterModel StatusFilter => new FilterModel { TemplateId = TemplateId };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task LoadData()
+    {
+        Form = await Service.GetSequenceFlowConfig(TemplateId, Element.Id) ?? Form;
+    }
+
+    private async Task Save()
+    {
+         if (Form.Id.HasValue)
+             await Service.UpdateSequenceFlowConfig(Form.Id.Value, Form);
+         else
+             await Service.CreateSequenceFlowConfig(TemplateId, Element.Id, Form);
+
+        await LoadData();
+    }
+
+    private bool HasOptions()
+    {
+        return Element?.SourceRef?.TypeEnum == ElementType.ExclusiveGateway;
+    }
+}

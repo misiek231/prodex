@@ -21,5 +21,7 @@ public partial class ProductTemplate
 
     public virtual ICollection<SendTaskConfig> SendTaskConfigs { get; } = new List<SendTaskConfig>();
 
+    public virtual ICollection<SequenceFlowConfig> SequenceFlowConfigs { get; } = new List<SequenceFlowConfig>();
+
     public virtual ICollection<ServiceTaskConfig> ServiceTaskConfigs { get; } = new List<ServiceTaskConfig>();
 }

@@ -13,8 +13,20 @@ public class ApiSelectDefinition : IEndpointDefinition
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
+        group.MapGet("api-field-config", async (IMediator mediator, [FromQuery] long templateId, [AsParameters] Pager pager, [FromQuery] string search) =>
+        {
+            var request = new SelectDynamicFieldRequest
+            {
+                TemplateId = templateId,
+                Pager = pager,
+                Search = search
+            };
 
-        group.MapGet("api-status-select", async (IMediator mediator, ApiSelectCacheService selectCache, [FromQuery] long templateId, [AsParameters] Pager pager, [FromQuery] string search) =>
+            return await mediator.Send(request);
+
+        }).RequireAuthorization();
+
+        group.MapGet("api-status-select", async (IMediator mediator, [FromQuery] long templateId, [AsParameters] Pager pager, [FromQuery] string search) =>
         {
             var request = new SelectStatusRequest
             {

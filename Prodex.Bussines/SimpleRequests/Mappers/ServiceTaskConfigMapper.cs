@@ -13,7 +13,16 @@ public partial class ServiceTaskConfigMapper :
     IUpdateMapper<ServiceTaskConfig, ServiceTaskConfigFormModelExtended>,
     IDetailsMapper<ServiceTaskConfig, ServiceTaskConfigFormModel>
 {
-    public partial ServiceTaskConfig ToEntity(ServiceTaskConfigFormModelExtended form);
+    public ServiceTaskConfig ToEntity(ServiceTaskConfigFormModelExtended form)
+    {
+        return new ServiceTaskConfig
+        {
+            ActionTypeEnum = form.ActionTypeEnum,
+            ConfigJson = JsonConvert.SerializeObject(form.ConfigObject),
+            StepId = form.StepId,
+            TemplateId = form.TemplateId.Value
+        };
+    }
 
     public void ToEntity(ServiceTaskConfigFormModelExtended form, ServiceTaskConfig entity)
     {

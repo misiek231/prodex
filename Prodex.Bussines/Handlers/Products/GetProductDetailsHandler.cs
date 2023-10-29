@@ -13,14 +13,16 @@ namespace Prodex.Bussines.Handlers.Products
     {
         private readonly ProcessBuilderService processBuilderService;
         private readonly DataContext context;
+        private readonly IMediator mediator;
 
         private readonly IDetailsMapper<Product, DetailsModel> Mapper;
 
-        public GetProductDetailsHandler(ProcessBuilderService processBuilderService, IDetailsMapper<Product, DetailsModel> mapper, DataContext context)
+        public GetProductDetailsHandler(ProcessBuilderService processBuilderService, IDetailsMapper<Product, DetailsModel> mapper, DataContext context, IMediator mediator)
         {
             this.processBuilderService = processBuilderService;
             Mapper = mapper;
             this.context = context;
+            this.mediator = mediator;
         }
 
         public async Task<DetailsModel> Handle(Request<Product, DetailsModel> request, CancellationToken cancellationToken)
@@ -36,9 +38,9 @@ namespace Prodex.Bussines.Handlers.Products
             // Przyciski są dostępne tylko dla targetów
             if (result.ProductTargets.Select(p => p.UserId).Contains(request.UserId))
             {
-                var actions = processBuilderService
+                var actions = await processBuilderService
                     .BuildProcess(result.Template.ProcessXml)
-                    .GetActions(result);
+                    .GetActions(mediator, result);
 
                 model.Buttons = actions.Select(p => new ApiButton { ActionId = p.Key, Name = p.Value }).ToList();
             }

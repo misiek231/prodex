@@ -32,7 +32,7 @@
             <CardHeader>
                 <b>Szczegóły</b>
             </CardHeader>
-            <DynamicDetails ProductId="Id" />
+            <DynamicDetails ProductId="Id" Reload="LoadData"/>
         </Card>
 
         <Card Style="min-width: 30rem">
@@ -78,16 +78,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Details = await Products.Get(Id);
-        await modeler.SetValueAsync(Details.Template.Xml);
-        await historyList.Reload();
-        await SetColors(historyList.items);
+        await LoadData();
     }
 
     private async Task ActionButtonClick(long actionId)
     {
         await Products.Execute(Id, actionId);
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
         Details = await Products.Get(Id);
+        await modeler.SetValueAsync(Details.Template.Xml);
         await historyList.Reload();
         await SetColors(historyList.items);
     }

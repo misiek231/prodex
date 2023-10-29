@@ -37,11 +37,14 @@ public class SimpleCreate
 
         public async Task<OneOf<TEntity, ValidationErrors>> Handle(Request<TEntity, TForm> request, CancellationToken cancellationToken)
         {
-            var validationResult = Validator.ValidateCreate(request.Form);
-            
-            if (validationResult.HasErrors)
+            if (Validator is not null)
             {
-                return validationResult;
+                var validationResult = Validator.ValidateCreate(request.Form);
+
+                if (validationResult.HasErrors)
+                {
+                    return validationResult;
+                }
             }
 
             var entity = Mapper.ToEntity(request.Form);
