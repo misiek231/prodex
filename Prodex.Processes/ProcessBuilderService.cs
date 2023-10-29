@@ -48,6 +48,7 @@ namespace Prodex.Processes
 
                 if (existing != null)
                 {
+                    existing.PrevSteps.Add(currentElement.Id, outgoing);
                     nextSteps.Add(existing.StepId);
                     continue;
                 }
@@ -57,7 +58,8 @@ namespace Prodex.Processes
                     Id = newStep.Id,
                     Name = newStep.Name,
                     StepId = steps.Count + 1,
-                    StepType = MapStepType(newStep)
+                    StepType = MapStepType(newStep),
+                    PrevSteps = new Dictionary<string, string> { { currentElement.Id, outgoing } }
                 });
 
                 nextSteps.Add(steps.Count);

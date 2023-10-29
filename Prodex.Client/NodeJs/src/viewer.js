@@ -20,7 +20,6 @@ window.loadBpmnViewer = () => {
         additionalModules: [
             TokenSimulationModule,
             FixModule,
-            ExampleModule,
             ModelingModule
         ]
     });

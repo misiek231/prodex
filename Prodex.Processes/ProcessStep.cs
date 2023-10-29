@@ -7,6 +7,9 @@
         public string Name { get; set; }
         public StepType StepType { get; set; }
         public List<long> NextSteps { get; set; }
+
+        // { PrevStep, SequenceFlow }
+        public Dictionary<string, string> PrevSteps { get; set; }
     }
 
     public enum StepType

@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Prodex.Processes;
 
@@ -47,12 +48,24 @@ public class BuildedProcess
             return;
         }
 
-        if(nextSteps.Count > 1)
+        ProcessStep step = null;
+
+        if(currentStep.StepType == StepType.ExclusiveGateway)
+        {
+            var flowIds = nextSteps.Select(p => p.PrevSteps[currentStep.Id]).ToList();
+            var enabledFlows = (await mediator.Send(new CheckConditionsRequest(processable, flowIds))).EnabledFlows;
+         
+            // Jeżeli wicej niż 1 warunek jest spełniony bierzemy pierwszy 
+            step = nextSteps.Where(p => enabledFlows.Where(q => p.PrevSteps.ContainsValue(q)).Any()).FirstOrDefault();
+        }
+        else if(nextSteps.Count == 1)
+        {
+            step = nextSteps.Single();
+        }
+        else
         {
             throw new NotImplementedException();
         }
-
-        var step = nextSteps.Single();
 
         switch (step.StepType)
         {
@@ -71,8 +84,7 @@ public class BuildedProcess
                 break;
 
             case StepType.ExclusiveGateway:
-
-                // ExecuteExclusiveGateway(processable, step);
+                
                 break;
 
             case StepType.End:
@@ -90,12 +102,20 @@ public class BuildedProcess
         await Run(mediator, processable, step, userId);
     }
 
-    public List<KeyValueResult> GetActions(IProcessable processable)
+    public async Task<List<KeyValueResult>> GetActions(IMediator mediator, IProcessable processable)
     {
         var current = processSteps.Single(p => p.StepId == processable.CurrentStepId);
 
-        return processSteps
-            .Where(p => current.NextSteps.Contains(p.StepId))
+        List<ProcessStep> next = GetNextSteps(current.StepId);
+
+        if (current.StepType == StepType.ExclusiveGateway)
+        {
+            var flowIds = next.Select(p => p.PrevSteps[current.Id]).ToList();
+            var enabledFlows = (await mediator.Send(new CheckConditionsRequest(processable, flowIds))).EnabledFlows;
+            next = next.Where(p => enabledFlows.Where(q => p.PrevSteps.ContainsValue(q)).Any()).ToList();
+        }
+
+        return next
             .Select(p => new KeyValueResult(p.StepId, p.Name))
             .ToList();
     }
