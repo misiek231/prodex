@@ -19,6 +19,11 @@
     {
         await _js.InvokeVoidAsync("setColorViewer", elementId, color);
     }
+
+    public async Task SetEndEventColor(string color)
+    {
+        await _js.InvokeVoidAsync("setEndEventColorViewer", color);
+    }
 }
 
 <style>

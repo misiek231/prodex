@@ -121,6 +121,9 @@
 
             await modeler.SetColor(i.ActionId, colors[i.ActionId]);
         }
+
+        if (Details.IsFinished)
+            await modeler.SetEndEventColor("red");
     }
 
     public static System.Drawing.Color ChangeColorBrightness(System.Drawing.Color color, float correctionFactor)

@@ -43,6 +43,16 @@ window.setColorViewer = (elementId, color) => {
     modeling.setColor(element, { stroke: '#222222', fill: color })
 }
 
+window.setEndEventColorViewer = (color) => {
+
+    const elementRegistry = window.viewer.get("elementRegistry").getAll();
+    const modeling = window.viewer.get("modeling");
+    const endEvent = elementRegistry.filter(p => p.type == "bpmn:EndEvent");
+
+    if (endEvent)
+        modeling.setColor(endEvent, { stroke: '#222222', fill: color })
+}
+
 window.setCurrentDiagramViewer = async (xml) => {
     if (!window.viewer) return;
 

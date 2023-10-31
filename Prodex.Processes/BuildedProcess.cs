@@ -16,6 +16,8 @@ public interface IProcessable
 {
     public long Id { get; set; }
     public long CurrentStepId { get; set; }
+    public bool IsFinished { get; set; }
+
 }
 
 public class BuildedProcess
@@ -89,7 +91,7 @@ public class BuildedProcess
 
             case StepType.End:
                 processable.CurrentStepId = step.StepId;
-                // processable.IsFinished = true; ???
+                processable.IsFinished = true;
                 return; 
 
             default: 
