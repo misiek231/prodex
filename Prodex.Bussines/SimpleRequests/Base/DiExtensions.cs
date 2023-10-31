@@ -67,7 +67,7 @@ public class SimpleRequestConfig
         return this;
     }
 
-    public SimpleRequestConfig AddCreateConfig<TEntity, TForm>() where TEntity : class
+    public SimpleRequestConfig AddCreateConfig<TEntity, TForm>() where TEntity : class, IEntity
     {
         Services.AddScoped<IRequestHandler<SimpleCreate.Request<TEntity, TForm>, OneOf<TEntity, ValidationErrors>>,
             SimpleCreate.Handler<TEntity, TForm>>();

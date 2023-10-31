@@ -11,7 +11,7 @@ public class SimpleCreate
 {
 
     public class Request<TEntity, TForm> : IRequest<OneOf<TEntity, ValidationErrors>>
-        where TEntity : class
+        where TEntity : class, IEntity
     {
         public TForm Form { get; set; }
 
@@ -22,7 +22,7 @@ public class SimpleCreate
     }
 
     public class Handler<TEntity, TForm> : IRequestHandler<Request<TEntity, TForm>, OneOf<TEntity, ValidationErrors>>
-    where TEntity : class
+    where TEntity : class, IEntity
     {
         private readonly ICreateMapper<TEntity, TForm> Mapper;
         private readonly IValidatorCreate<TForm> Validator;

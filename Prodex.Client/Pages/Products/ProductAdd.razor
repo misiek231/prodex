@@ -39,7 +39,7 @@
 
         if (result.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("product");
+            Navigation.NavigateTo($"product/{TemplateId}/details/{result.Result}");
         }
     }
 }

@@ -30,12 +30,12 @@ namespace Prodex.Client.RestClients
             return await client.GetFromJsonAsync<Prodex.Shared.Models.Products.DetailsModel>($"api/products/{id}");
         }
 
-        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Post(Prodex.Shared.Models.Products.FormModel model)
+        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<long>> Post(Prodex.Shared.Models.Products.FormModel model)
         {
             if (model.Validate(null).HasErrors)
-                return new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(System.Net.HttpStatusCode.BadRequest);
+                return new Prodex.Client.RestClients.HttpResponseMessage<long>(System.Net.HttpStatusCode.BadRequest);
             
-            var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(await client.PostAsJsonAsync("api/products/", model));
+            var result = new Prodex.Client.RestClients.HttpResponseMessage<long>(await client.PostAsJsonAsync("api/products/", model));
             await result.InitResultAsync();
             
             if (result.StatusCode == HttpStatusCode.BadRequest)

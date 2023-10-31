@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Prodex.Bussines.SimpleRequests.Base;
+using Prodex.Data.Interfaces;
 using Prodex.Data.Models;
 using Prodex.Server.Extensions;
 using Prodex.Server.MinimalApiExtensions;
@@ -25,9 +26,13 @@ namespace Prodex.Server.EndpointDefinitions
                 .RequireAuthorization();
         }
 
-        public void DefineCreate<TEntity, TFormModel>(RouteGroupBuilder group) where TEntity : class
+        public void DefineCreate<TEntity, TFormModel>(RouteGroupBuilder group) where TEntity : class, IEntity
         {
-            group.MapPost("", async (IMediator mediator, [FromBody] TFormModel model) => await mediator.Send(new SimpleCreate.Request<TEntity, TFormModel>(model)))
+            group.MapPost("", async (IMediator mediator, [FromBody] TFormModel model) => {
+                var result = await mediator.Send(new SimpleCreate.Request<TEntity, TFormModel>(model));
+
+                return result.Match(p => Results.Ok(p.Id), p => Results.BadRequest(p));
+                })
                 .RequireAuthorization();
         }
 
