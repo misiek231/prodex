@@ -36,10 +36,14 @@ namespace Prodex.Server.EndpointDefinitions
                 .RequireAuthorization();
         }
 
-        public void DefineUpdate<TEntity, TFormModel>(RouteGroupBuilder group) where TEntity : class
+        public void DefineUpdate<TEntity, TFormModel>(RouteGroupBuilder group) where TEntity : class, IEntity
         {
-            group.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] TFormModel model) => 
-                await mediator.Send(new SimpleUpdate.Request<TEntity, TFormModel>(id, model)))
+            group.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] TFormModel model) =>
+            {
+                var result = await mediator.Send(new SimpleUpdate.Request<TEntity, TFormModel>(id, model));
+
+                return result.Match(p => Results.Ok(p.Id), p => Results.BadRequest(p));
+            })
                 .RequireAuthorization();
         }
     }

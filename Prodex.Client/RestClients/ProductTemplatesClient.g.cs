@@ -25,12 +25,12 @@ namespace Prodex.Client.RestClients
             return await client.GetFromJsonAsync<Prodex.Shared.Models.ProductTemplates.FormModel>($"api/product-templates/{id}");
         }
 
-        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Post(Prodex.Shared.Models.ProductTemplates.FormModel model)
+        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Int64>> Post(Prodex.Shared.Models.ProductTemplates.FormModel model)
         {
             if (model.Validate(null).HasErrors)
-                return new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(System.Net.HttpStatusCode.BadRequest);
+                return new Prodex.Client.RestClients.HttpResponseMessage<System.Int64>(System.Net.HttpStatusCode.BadRequest);
             
-            var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(await client.PostAsJsonAsync("api/product-templates/", model));
+            var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Int64>(await client.PostAsJsonAsync("api/product-templates/", model));
             await result.InitResultAsync();
             
             if (result.StatusCode == HttpStatusCode.BadRequest)
@@ -41,12 +41,12 @@ namespace Prodex.Client.RestClients
             return result;
         }
 
-        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Object>> Put(System.Int64 id, Prodex.Shared.Models.ProductTemplates.FormModel model)
+        public async System.Threading.Tasks.Task<Prodex.Client.RestClients.HttpResponseMessage<System.Int64>> Put(System.Int64 id, Prodex.Shared.Models.ProductTemplates.FormModel model)
         {
             if (model.Validate(null).HasErrors)
-                return new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(System.Net.HttpStatusCode.BadRequest);
+                return new Prodex.Client.RestClients.HttpResponseMessage<System.Int64>(System.Net.HttpStatusCode.BadRequest);
             
-            var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Object>(await client.PutAsJsonAsync($"api/product-templates/{id}", model));
+            var result = new Prodex.Client.RestClients.HttpResponseMessage<System.Int64>(await client.PutAsJsonAsync($"api/product-templates/{id}", model));
             await result.InitResultAsync();
             
             if (result.StatusCode == HttpStatusCode.BadRequest)

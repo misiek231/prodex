@@ -86,7 +86,7 @@
 
         if (result.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("product-template");
+            Navigation.NavigateTo($"administration/product-template/form/{result.Result}");
         }
     }
 

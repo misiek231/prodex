@@ -97,6 +97,7 @@
 
     private async Task SetColors(List<Prodex.Shared.Models.Products.History.ListItemModel> list)
     {
+        await modeler.ClearColors("white");
         await modeler.SetColor("StartEvent_1", "#2eb85c");
 
         var colors = new Dictionary<string, string>();

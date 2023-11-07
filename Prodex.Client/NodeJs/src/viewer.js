@@ -34,6 +34,14 @@ window.loadBpmnViewer = () => {
     }
 }
 
+window.clearColorsViewer = (color) => {
+
+    const elementRegistry = window.viewer.get("elementRegistry").getAll();
+    const modeling = window.viewer.get("modeling");
+
+    modeling.setColor(elementRegistry, { stroke: '#222222', fill: color })
+}
+
 window.setColorViewer = (elementId, color) => {
 
     const elementRegistry = window.viewer.get("elementRegistry").getAll();

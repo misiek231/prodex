@@ -20,6 +20,11 @@
         await _js.InvokeVoidAsync("setColorViewer", elementId, color);
     }
 
+    public async Task ClearColors(string color)
+    {
+        await _js.InvokeVoidAsync("clearColorsViewer", color);
+    }
+
     public async Task SetEndEventColor(string color)
     {
         await _js.InvokeVoidAsync("setEndEventColorViewer", color);
