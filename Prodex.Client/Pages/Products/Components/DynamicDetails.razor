@@ -2,7 +2,8 @@
 @using Prodex.Shared.Models.Products.DynamicFields;
 @inject FieldsDetailsClient client;
 
-<CardBody>
+
+<Div>
     @for(int k = 0; k < Fields.Count; k++)
     {
         int i = k;
@@ -22,7 +23,7 @@
             <Button @onclick="() => SetEditMode(i)"><Icon Name="IconName.Edit" /></Button><br />
         }
     }
-</CardBody>
+</Div>
 
 @code {
 
