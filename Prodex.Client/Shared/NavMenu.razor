@@ -4,11 +4,14 @@
      Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small">
     <BarToggler />
     <BarBrand>
-        <BarItem>
-            <BarLink To="">Prodex</BarLink>
+        <BarItem Style="font-size: 20px; font-weight: bold">
+            <BarLink Class="gap-3">
+                <Div Class="b-bar-icon d-inline-block"><img Style="width:32px; height: 32px" src="/favicon.png?v=2"/></Div>
+                Prodex
+            </BarLink>
         </BarItem>
     </BarBrand>
-        <BarMenu>
+    <BarMenu>
         <BarStart>
             @foreach (var node in Sitemap.Nodes)
             {

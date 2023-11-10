@@ -10,64 +10,58 @@
 @inject NavigationManager Navigation
 @inject ProductsClient Products
 
-<Card>
-    <CardHeader>
-        @Details?.Name
-    </CardHeader>
-    <CardBody>
-        <Div Style="max-height: 50vh" Class="d-flex gap-2 mb-2">
-            <Div Style="flex: 1" Class="d-flex flex-column gap-2">
-                <Card>
-                    <CardHeader>
-                        <b>Informacje podstawowe</b>
-                    </CardHeader>
-                    <CardBody>
-                        <p><b>ID: </b> @Details?.Id</p>
-                        <p><b>Nazwa: </b> @Details?.Name</p>
-                        <p><b>Szablon: </b> @Details?.Template?.Value</p>
-                        <p><b>Status: </b> <Badge Color="Details?.Status?.Color">@Details?.Status?.Value</Badge> </p>
-                    </CardBody>
-                </Card>
 
-                <Card Style="flex: 1; max-width: 100%; max-height: 100%; overflow: auto">
-                    <CardHeader>
-                        <b>Szczegóły</b>
-                    </CardHeader>
-                    <CardBody Style="overflow: auto">
-                        <DynamicDetails ProductId="Id" Reload="LoadData"/>
-                    </CardBody>
-                </Card>
-            </Div>
-            <Div Style="flex: 1">
-                <Card Style="max-width: 100%; max-height: 100%; height: 100%;">
-                    <CardHeader>
-                        <b>Historia</b>
-                    </CardHeader>
-                    <CardBody Style="overflow: auto">
-                        <HistoryList @ref="historyList" ProductId="Id" />
-                    </CardBody>
-                </Card>
-            </Div>
-        </Div>
-
+<Div Style="max-height: 50vh" Class="d-flex gap-2 mb-2">
+    <Div Style="flex: 1" Class="d-flex flex-column gap-2">
         <Card>
             <CardHeader>
-                <b>Proces</b>
+                <b>Informacje podstawowe</b>
             </CardHeader>
             <CardBody>
-                <BpmnViewer @ref="modeler" />
+                <p><b>Nazwa: </b> @Details?.Name</p>
+                <p><b>Szablon: </b> @Details?.Template?.Value</p>
+                <p><b>Status: </b> <Badge Color="Details?.Status?.Color">@Details?.Status?.Value</Badge> </p>
             </CardBody>
         </Card>
+
+        <Card Style="flex: 1; max-width: 100%; max-height: 100%; overflow: auto">
+            <CardHeader>
+                <b>Szczegóły</b>
+            </CardHeader>
+            <CardBody Style="overflow: auto">
+                <DynamicDetails ProductId="Id" Reload="LoadData"/>
+            </CardBody>
+        </Card>
+    </Div>
+    <Div Style="flex: 1">
+        <Card Style="max-width: 100%; max-height: 100%; height: 100%;">
+            <CardHeader>
+                <b>Historia</b>
+            </CardHeader>
+            <CardBody Style="overflow: auto">
+                <HistoryList @ref="historyList" ProductId="Id" />
+            </CardBody>
+        </Card>
+    </Div>
+</Div>
+
+<Card>
+    <CardHeader>
+        <b>Proces</b>
+    </CardHeader>
+    <CardBody>
+        <BpmnViewer @ref="modeler" />
     </CardBody>
     <CardFooter>
         <Div class="d-flex gap-1">
-            @foreach(var button in Details?.Buttons ?? new List<ApiButton>())
+            @foreach (var button in Details?.Buttons ?? new List<ApiButton>())
             {
                 <Button Color="Color.Primary" @onclick="() => ActionButtonClick(button.ActionId)">@button.Name</Button>
             }
         </Div>
     </CardFooter>
 </Card>
+    
 
 
 @code {

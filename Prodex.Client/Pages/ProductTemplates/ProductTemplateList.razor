@@ -13,7 +13,6 @@
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="RowSelected" Responsive>
-            <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
             <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
         </DataGrid>
     </CardBody>

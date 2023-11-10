@@ -12,7 +12,6 @@
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="m => createDictionaryModal.Show(m.Id)" Responsive>
-            <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
             <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" />
         </DataGrid>
     </CardBody>

@@ -1,8 +1,9 @@
 ﻿@using Prodex.Client.Coponents;
 @using Prodex.Client.Pages.ProductTemplates.Components.ElementOptions
 @using Prodex.Client.Pages.ProductTemplates.Models;
-<Card>
-    <CardBody>
+
+<Card Style="height: 100%">
+    <CardBody Class="d-flex flex-column" Style="height: 100%">
         <BpmnModeler @ref="modeler" SelectedElementChanged="SelectedElementChanged"></BpmnModeler>
 
 

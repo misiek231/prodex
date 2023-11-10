@@ -1,21 +1,21 @@
 ﻿[
   {
-    "name": "Dashboard",
+    "name": "Strona główna",
     "route": "",
     "icon": "fa-chart-line"
   },
   {
-    "name": "Administracja",
+    "name": "Zarządzanie",
     "route": "administration",
     "icon": "fa-chart-line",
     "children": [
       {
-        "name": "Użytkownicy",
+        "name": "Pracownicy",
         "route": "users",
         "icon": "fa-user",
         "children": [
           {
-            "name": "Dodaj Użytkownika",
+            "name": "Dodaj Pracownika",
             "route": "add",
             "icon": "",
             "hidden": true

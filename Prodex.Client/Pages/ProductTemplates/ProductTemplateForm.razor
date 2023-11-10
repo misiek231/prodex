@@ -12,47 +12,51 @@
 @inject ProductTemplatesClient ProductsTemplates
 
 
-<Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
-    <Items>
-        <Tab Name="basic">Informacje podstawowe</Tab>
-        @if (Id.HasValue)
-        {
-            <Tab Name="statuses">Statusy</Tab>
-            <Tab Name="actions">Akcje</Tab>
-            <Tab Name="fields">Pola</Tab>
-            <Tab Name="process">Proces</Tab>
-        }
-    </Items>
-    <Content>
-        <TabPanel Name="basic">
-            <Card>
-                <CardBody>
-                    <FormWrapper Form="Form">
-                        <FormInput Property="p => p.Name" />
-                    </FormWrapper>
-                </CardBody>
-                <CardFooter>
-                    <Button Color="Color.Primary" @onclick="Save">Zapisz</Button>
-                </CardFooter>
-            </Card>
-        </TabPanel>
-        @if (Id.HasValue)
-        {
-            <TabPanel Name="statuses">
-                <StatusesList TemplateId="Id.Value"/>
+<style>
+    .tab-content{
+        flex: 1;
+    }
+</style> 
+
+<Div Class="d-flex flex-column h-100">
+    <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+        <Items>
+            <Tab Name="basic">Informacje podstawowe</Tab>
+            @if (Id.HasValue)
+            {
+                <Tab Name="statuses">Statusy</Tab>
+                <Tab Name="fields">Pola</Tab>
+                <Tab Name="process">Proces</Tab>
+            }
+        </Items>
+        <Content>
+            <TabPanel Name="basic">
+                <Card>
+                    <CardBody>
+                        <FormWrapper Form="Form">
+                            <FormInput Property="p => p.Name" />
+                        </FormWrapper>
+                    </CardBody>
+                    <CardFooter>
+                        <Button Color="Color.Primary" @onclick="Save">Zapisz</Button>
+                    </CardFooter>
+                </Card>
             </TabPanel>
-            <TabPanel Name="actions">
-                Content for messages.
-            </TabPanel>
-            <TabPanel Name="fields">
-                <FieldsConfigurator TemplateId="Id.Value"/>
-            </TabPanel>
-            <TabPanel Name="process">
-                <ProcessDesigner @ref="designer" Save="Save" TemplateId="Id.Value"/>
-            </TabPanel>
-        }
-    </Content>
-</Tabs>
+            @if (Id.HasValue)
+            {
+                <TabPanel Name="statuses">
+                    <StatusesList TemplateId="Id.Value"/>
+                </TabPanel>
+                <TabPanel Name="fields">
+                    <FieldsConfigurator TemplateId="Id.Value"/>
+                </TabPanel>
+                <TabPanel Style="height: 100%;" Name="process">
+                    <ProcessDesigner @ref="designer" Save="Save" TemplateId="Id.Value"/>
+                </TabPanel>
+            }
+        </Content>
+    </Tabs>
+</Div>
 
 @code {
     private FormModel Form = new FormModel();

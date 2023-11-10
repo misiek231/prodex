@@ -65,6 +65,11 @@ window.setCurrentDiagramViewer = async (xml) => {
     if (!window.viewer) return;
 
     await window.viewer.importXML(xml);
+    window.viewer.get('canvas').zoom('fit-viewport');
+
+    if (window.viewer.get('zoomScroll')._enabled)
+        window.viewer.get('zoomScroll').toggle();
+
 }
 
 

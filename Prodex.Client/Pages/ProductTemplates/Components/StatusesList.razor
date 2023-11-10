@@ -7,12 +7,11 @@
 
 
 <Card>
-    <CardHeader Class="d-flex justify-content-end">
+    <CardHeader Class="d-flex">
         <Button Type="ButtonType.Link" Color="Color.Primary" @onclick="createStatusModal.Show">Dodaj</Button>
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="m => createStatusModal.Show(m.Id)" Responsive>
-            <DataGridColumn Field="@nameof(ListItemModel.Id)" Caption="#" Sortable="false" />
             <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
             <DataGridColumn Field="@nameof(ListItemModel.Color)" Caption="Kolor" Editable >
                 <DisplayTemplate>
