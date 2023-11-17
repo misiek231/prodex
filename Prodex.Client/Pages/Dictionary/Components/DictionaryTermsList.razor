@@ -6,8 +6,8 @@
 @using Prodex.Client.Pages.Dictionary.Modals;
 @inject DictionaryTermsClient DictionaryTerms
 
-<Card>
-    <CardHeader Class="d-flex justify-content-end">
+<Card Style="height: 100%;">
+    <CardHeader Class="d-flex">
         <Button Type="ButtonType.Link" Color="Color.Primary" @onclick="createDictionaryTermModal.Show">Dodaj</Button>
     </CardHeader>
     <CardBody>

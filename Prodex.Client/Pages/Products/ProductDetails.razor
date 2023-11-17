@@ -10,9 +10,24 @@
 @inject NavigationManager Navigation
 @inject ProductsClient Products
 
+<style>
+    .card-header {
+        background: linear-gradient(45deg,#2497bf,#105f7b) !important;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        font-size: 1.2rem;
+        padding: 20px;
+    }
 
-<Div Style="max-height: 50vh" Class="d-flex gap-2 mb-2">
-    <Div Style="flex: 1" Class="d-flex flex-column gap-2">
+    .card {
+        border-radius: 0.4rem !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+</style>
+
+<Div Style="max-height: 50vh" Class="d-flex gap-3 mb-3">
+    <Div Style="flex: 1" Class="d-flex flex-column gap-3">
         <Card>
             <CardHeader>
                 <b>Informacje podstawowe</b>

@@ -7,16 +7,22 @@
 @using Prodex.Client.Pages.Dictionary.Modals;
 @using Prodex.Client.Pages.Dictionary.Components;
 
+<style>
+    .tab-content{
+        height: 97%;
+    }
+</style>
+
 <Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
     <Items>
         <Tab Name="dictionary">Kategorie słowników</Tab>
         <Tab Name="dictionaryTerms">Wartości słowników</Tab>
     </Items>
-    <Content>
-        <TabPanel Name="dictionary">
+    <Content >
+        <TabPanel Style="height: 100%;" Name="dictionary">
             <DictionaryList />
         </TabPanel>
-        <TabPanel Name="dictionaryTerms">
+        <TabPanel Style="height: 100%;" Name="dictionaryTerms">
             <DictionaryTermsList />
         </TabPanel>
     </Content>
