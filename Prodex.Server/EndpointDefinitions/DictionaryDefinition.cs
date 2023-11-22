@@ -11,6 +11,8 @@ public class DictionaryDefinition : SimpleRequestsBaseDefinition, IEndpointDefin
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
+        group.RequireAuthorization(Shared.Models.Users.UserType.Admin.ToString());
+
         DefineGetList<Dictionary, FilterModel, ListItemModel>(group);
         DefineGetDetails<Dictionary, FormModel>(group);
         DefineCreate<Dictionary, FormModel>(group);

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Prodex.Data;
 using Prodex.Shared.Models.Sitemap;
-using System.Text.Json;
+using Prodex.Shared.Models.Users;
 
 namespace Prodex.Bussines.Sitemap;
 
@@ -10,11 +10,11 @@ public class GetSitemap
 {
     public class Request : IRequest<SitemapModel>
     {
-        public string SitemapFilePath { get; init; }
+        public long UserId { get; init; }
 
-        public Request(string sitemapFilePath)
+        public Request(long userId)
         {
-            SitemapFilePath = sitemapFilePath;
+            UserId = userId;
         }
     }
 
@@ -29,13 +29,29 @@ public class GetSitemap
 
         public async Task<SitemapModel> Handle(Request request, CancellationToken cancellationToken)
         {
-            var text = await File.ReadAllTextAsync(request.SitemapFilePath, cancellationToken);
-            var model = new SitemapModel { Nodes = JsonSerializer.Deserialize<List<SitemapNode>>(text, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) };
+            var user = await _context.Users.FindAsync(request.UserId);
+
+            var model = new SitemapModel
+            {
+                User = user.Name,
+                Nodes = new List<SitemapNode>
+                {
+                    new SitemapNode
+                    {
+                        Name = "Strona główna",
+                        Route = "",
+                        Icon = "fa-chart-line"
+                    }
+                }
+            };
+
+            if (user.UserTypeEnum == UserType.Admin)
+            {
+                model.Nodes.Add(GetAdministrationNode());
+            }
 
             var newNodes = _context.ProductTemplates.ToList();
-
-
-            foreach( var node in newNodes )
+            foreach (var node in newNodes)
             {
                 model.Nodes.Add(new SitemapNode
                 {
@@ -61,6 +77,57 @@ public class GetSitemap
             }
 
             return model;
+        }
+
+        private SitemapNode GetAdministrationNode()
+        {
+            return new SitemapNode
+            {
+                Name = "Zarządzanie",
+                Route = "administration",
+                Icon = "fa-chart-line",
+                Children = new List<SitemapNode>
+                {
+                    new SitemapNode
+                    {
+                        Name = "Pracownicy",
+                        Route = "users",
+                        Icon = "fa-user",
+                        Children = new List<SitemapNode>
+                        {
+                            new SitemapNode
+                            {
+                            Name = "Dodaj Pracownika",
+                            Route = "add",
+                            Icon = "",
+                            Hidden = true
+                            }
+                        }
+                    },
+                    new SitemapNode
+                    {
+                        Name = "Słowniki",
+                        Route = "dictionary",
+                        Icon = "fa-book"
+                    },
+                    new SitemapNode
+                    {
+                        Name = "Szablony produktów",
+                        Route = "product-template",
+                        Icon = "fa-desktop",
+                        Children = new List<SitemapNode>
+                        {
+                            new SitemapNode
+                            {
+                                Name = "Formularz",
+                                Route = "form",
+                                Icon = "",
+                                Hidden = true
+                            }
+                        }
+                    }
+                }
+            };
         }
     }
 }

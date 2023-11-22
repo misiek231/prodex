@@ -17,6 +17,10 @@ public partial class User
 
     public string Surname { get; set; }
 
+    public string Email { get; set; }
+
+    public int UserType { get; set; }
+
     public virtual ICollection<History> Histories { get; } = new List<History>();
 
     public virtual ICollection<ProductTarget> ProductTargets { get; } = new List<ProductTarget>();

@@ -9,6 +9,7 @@ using Prodex.Bussines.Sitemap;
 using Prodex.Data;
 using Prodex.Processes;
 using Prodex.Server.MinimalApiExtensions;
+using Prodex.Shared.Models.Users;
 using System.Reflection;
 using System.Text;
 
@@ -63,7 +64,11 @@ namespace Prodex.Server
                 };
             });
 
-            builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization(p =>
+            {
+                p.AddPolicy(UserType.Admin.ToString(), q => q.RequireRole(UserType.Admin.ToString()));
+                p.AddPolicy(UserType.Worker.ToString(), q => q.RequireRole(UserType.Worker.ToString()));
+            });
 
             builder.Services.AddEndpointDefinitions();
         }

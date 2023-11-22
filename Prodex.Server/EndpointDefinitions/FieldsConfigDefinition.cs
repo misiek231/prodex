@@ -15,6 +15,8 @@ public class FieldsConfigDefinition : IEndpointDefinition
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
+        group.RequireAuthorization(Shared.Models.Users.UserType.Admin.ToString());
+
         group.MapGet("{templateId:long}", async (IMediator mediator, [FromRoute] long templateId, [AsParameters] Pager pager) =>
             await mediator.Send(new SimpleGetList.Request<FieldConfig, FilterModel, FieldModel>(pager, new FilterModel { TemplateId = templateId }))
         ).RequireAuthorization();

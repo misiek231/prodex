@@ -2,6 +2,8 @@
 using Prodex.Bussines.SimpleRequests.Base;
 using Prodex.Data.Models;
 using Prodex.Shared.Models.Users;
+using Prodex.Shared.Utils;
+using Prodex.Utils;
 using Riok.Mapperly.Abstractions;
 
 namespace Prodex.Bussines.Mappers;
@@ -35,9 +37,14 @@ public partial class UsersMapper : IListMapper<User, ListItemModel>, ICreateMapp
 
     public partial void CustomToEntity(FormModel form, User user);
 
+    [ObjectFactory]
+    private static string CreateUserTypeDescription(UserType t) => t == UserType.None ? "-" : t.Description();
+
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<User> prod);
 
+    [MapperIgnoreSource(nameof(User.Password))]
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<User> query);
 
+    [MapperIgnoreSource(nameof(User.Password))]
     public partial FormModel ToDetailsModel(User model);
 }

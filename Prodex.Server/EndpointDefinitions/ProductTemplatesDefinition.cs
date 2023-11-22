@@ -11,6 +11,8 @@ public class ProductTemplatesDefinition : SimpleRequestsBaseDefinition, IEndpoin
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
+        group.RequireAuthorization(Shared.Models.Users.UserType.Admin.ToString());
+
         DefineGetList<ProductTemplate, FilterModel, ListItemModel>(group);
         DefineGetDetails<ProductTemplate, FormModel>(group);
         DefineCreate<ProductTemplate, FormModel>(group);

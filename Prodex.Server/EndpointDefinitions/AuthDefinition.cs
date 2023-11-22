@@ -2,9 +2,12 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Prodex.Bussines.Handlers.Auth;
 using Prodex.Bussines.Sitemap;
+using Prodex.Server.Extensions;
 using Prodex.Server.MinimalApiExtensions;
 using Prodex.Shared.Models.Auth;
+using Prodex.Shared.Models.Users;
 using System.Reflection;
+using System.Security.Claims;
 
 namespace Prodex.Server.Controllers;
 
@@ -14,14 +17,9 @@ public class AuthDefinition : IEndpointDefinition
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
-        group.MapGet("sitemap", async (IMediator mediator) =>
+        group.MapGet("sitemap", async (IMediator mediator, ClaimsPrincipal user) =>
         {
-
-            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            path = Path.Combine(path, "sitemap.json");
-
-            return await mediator.Send(new GetSitemap.Request(path));
+            return await mediator.Send(new GetSitemap.Request(user.Id()));
         }).RequireAuthorization();
 
         group.MapPost("login", async (IMediator mediator, [FromBody] LoginModel model) =>

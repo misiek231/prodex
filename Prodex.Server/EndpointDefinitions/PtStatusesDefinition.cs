@@ -11,6 +11,8 @@ public class PtStatusesDefinition : SimpleRequestsBaseDefinition, IEndpointDefin
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
+        group.RequireAuthorization(Shared.Models.Users.UserType.Admin.ToString());
+
         DefineGetList<PtStatus, FilterModel, ListItemModel>(group);
         DefineGetDetails<PtStatus, FormModel>(group);
         DefineCreate<PtStatus, FormModel>(group);

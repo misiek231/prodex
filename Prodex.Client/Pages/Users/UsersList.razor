@@ -5,16 +5,19 @@
 @using Prodex.Shared.Models.Users;
 @using Prodex.Shared.Pagination;
 @inject UsersClient Users
+@inject NavigationManager Navigation
 
 <Card Style="height: 100%;">
     <CardHeader>
         <Button Type="ButtonType.Link" To="administration/users/add" Color="Color.Primary">Dodaj</Button>
     </CardHeader>
     <CardBody>
-        <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" Responsive>
+        <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="RowSelected" Responsive>
             <DataGridColumn Field="@nameof(ListItemModel.GivenName)" Caption="Imię" />
             <DataGridColumn Field="@nameof(ListItemModel.Surname)" Caption="Nazwisko" />
             <DataGridColumn Field="@nameof(ListItemModel.Username)" Caption="Nazwa użytkownika" />
+            <DataGridColumn Field="@nameof(ListItemModel.Email)" Caption="Email" />
+            <DataGridColumn Field="@nameof(ListItemModel.UserTypeEnum)" Caption="Typ użytkownika" />
         </DataGrid>
     </CardBody>
     <CardFooter>
@@ -43,5 +46,10 @@
         {
             // todo: find nice way to handle exceptions like that
         }
+    }
+
+    private void RowSelected(ListItemModel item)
+    {
+        Navigation.NavigateTo($"administration/users/add/{item.Id}");
     }
 }

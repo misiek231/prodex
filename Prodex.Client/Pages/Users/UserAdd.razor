@@ -1,19 +1,28 @@
-﻿@page "/administration/users/add"
+﻿@page "/administration/users/add/{Id:long?}"
 @using Prodex.Client.RestClients;
 @using Prodex.Shared.Models.Users;
 @using System.Net;
 @inject NavigationManager Navigation
-@inject UsersClient Processes
+@inject UsersClient Users
 
 <Card>
     <CardHeader>
-        Dodaj Pracownika
+        @if (Id.HasValue)
+        {
+            <text>Edytuj Pracownika</text>
+        }
+        else
+        {
+            <text>Dodaj Pracownika</text>
+        }
     </CardHeader>
     <CardBody>
         <FormWrapper Form="Form">
             <FormInput Property="p => p.GivenName" />
             <FormInput Property="p => p.Surname" />
             <FormInput Property="p => p.Username" />
+            <FormInput Property="p => p.Email" Role="TextRole.Email" />
+            <FormEnumSelect Property="p => p.UserType" />
             <FormInput Property="p => p.Password" Role="TextRole.Password" />
         </FormWrapper>
     </CardBody>
@@ -25,13 +34,27 @@
 @code {
     private FormModel Form = new FormModel();
 
+    [Parameter]
+    public long? Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Id.HasValue) return;
+
+        Form = await Users.Get(Id.Value);
+
+        await base.OnInitializedAsync();
+    }
+
     private async Task Save()
     {
-        var result = await Processes.Post(Form);
+        var result = Id.HasValue ?
+            await Users.Put(Id.Value, Form) :
+            await Users.Post(Form);
 
         if (result.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("users");
+            Navigation.NavigateTo("administration/users");
         }
     }
 }

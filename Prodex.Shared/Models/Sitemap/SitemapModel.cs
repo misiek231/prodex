@@ -3,7 +3,8 @@
     public class SitemapModel
     {
         public List<SitemapNode> Nodes { get; set; }
-
+        public string User { get; set; }
+        
 
         public List<BreadcrumbItemModel> Breadcrumb(string route)
         {
