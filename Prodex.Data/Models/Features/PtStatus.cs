@@ -2,6 +2,6 @@
 
 namespace Prodex.Data.Models;
 
-public partial class PtStatus : IEntity
+public partial class PtStatus : IEntity, IConfidential
 {
 }

@@ -17,14 +17,24 @@ namespace Prodex.Data.Configurations
             entity.Property(e => e.ConfigJson)
             .IsRequired()
             .HasMaxLength(2048);
+            entity.Property(e => e.DateCreatedUtc).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.DateUpdatedUtc).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.StepId)
             .IsRequired()
             .HasMaxLength(20);
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.ServiceTaskConfigCreatedByNavigations)
+            .HasForeignKey(d => d.CreatedBy)
+            .HasConstraintName("FK_ServiceTaskConfigs_CreatedBy_Users_Id");
 
             entity.HasOne(d => d.Template).WithMany(p => p.ServiceTaskConfigs)
             .HasForeignKey(d => d.TemplateId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK_ServiceTaskConfigs_TemplateId_ProductTemplates_Id");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.ServiceTaskConfigUpdatedByNavigations)
+            .HasForeignKey(d => d.UpdatedBy)
+            .HasConstraintName("FK_ServiceTaskConfigs_UpdatedBy_Users_Id");
 
             OnConfigurePartial(entity);
         }

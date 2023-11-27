@@ -11,7 +11,19 @@ public partial class Dictionary
 
     public string Name { get; set; }
 
+    public long? CreatedBy { get; set; }
+
+    public long? UpdatedBy { get; set; }
+
+    public DateTime DateCreatedUtc { get; set; }
+
+    public DateTime DateUpdatedUtc { get; set; }
+
+    public virtual User CreatedByNavigation { get; set; }
+
     public virtual ICollection<DictionaryTerm> DictionaryTerms { get; } = new List<DictionaryTerm>();
 
     public virtual ICollection<FieldConfig> FieldConfigs { get; } = new List<FieldConfig>();
+
+    public virtual User UpdatedByNavigation { get; set; }
 }

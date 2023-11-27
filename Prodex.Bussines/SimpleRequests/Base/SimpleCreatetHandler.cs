@@ -14,10 +14,12 @@ public class SimpleCreate
         where TEntity : class, IEntity
     {
         public TForm Form { get; set; }
+        public long UserId { get; set; }
 
-        public Request(TForm form)
+        public Request(TForm form, long userId)
         {
             Form = form;
+            UserId = userId;
         }
     }
 
@@ -49,9 +51,17 @@ public class SimpleCreate
 
             var entity = Mapper.ToEntity(request.Form);
 
+            if (entity is IConfidential conf)
+            {
+                conf.DateCreatedUtc = DateTime.UtcNow;
+                conf.DateUpdatedUtc = DateTime.UtcNow;
+                conf.CreatedBy = request.UserId;
+                conf.UpdatedBy = request.UserId;
+            }
+
             Context.Add(entity);
             await Context.SaveChangesAsync(cancellationToken);
-            
+
             return entity;
         }
     }
@@ -80,6 +90,15 @@ public class SimpleCreate
         public async Task<OneOf<TEntity, ValidationErrors>> Handle(Request<TEntity, TForm> request, CancellationToken cancellationToken)
         {
             var entity = Mapper.ToEntity(request.Form);
+
+            if (entity is IConfidential conf)
+            {
+                conf.DateCreatedUtc = DateTime.UtcNow;
+                conf.DateUpdatedUtc = DateTime.UtcNow;
+                conf.CreatedBy = request.UserId;
+                conf.UpdatedBy = request.UserId;
+            }
+
             Context.Add(entity);
             await Context.SaveChangesAsync(cancellationToken);
 

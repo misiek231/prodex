@@ -2,6 +2,6 @@
 
 namespace Prodex.Data.Models;
 
-public partial class ProductTemplate : IEntity
+public partial class ProductTemplate : IEntity, IConfidential
 {
 }

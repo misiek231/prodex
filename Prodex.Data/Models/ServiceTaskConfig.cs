@@ -17,5 +17,17 @@ public partial class ServiceTaskConfig
 
     public string ConfigJson { get; set; }
 
+    public long? CreatedBy { get; set; }
+
+    public long? UpdatedBy { get; set; }
+
+    public DateTime DateCreatedUtc { get; set; }
+
+    public DateTime DateUpdatedUtc { get; set; }
+
+    public virtual User CreatedByNavigation { get; set; }
+
     public virtual ProductTemplate Template { get; set; }
+
+    public virtual User UpdatedByNavigation { get; set; }
 }

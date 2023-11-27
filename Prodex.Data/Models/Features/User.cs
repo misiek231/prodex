@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prodex.Data.Models;
 
-public partial class User : IEntity
+public partial class User : IEntity, IConfidential
 {
     public string Name => GivenName + " " + Surname;
 

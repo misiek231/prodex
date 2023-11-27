@@ -15,7 +15,19 @@ public partial class DynamicFieldValue
 
     public string Value { get; set; }
 
+    public long? CreatedBy { get; set; }
+
+    public long? UpdatedBy { get; set; }
+
+    public DateTime DateCreatedUtc { get; set; }
+
+    public DateTime DateUpdatedUtc { get; set; }
+
+    public virtual User CreatedByNavigation { get; set; }
+
     public virtual FieldConfig FieldConfig { get; set; }
 
     public virtual Product Product { get; set; }
+
+    public virtual User UpdatedByNavigation { get; set; }
 }

@@ -40,6 +40,12 @@ public partial class UsersMapper : IListMapper<User, ListItemModel>, ICreateMapp
     [ObjectFactory]
     private static string CreateUserTypeDescription(UserType t) => t == UserType.None ? "-" : t.Description();
 
+    [ObjectFactory]
+    private static string CreateCreatedByDescription(User t) => t != null ? t.Name : "-";
+
+    [ObjectFactory]
+    private static string CreateUpdatedByDescription(User t) => t != null ? t.Name : "-";
+
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<User> prod);
 
     [MapperIgnoreSource(nameof(User.Password))]

@@ -36,4 +36,10 @@ public partial class ProductsMapper : IListMapper<Product, ListItemModel>, ICrea
     public partial IQueryable<DetailsModel> ToDetailsModel(IQueryable<Product> query);
 
     public partial DetailsModel ToDetailsModel(Product model);
+
+    [ObjectFactory]
+    private static string CreateCreatedByDescription(User t) => t != null ? t.Name : "-";
+
+    [ObjectFactory]
+    private static string CreateUpdatedByDescription(User t) => t != null ? t.Name : "-";
 }

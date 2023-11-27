@@ -5,8 +5,10 @@ using Prodex.Bussines.Handlers.ProductTemplatesConfigs;
 using Prodex.Bussines.SimpleRequests.Base;
 using Prodex.Bussines.SimpleRequests.Models;
 using Prodex.Data.Models;
+using Prodex.Server.Extensions;
 using Prodex.Server.MinimalApiExtensions;
 using Prodex.Shared.Models.ProductTemplates.ElementOptions;
+using System.Security.Claims;
 
 namespace Prodex.Server.Controllers;
 
@@ -32,18 +34,18 @@ public class ProductTemplatesConfigsDefinition : IEndpointDefinition
             .WithDisplayName("GetSendTaskConfig")
             .RequireAuthorization();
 
-        sendTask.MapPost("{templateId}/{stepId}", async (IMediator mediator, [FromRoute] long templateId, [FromRoute] string stepId, [FromBody] SendTaskConfigFormModel model) =>
+        sendTask.MapPost("{templateId}/{stepId}", async (IMediator mediator, ClaimsPrincipal user, [FromRoute] long templateId, [FromRoute] string stepId, [FromBody] SendTaskConfigFormModel model) =>
             {
-                var result = await mediator.Send(new SimpleCreate.Request<SendTaskConfig, SendTaskConfigFormModelExtended>(new SendTaskConfigFormModelExtended(model, templateId, stepId)));
+                var result = await mediator.Send(new SimpleCreate.Request<SendTaskConfig, SendTaskConfigFormModelExtended>(new SendTaskConfigFormModelExtended(model, templateId, stepId), user.Id()));
 
                 return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
             })
             .WithDisplayName("CreateSendTaskConfig")
             .RequireAuthorization();
 
-        sendTask.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] SendTaskConfigFormModel model) =>
+        sendTask.MapPut("{id}", async (IMediator mediator, ClaimsPrincipal user, [FromRoute] long id, [FromBody] SendTaskConfigFormModel model) =>
             {
-                var result = await mediator.Send(new SimpleUpdate.Request<SendTaskConfig, SendTaskConfigFormModelExtended>(id, new SendTaskConfigFormModelExtended(model)));
+                var result = await mediator.Send(new SimpleUpdate.Request<SendTaskConfig, SendTaskConfigFormModelExtended>(id, new SendTaskConfigFormModelExtended(model), user.Id()));
                 return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
             })
             .WithDisplayName("UpdateSendTaskConfig")
@@ -59,17 +61,17 @@ public class ProductTemplatesConfigsDefinition : IEndpointDefinition
             .WithDisplayName("GetServiceTaskConfig")
             .RequireAuthorization();
 
-        serviceTask.MapPost("{templateId}/{stepId}", async (IMediator mediator, [FromRoute] long templateId, [FromRoute] string stepId, [FromBody] ServiceTaskConfigFormModel model) =>
+        serviceTask.MapPost("{templateId}/{stepId}", async (IMediator mediator, ClaimsPrincipal user, [FromRoute] long templateId, [FromRoute] string stepId, [FromBody] ServiceTaskConfigFormModel model) =>
         {
-            var result = await mediator.Send(new SimpleCreate.Request<ServiceTaskConfig, ServiceTaskConfigFormModelExtended>(new ServiceTaskConfigFormModelExtended(model, templateId, stepId)));
+            var result = await mediator.Send(new SimpleCreate.Request<ServiceTaskConfig, ServiceTaskConfigFormModelExtended>(new ServiceTaskConfigFormModelExtended(model, templateId, stepId), user.Id()));
             return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
         })
         .WithDisplayName("CreateServiceTaskConfig")
         .RequireAuthorization();
 
-        serviceTask.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] ServiceTaskConfigFormModel model) =>
+        serviceTask.MapPut("{id}", async (IMediator mediator, ClaimsPrincipal user, [FromRoute] long id, [FromBody] ServiceTaskConfigFormModel model) =>
         {
-            var result = await mediator.Send(new SimpleUpdate.Request<ServiceTaskConfig, ServiceTaskConfigFormModelExtended>(id, new ServiceTaskConfigFormModelExtended(model)));
+            var result = await mediator.Send(new SimpleUpdate.Request<ServiceTaskConfig, ServiceTaskConfigFormModelExtended>(id, new ServiceTaskConfigFormModelExtended(model), user.Id()));
             return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
         })
         .WithDisplayName("UpdateServiceTaskConfig")
@@ -85,17 +87,17 @@ public class ProductTemplatesConfigsDefinition : IEndpointDefinition
             .WithDisplayName("GetSequenceFlowConfig")
             .RequireAuthorization();
 
-        sequenceFlow.MapPost("{templateId}/{flowId}", async (IMediator mediator, [FromRoute] long templateId, [FromRoute] string flowId, [FromBody] SequenceFlowConfigFormModel model) =>
+        sequenceFlow.MapPost("{templateId}/{flowId}", async (IMediator mediator, ClaimsPrincipal user, [FromRoute] long templateId, [FromRoute] string flowId, [FromBody] SequenceFlowConfigFormModel model) =>
         {
-            var result = await mediator.Send(new SimpleCreate.Request<SequenceFlowConfig, SequenceFlowConfigFormModelExtended>(new SequenceFlowConfigFormModelExtended(model, templateId, flowId)));
+            var result = await mediator.Send(new SimpleCreate.Request<SequenceFlowConfig, SequenceFlowConfigFormModelExtended>(new SequenceFlowConfigFormModelExtended(model, templateId, flowId), user.Id()));
             return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
         })
         .WithDisplayName("CreateSequenceFlowConfig")
         .RequireAuthorization();
 
-        sequenceFlow.MapPut("{id}", async (IMediator mediator, [FromRoute] long id, [FromBody] SequenceFlowConfigFormModel model) =>
+        sequenceFlow.MapPut("{id}", async (IMediator mediator, ClaimsPrincipal user, [FromRoute] long id, [FromBody] SequenceFlowConfigFormModel model) =>
         {
-            var result = await mediator.Send(new SimpleUpdate.Request<SequenceFlowConfig, SequenceFlowConfigFormModelExtended>(id, new SequenceFlowConfigFormModelExtended(model)));
+            var result = await mediator.Send(new SimpleUpdate.Request<SequenceFlowConfig, SequenceFlowConfigFormModelExtended>(id, new SequenceFlowConfigFormModelExtended(model), user.Id()));
             return result.Match(p => Results.Ok(p), p => Results.BadRequest(p));
         })
         .WithDisplayName("UpdateSequenceFlowConfig")

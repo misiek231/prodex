@@ -2,5 +2,5 @@
 
 namespace Prodex.Data.Models;
 
-public partial class DictionaryTerm : IEntity
+public partial class DictionaryTerm : IEntity, IConfidential
 { }

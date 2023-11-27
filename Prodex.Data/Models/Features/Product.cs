@@ -3,6 +3,6 @@ using Prodex.Processes;
 
 namespace Prodex.Data.Models;
 
-public partial class Product : IEntity, IProcessable
+public partial class Product : IEntity, IProcessable, IConfidential
 {
 }

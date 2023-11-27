@@ -12,6 +12,8 @@ namespace Prodex.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<User> entity)
         {
+            entity.Property(e => e.DateCreatedUtc).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.DateUpdatedUtc).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.Email).HasMaxLength(60);
             entity.Property(e => e.GivenName).HasMaxLength(60);
             entity.Property(e => e.Password)
@@ -21,6 +23,14 @@ namespace Prodex.Data.Configurations
             entity.Property(e => e.Username)
             .IsRequired()
             .HasMaxLength(60);
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.InverseCreatedByNavigation)
+            .HasForeignKey(d => d.CreatedBy)
+            .HasConstraintName("FK_Users_CreatedBy_Users_Id");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.InverseUpdatedByNavigation)
+            .HasForeignKey(d => d.UpdatedBy)
+            .HasConstraintName("FK_Users_UpdatedBy_Users_Id");
 
             OnConfigurePartial(entity);
         }

@@ -19,4 +19,10 @@ public partial class ProductTemplateMapper :
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<ProductTemplate> prod);
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<ProductTemplate> query);
     public partial FormModel ToDetailsModel(ProductTemplate model);
+
+    [ObjectFactory]
+    private static string CreateCreatedByDescription(User t) => t != null ? t.Name : "-";
+
+    [ObjectFactory]
+    private static string CreateUpdatedByDescription(User t) => t != null ? t.Name : "-";
 }

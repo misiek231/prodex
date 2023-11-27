@@ -15,14 +15,24 @@ namespace Prodex.Data.Configurations
             entity.Property(e => e.Color)
             .IsRequired()
             .HasMaxLength(60);
+            entity.Property(e => e.DateCreatedUtc).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.DateUpdatedUtc).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.Name)
             .IsRequired()
             .HasMaxLength(60);
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.PtStatusCreatedByNavigations)
+            .HasForeignKey(d => d.CreatedBy)
+            .HasConstraintName("FK_PtStatuses_CreatedBy_Users_Id");
 
             entity.HasOne(d => d.Template).WithMany(p => p.PtStatuses)
             .HasForeignKey(d => d.TemplateId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK_PtStatuses_TemplateId_ProductTemplates_Id");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.PtStatusUpdatedByNavigations)
+            .HasForeignKey(d => d.UpdatedBy)
+            .HasConstraintName("FK_PtStatuses_UpdatedBy_Users_Id");
 
             OnConfigurePartial(entity);
         }

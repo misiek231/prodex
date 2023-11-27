@@ -12,9 +12,19 @@ namespace Prodex.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductTemplate> entity)
         {
+            entity.Property(e => e.DateCreatedUtc).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.DateUpdatedUtc).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.Name)
             .IsRequired()
             .HasMaxLength(60);
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.ProductTemplateCreatedByNavigations)
+            .HasForeignKey(d => d.CreatedBy)
+            .HasConstraintName("FK_ProductTemplates_CreatedBy_Users_Id");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.ProductTemplateUpdatedByNavigations)
+            .HasForeignKey(d => d.UpdatedBy)
+            .HasConstraintName("FK_ProductTemplates_UpdatedBy_Users_Id");
 
             OnConfigurePartial(entity);
         }

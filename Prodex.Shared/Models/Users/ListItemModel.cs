@@ -1,6 +1,8 @@
-﻿namespace Prodex.Shared.Models.Users;
+﻿using Prodex.Shared.Utils;
 
-public class ListItemModel
+namespace Prodex.Shared.Models.Users;
+
+public class ListItemModel : ConfidentialInfo
 {
     public long Id { get; set; }
     public string Username { get; set; }

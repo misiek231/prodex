@@ -2,6 +2,6 @@
 
 namespace Prodex.Data.Models;
 
-public partial class DynamicFieldValue : IEntity
+public partial class DynamicFieldValue : IEntity, IConfidential
 {
 }

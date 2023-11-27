@@ -2,7 +2,7 @@
 
 namespace Prodex.Shared.Models.DictionaryTerms;
 
-public class ListItemModel
+public class ListItemModel : ConfidentialInfo
 {
     public long Id { get; set; }
     public string Value { get; set; }

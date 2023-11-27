@@ -18,6 +18,10 @@
             <DataGridColumn Field="@nameof(ListItemModel.Username)" Caption="Nazwa użytkownika" />
             <DataGridColumn Field="@nameof(ListItemModel.Email)" Caption="Email" />
             <DataGridColumn Field="@nameof(ListItemModel.UserTypeEnum)" Caption="Typ użytkownika" />
+            <DataGridColumn Field="@nameof(ListItemModel.DateCreatedUtc)" Caption="Data utworzenia" />
+            <DataGridColumn Field="@nameof(ListItemModel.DateUpdatedUtc)" Caption="Data edycji" />
+            <DataGridColumn Field="@nameof(ListItemModel.CreatedByNavigation)" Caption="Utworzone przez" />
+            <DataGridColumn Field="@nameof(ListItemModel.UpdatedByNavigation)" Caption="Edytowane przez" />
         </DataGrid>
     </CardBody>
     <CardFooter>

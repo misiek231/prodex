@@ -13,6 +13,10 @@
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="m => createDictionaryModal.Show(m.Id)" Responsive>
             <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" />
+            <DataGridColumn Field="@nameof(ListItemModel.DateCreatedUtc)" Caption="Data utworzenia" />
+            <DataGridColumn Field="@nameof(ListItemModel.DateUpdatedUtc)" Caption="Data edycji" />
+            <DataGridColumn Field="@nameof(ListItemModel.CreatedByNavigation)" Caption="Utworzone przez" />
+            <DataGridColumn Field="@nameof(ListItemModel.UpdatedByNavigation)" Caption="Edytowane przez" />
         </DataGrid>
     </CardBody>
     <CardFooter>

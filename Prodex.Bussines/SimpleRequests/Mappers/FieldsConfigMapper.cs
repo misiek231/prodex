@@ -11,5 +11,11 @@ public partial class FieldsConfigMapper : ICreateMapper<FieldConfig, FieldModel>
     public partial FieldConfig ToEntity(FieldModel form);
     public partial IEnumerable<FieldConfig> ToEntity(IEnumerable<FieldModel> form);
     public partial IQueryable<FieldModel> ToListItemModel(IQueryable<FieldConfig> query);
+
+    [ObjectFactory]
+    private static string CreateCreatedByDescription(User t) => t != null ? t.Name : "-";
+
+    [ObjectFactory]
+    private static string CreateUpdatedByDescription(User t) => t != null ? t.Name : "-";
 }
 

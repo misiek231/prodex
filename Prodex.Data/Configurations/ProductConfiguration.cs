@@ -13,9 +13,15 @@ namespace Prodex.Data.Configurations
         public void Configure(EntityTypeBuilder<Product> entity)
         {
             entity.Property(e => e.CurrentStepId).HasDefaultValueSql("((1))");
+            entity.Property(e => e.DateCreatedUtc).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.DateUpdatedUtc).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.Name)
             .IsRequired()
             .HasMaxLength(60);
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.ProductCreatedByNavigations)
+            .HasForeignKey(d => d.CreatedBy)
+            .HasConstraintName("FK_Products_CreatedBy_Users_Id");
 
             entity.HasOne(d => d.Status).WithMany(p => p.Products)
             .HasForeignKey(d => d.StatusId)
@@ -25,6 +31,10 @@ namespace Prodex.Data.Configurations
             .HasForeignKey(d => d.TemplateId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK_Products_TemplateId_ProductTemplates_Id");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.ProductUpdatedByNavigations)
+            .HasForeignKey(d => d.UpdatedBy)
+            .HasConstraintName("FK_Products_UpdatedBy_Users_Id");
 
             OnConfigurePartial(entity);
         }

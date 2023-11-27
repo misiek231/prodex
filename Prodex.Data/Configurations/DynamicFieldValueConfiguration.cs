@@ -12,7 +12,13 @@ namespace Prodex.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<DynamicFieldValue> entity)
         {
+            entity.Property(e => e.DateCreatedUtc).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.DateUpdatedUtc).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.Value).IsRequired();
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.DynamicFieldValueCreatedByNavigations)
+            .HasForeignKey(d => d.CreatedBy)
+            .HasConstraintName("FK_DynamicFieldValues_CreatedBy_Users_Id");
 
             entity.HasOne(d => d.FieldConfig).WithMany(p => p.DynamicFieldValues)
             .HasForeignKey(d => d.FieldConfigId)
@@ -23,6 +29,10 @@ namespace Prodex.Data.Configurations
             .HasForeignKey(d => d.ProductId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK_DynamicFieldValues_ProductId_Products_Id");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.DynamicFieldValueUpdatedByNavigations)
+            .HasForeignKey(d => d.UpdatedBy)
+            .HasConstraintName("FK_DynamicFieldValues_UpdatedBy_Users_Id");
 
             OnConfigurePartial(entity);
         }

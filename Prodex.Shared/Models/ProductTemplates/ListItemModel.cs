@@ -1,6 +1,8 @@
-﻿namespace Prodex.Shared.Models.ProductTemplates;
+﻿using Prodex.Shared.Utils;
 
-public class ListItemModel
+namespace Prodex.Shared.Models.ProductTemplates;
+
+public class ListItemModel : ConfidentialInfo
 {
     public long Id { get; set; }
     public string Name { get; set; }

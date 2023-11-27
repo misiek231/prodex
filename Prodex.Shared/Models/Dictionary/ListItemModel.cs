@@ -1,6 +1,8 @@
-﻿namespace Prodex.Shared.Models.Dictionary;
+﻿using Prodex.Shared.Utils;
 
-public class ListItemModel
+namespace Prodex.Shared.Models.Dictionary;
+
+public class ListItemModel : ConfidentialInfo
 {
     public long Id { get; set; }
     public string Name { get; set; }

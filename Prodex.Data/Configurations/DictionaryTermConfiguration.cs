@@ -12,14 +12,24 @@ namespace Prodex.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<DictionaryTerm> entity)
         {
+            entity.Property(e => e.DateCreatedUtc).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.DateUpdatedUtc).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.Value)
             .IsRequired()
             .HasMaxLength(60);
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.DictionaryTermCreatedByNavigations)
+            .HasForeignKey(d => d.CreatedBy)
+            .HasConstraintName("FK_DictionaryTerms_CreatedBy_Users_Id");
 
             entity.HasOne(d => d.Dictionary).WithMany(p => p.DictionaryTerms)
             .HasForeignKey(d => d.DictionaryId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK_DictionaryTerms_DictionaryId_Dictionaries_Id");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.DictionaryTermUpdatedByNavigations)
+            .HasForeignKey(d => d.UpdatedBy)
+            .HasConstraintName("FK_DictionaryTerms_UpdatedBy_Users_Id");
 
             OnConfigurePartial(entity);
         }

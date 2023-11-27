@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using OneOf;
 using Prodex.Data;
+using Prodex.Data.Interfaces;
 using Prodex.Shared.Forms;
 
 namespace Prodex.Bussines.SimpleRequests.Base;
@@ -13,11 +14,13 @@ public class SimpleUpdate
     {
         public long Id { get; set; }
         public TForm Form { get; set; }
+        public long UserId { get; set; }
 
-        public Request(long id, TForm form)
+        public Request(long id, TForm form, long userId)
         {
             Id = id;
             Form = form;
+            UserId = userId;
         }
     }
 
@@ -47,6 +50,14 @@ public class SimpleUpdate
             }
 
             Mapper.ToEntity(request.Form, entity);
+
+            if (entity is IConfidential conf)
+            {
+                conf.DateCreatedUtc = DateTime.UtcNow;
+                conf.DateUpdatedUtc = DateTime.UtcNow;
+                conf.CreatedBy = request.UserId;
+                conf.UpdatedBy = request.UserId;
+            }
 
             await Context.SaveChangesAsync(cancellationToken);
             

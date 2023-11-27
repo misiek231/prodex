@@ -15,4 +15,10 @@ public partial class PtStatusMapper : IListMapper<PtStatus, ListItemModel>, ICre
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<PtStatus> prod);
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<PtStatus> query);
     public partial FormModel ToDetailsModel(PtStatus model);
+
+    [ObjectFactory]
+    private static string CreateCreatedByDescription(User t) => t != null ? t.Name : "-";
+
+    [ObjectFactory]
+    private static string CreateUpdatedByDescription(User t) => t != null ? t.Name : "-";
 }

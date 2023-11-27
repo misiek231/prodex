@@ -19,4 +19,10 @@ public partial class DictionaryMapper :
     public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<Dictionary> prod);
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<Dictionary> query);
     public partial FormModel ToDetailsModel(Dictionary model);
+
+    [ObjectFactory]
+    private static string CreateCreatedByDescription(User t) => t != null ? t.Name : "-";
+
+    [ObjectFactory]
+    private static string CreateUpdatedByDescription(User t) => t != null ? t.Name : "-";
 }

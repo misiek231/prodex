@@ -19,6 +19,16 @@ public partial class Product
 
     public bool IsFinished { get; set; }
 
+    public long? CreatedBy { get; set; }
+
+    public long? UpdatedBy { get; set; }
+
+    public DateTime DateCreatedUtc { get; set; }
+
+    public DateTime DateUpdatedUtc { get; set; }
+
+    public virtual User CreatedByNavigation { get; set; }
+
     public virtual ICollection<DynamicFieldValue> DynamicFieldValues { get; } = new List<DynamicFieldValue>();
 
     public virtual ICollection<History> Histories { get; } = new List<History>();
@@ -28,4 +38,6 @@ public partial class Product
     public virtual PtStatus Status { get; set; }
 
     public virtual ProductTemplate Template { get; set; }
+
+    public virtual User UpdatedByNavigation { get; set; }
 }

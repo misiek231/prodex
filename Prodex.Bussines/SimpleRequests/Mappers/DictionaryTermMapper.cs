@@ -32,4 +32,10 @@ public partial class DictionaryTermMapper :
     public partial IQueryable<FormModel> ToDetailsModel(IQueryable<DictionaryTerm> query);
 
     public partial FormModel ToDetailsModel(DictionaryTerm model);
+
+    [ObjectFactory]
+    private static string CreateCreatedByDescription(User t) => t != null ? t.Name : "-";
+
+    [ObjectFactory]
+    private static string CreateUpdatedByDescription(User t) => t != null ? t.Name : "-";
 }

@@ -2,7 +2,7 @@
 
 namespace Prodex.Shared.Models.Products;
 
-public class ListItemModel
+public class ListItemModel : ConfidentialInfo
 {
     public long Id { get; set; }
     public string Name { get; set; }

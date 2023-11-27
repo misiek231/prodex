@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prodex.Data.Models;
 
-public partial class ServiceTaskConfig : IEntity
+public partial class ServiceTaskConfig : IEntity, IConfidential
 {
     [NotMapped]
     public ServiceTaskAction ActionTypeEnum

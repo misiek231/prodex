@@ -12,9 +12,15 @@ namespace Prodex.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<FieldConfig> entity)
         {
+            entity.Property(e => e.DateCreatedUtc).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.DateUpdatedUtc).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.DisplayName)
             .IsRequired()
             .HasMaxLength(50);
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.FieldConfigCreatedByNavigations)
+            .HasForeignKey(d => d.CreatedBy)
+            .HasConstraintName("FK_FieldConfigs_CreatedBy_Users_Id");
 
             entity.HasOne(d => d.Dictionary).WithMany(p => p.FieldConfigs)
             .HasForeignKey(d => d.DictionaryId)
@@ -24,6 +30,10 @@ namespace Prodex.Data.Configurations
             .HasForeignKey(d => d.TemplateId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK_FieldConfigs_TemplateId_ProductTemplates_Id");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.FieldConfigUpdatedByNavigations)
+            .HasForeignKey(d => d.UpdatedBy)
+            .HasConstraintName("FK_FieldConfigs_UpdatedBy_Users_Id");
 
             OnConfigurePartial(entity);
         }

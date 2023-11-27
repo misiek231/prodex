@@ -13,6 +13,16 @@ public partial class ProductTemplate
 
     public string ProcessXml { get; set; }
 
+    public long? CreatedBy { get; set; }
+
+    public long? UpdatedBy { get; set; }
+
+    public DateTime DateCreatedUtc { get; set; }
+
+    public DateTime DateUpdatedUtc { get; set; }
+
+    public virtual User CreatedByNavigation { get; set; }
+
     public virtual ICollection<FieldConfig> FieldConfigs { get; } = new List<FieldConfig>();
 
     public virtual ICollection<Product> Products { get; } = new List<Product>();
@@ -24,4 +34,6 @@ public partial class ProductTemplate
     public virtual ICollection<SequenceFlowConfig> SequenceFlowConfigs { get; } = new List<SequenceFlowConfig>();
 
     public virtual ICollection<ServiceTaskConfig> ServiceTaskConfigs { get; } = new List<ServiceTaskConfig>();
+
+    public virtual User UpdatedByNavigation { get; set; }
 }
