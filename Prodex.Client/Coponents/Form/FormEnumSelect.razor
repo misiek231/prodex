@@ -12,12 +12,6 @@
 @typeparam TField where TField : Enum
 @inject ApiSelectClient apiSelectClient;
 
-<style>
-    .dropdown-menu {
-        margin: 2.5rem 0 0;
-    }
-</style>
-
 <Validation Validator="(a) => Form.GetState(a, GetProp().Name)">
     <Field>
         <FieldLabel>@GetLabel()</FieldLabel>
@@ -40,19 +34,19 @@
     </Field>
 </Validation>
 
-    @code {
+@code {
 
     [CascadingParameter]
     public TForm Form { get; set; }
+
+    [Parameter]
+    public EventCallback OnValueChanged { get; set; }
 
     [Parameter]
     public string Label { get; set; }
 
     [Parameter]
     public bool Disabled { get; set; }
-
-    [Parameter]
-    public EventCallback ValueChangedEvent { get; set; }
 
     [Parameter]
     public Expression<Func<TForm, TField>> Property { get; set; }
@@ -80,7 +74,7 @@
         Console.WriteLine(newValue);
         Property.SetValue(Form, newValue);
 
-        await ValueChangedEvent.InvokeAsync();
+        await OnValueChanged.InvokeAsync();
     }
 
     private string GetLabel()

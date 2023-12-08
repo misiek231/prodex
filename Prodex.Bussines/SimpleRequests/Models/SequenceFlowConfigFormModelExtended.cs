@@ -9,35 +9,56 @@ public class SequenceFlowConfigFormModelExtended
     public long? TemplateId { get; set; }
     public string FlowId { get; set; }
     public long? LdynamicField { get; set; }
+    public long? LDictionaryField { get; set; }
     public string Lvalue { get; set; }
     public OperatorType OperatorType { get; set; }
     public long? RdynamicField { get; set; }
+    public long? RDictionaryField { get; set; }
     public string Rvalue { get; set; }
 
     public SequenceFlowConfigFormModelExtended(SequenceFlowConfigFormModel model)
     {
-        if(model.LOperandType == OperandType.Value)
+
+        switch (model.LOperandType)
         {
-            LdynamicField = null;
-            Lvalue = model.Lvalue;
-        }
-        else
-        {
-            LdynamicField = model.LdynamicField.Id;
-            Lvalue = null;
+            case OperandType.Value:
+                Lvalue = model.Lvalue;
+                LdynamicField = null;
+                LDictionaryField = null;
+                break;
+        
+            case OperandType.DynamicField:
+                LdynamicField = model.LdynamicField.Id;
+                LDictionaryField = null;
+                Lvalue = null;
+                break;
+
+            case OperandType.DictionaryTerm:
+                LDictionaryField = model.LDictionaryField.Id;
+                LdynamicField = null;
+                Lvalue = null;
+                break;
         }
 
         OperatorType = model.OperatorType;
 
-        if (model.ROperandType == OperandType.Value)
+        switch (model.ROperandType)
         {
-            RdynamicField = null;
-            Rvalue = model.Rvalue;
-        }
-        else
-        {
-            RdynamicField = model.RdynamicField.Id;
-            Rvalue = null;
+            case OperandType.Value:
+                Rvalue = model.Rvalue;
+                RdynamicField = null;
+                RDictionaryField = null;
+                break;
+            case OperandType.DynamicField:
+                RdynamicField = model.RdynamicField.Id;
+                Rvalue = null;
+                RDictionaryField = null;
+                break;
+            case OperandType.DictionaryTerm:
+                RDictionaryField = model.RDictionaryField.Id;
+                RdynamicField = null;
+                Rvalue = null;
+                break;
         }
     }
 

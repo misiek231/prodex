@@ -15,9 +15,13 @@ public partial class SequenceFlowConfigMapper :
     public void ToEntity(SequenceFlowConfigFormModelExtended form, SequenceFlowConfig entity)
     {
         entity.LdynamicField = form.LdynamicField;
+        entity.LDictionaryTermId = form.LDictionaryField;
         entity.Lvalue = form.Lvalue;
+
         entity.OperatorTypeEnum = form.OperatorType;
+        
         entity.RdynamicField = form.RdynamicField;
+        entity.RDictionaryTermId = form.RDictionaryField;
         entity.Rvalue = form.Rvalue;
     }
 }

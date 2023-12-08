@@ -59,6 +59,8 @@ public class BuildedProcess
          
             // Jeżeli wicej niż 1 warunek jest spełniony bierzemy pierwszy 
             step = nextSteps.Where(p => enabledFlows.Where(q => p.PrevSteps.ContainsValue(q)).Any()).FirstOrDefault();
+
+            if (step == null) throw new InvalidOperationException("Żaden z warunków nie został spełniony");
         }
         else if(nextSteps.Count == 1)
         {

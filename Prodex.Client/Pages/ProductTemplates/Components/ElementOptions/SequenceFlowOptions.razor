@@ -9,28 +9,54 @@
     <Div class="mt-3">
 
         <FormWrapper Form="Form">
-            <FormEnumSelect Property="p => p.LOperandType" />
+            <Div Class="d-flex gap-2">
 
-            @if(Form.LOperandType == OperandType.Value)
-            {
-                <FormInput Property="p => p.Lvalue"/>
-            }
-            else if(Form.LOperandType == OperandType.DynamicField)
-            {
-                <FormSelect Property="p => p.LdynamicField" AdditionalFilter="Filter" />
-            }
+                <FormEnumSelect Property="p => p.LOperandType" OnValueChanged="StateHasChanged" />
+
+                @switch (Form.LOperandType)
+                {
+                    case OperandType.Value:
+                        <FormInput Property="p => p.Lvalue" />
+                        break;
+
+                    case OperandType.DynamicField:
+                        <FormSelect Property="p => p.LdynamicField" AdditionalFilter="Filter" />
+                        break;
+
+                    case OperandType.DictionaryTerm:
+
+                        <FormSelect Property="p => p.LDictionaryField" AdditionalFilter="Filter" />
+                        break;
+
+                    default:
+                        <Div></Div>
+                        break;
+                }
             
-            <FormEnumSelect Property="p => p.OperatorType" />
-            
-            <FormEnumSelect Property="p => p.ROperandType" />
-            @if(Form.ROperandType == OperandType.Value)
-            {
-                <FormInput Property="p => p.Rvalue" />
-            }
-            else if (Form.ROperandType == OperandType.DynamicField)
-            { 
-                <FormSelect Property="p => p.RdynamicField" AdditionalFilter="Filter" />
-            }
+                <FormEnumSelect Property="p => p.OperatorType" />
+
+                <FormEnumSelect Property="p => p.ROperandType" OnValueChanged="StateHasChanged" />
+
+                @switch (Form.ROperandType)
+                {
+                    case OperandType.Value:
+                        <FormInput Property="p => p.Rvalue" />
+                        break;
+
+                    case OperandType.DynamicField:
+                        <FormSelect Property="p => p.RdynamicField" AdditionalFilter="Filter" />
+                        break;
+
+                    case OperandType.DictionaryTerm:
+
+                        <FormSelect Property="p => p.RDictionaryField" AdditionalFilter="Filter" />
+                        break;
+
+                    default:
+                        <Div></Div>
+                        break;
+                }
+            </Div>
         </FormWrapper>
 
         <Button Color="Color.Primary" Clicked="@Save">Zapisz konfigurację</Button>
@@ -62,10 +88,15 @@
 
     private async Task Save()
     {
-         if (Form.Id.HasValue)
-             await Service.UpdateSequenceFlowConfig(Form.Id.Value, Form);
-         else
+        if (Form.Id.HasValue){
+            Console.WriteLine("dupa");
+            await Service.UpdateSequenceFlowConfig(Form.Id.Value, Form);
+         }
+         else{
+            Console.WriteLine("dupa2");
              await Service.CreateSequenceFlowConfig(TemplateId, Element.Id, Form);
+
+         }
 
         await LoadData();
     }

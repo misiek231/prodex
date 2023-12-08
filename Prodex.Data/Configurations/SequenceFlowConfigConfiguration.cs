@@ -18,6 +18,8 @@ namespace Prodex.Data.Configurations
             .IsRequired()
             .HasMaxLength(20);
             entity.Property(e => e.LdynamicField).HasColumnName("LDynamicField");
+            entity.Property(e => e.LDictionaryTermId);
+            entity.Property(e => e.RDictionaryTermId);
             entity.Property(e => e.Lvalue)
             .HasMaxLength(1024)
             .HasColumnName("LValue");
@@ -25,6 +27,14 @@ namespace Prodex.Data.Configurations
             entity.Property(e => e.Rvalue)
             .HasMaxLength(1024)
             .HasColumnName("RValue");
+
+            entity.HasOne(d => d.LDictionaryTerm).WithMany(p => p.LSequenceFlowConfigs)
+            .HasForeignKey(d => d.LDictionaryTermId)
+            .HasConstraintName("FK_SequenceFlowConfigs_LDictionaryTermId_DictionaryTerms_Id");
+
+            entity.HasOne(d => d.RDictionaryTerm).WithMany(p => p.RSequenceFlowConfigs)
+            .HasForeignKey(d => d.RDictionaryTermId)
+            .HasConstraintName("FK_SequenceFlowConfigs_RDictionaryTermId_DictionaryTerms_Id");
 
             entity.HasOne(d => d.LdynamicFieldNavigation).WithMany(p => p.SequenceFlowConfigLdynamicFieldNavigations)
             .HasForeignKey(d => d.LdynamicField)

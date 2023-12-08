@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Prodex.Shared.Forms;
+using Prodex.Shared.Models.Dictionary;
 using Prodex.Shared.Validation;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -19,6 +20,9 @@ public class SequenceFlowConfigFormModel : FormBaseModel<SequenceFlowConfigFormM
     [Description("Operand")]
     public ApiFieldConfig LdynamicField { get; set; }
 
+    [Description("Operand")]
+    public ApiDictionaryTermSelect LDictionaryField { get; set; }
+
     [Description("Operator")]
     public OperatorType OperatorType { get; set; }
 
@@ -30,6 +34,9 @@ public class SequenceFlowConfigFormModel : FormBaseModel<SequenceFlowConfigFormM
 
     [Description("Operand")]
     public ApiFieldConfig RdynamicField { get; set; }
+
+    [Description("Operand")]
+    public ApiDictionaryTermSelect RDictionaryField { get; set; }
 
     public override void Rules(ValidationContext validationContext, FluentValidator<SequenceFlowConfigFormModel> model)
     {
@@ -43,6 +50,9 @@ public class SequenceFlowConfigFormModel : FormBaseModel<SequenceFlowConfigFormM
 
         model.RuleFor(p => p.LdynamicField).NotNull().When(p => p.LOperandType == OperandType.DynamicField).WithMessage("Pole jest wymagane");
         model.RuleFor(p => p.RdynamicField).NotNull().When(p => p.ROperandType == OperandType.DynamicField).WithMessage("Pole jest wymagane");
+
+        model.RuleFor(p => p.LDictionaryField).NotNull().When(p => p.LOperandType == OperandType.DictionaryTerm).WithMessage("Pole jest wymagane");
+        model.RuleFor(p => p.RDictionaryField).NotNull().When(p => p.ROperandType == OperandType.DictionaryTerm).WithMessage("Pole jest wymagane");
     }
 }
 
@@ -55,7 +65,10 @@ public enum OperandType
     Value,
 
     [Description("Pole dynamiczne")]
-    DynamicField
+    DynamicField,
+
+    [Description("Wartość słownikowa")]
+    DictionaryTerm
 }
 
 public enum OperatorType

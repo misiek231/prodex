@@ -26,4 +26,7 @@ public partial class DictionaryTerm
     public virtual Dictionary Dictionary { get; set; }
 
     public virtual User UpdatedByNavigation { get; set; }
+
+    public virtual ICollection<SequenceFlowConfig> LSequenceFlowConfigs { get; } = new List<SequenceFlowConfig>();
+    public virtual ICollection<SequenceFlowConfig> RSequenceFlowConfigs { get; } = new List<SequenceFlowConfig>();
 }

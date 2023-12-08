@@ -14,6 +14,9 @@ public partial class SequenceFlowConfig
     public string FlowId { get; set; }
 
     public long? LdynamicField { get; set; }
+    
+    public long? LDictionaryTermId { get; set; }
+    public long? RDictionaryTermId { get; set; }
 
     public string Lvalue { get; set; }
 
@@ -24,6 +27,8 @@ public partial class SequenceFlowConfig
     public string Rvalue { get; set; }
 
     public virtual FieldConfig LdynamicFieldNavigation { get; set; }
+    public virtual DictionaryTerm LDictionaryTerm { get; set; }
+    public virtual DictionaryTerm RDictionaryTerm { get; set; }
 
     public virtual FieldConfig RdynamicFieldNavigation { get; set; }
 

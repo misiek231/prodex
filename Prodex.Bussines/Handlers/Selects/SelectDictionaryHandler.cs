@@ -24,3 +24,22 @@ public class SelectDictionaryHandler : IRequestHandler<SelectRequest<ApiDictiona
         return await query.Select(p => new KeyValueResult(p.Id, p.Name)).ToListAsync(cancellationToken: cancellationToken);
     }
 }
+
+public class SelectDictionaryTermHandler : IRequestHandler<SelectRequest<ApiDictionaryTermSelect>, List<KeyValueResult>>
+{
+    private readonly DataContext context;
+
+    public SelectDictionaryTermHandler(DataContext context)
+    {
+        this.context = context;
+    }
+    public async Task<List<KeyValueResult>> Handle(SelectRequest<ApiDictionaryTermSelect> request, CancellationToken cancellationToken)
+    {
+        var query = context.DictionaryTerms.AsQueryable();
+
+        if (!string.IsNullOrEmpty(request.Search))
+            query = query.Where(p => p.Value.Contains(request.Search));
+
+        return await query.Select(p => new KeyValueResult(p.Id, p.Value)).ToListAsync(cancellationToken: cancellationToken);
+    }
+}

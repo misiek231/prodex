@@ -20,3 +20,22 @@ public class ApiDictionarySelect : IApiSelect
         Value = value;
     }
 }
+
+public class ApiDictionaryTermSelect : IApiSelect
+{
+    public long Id { get; set; }
+    public string Value { get; set; }
+
+    public ApiDictionaryTermSelect() { }
+
+    public ApiDictionaryTermSelect(long id)
+    {
+        Id = id;
+    }
+
+    public ApiDictionaryTermSelect(long id, string value)
+    {
+        Id = id;
+        Value = value;
+    }
+}
