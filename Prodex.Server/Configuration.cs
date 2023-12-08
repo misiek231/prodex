@@ -70,6 +70,9 @@ namespace Prodex.Server
                 p.AddPolicy(UserType.Worker.ToString(), q => q.RequireRole(UserType.Worker.ToString()));
             });
 
+            builder.Services.AddRazorComponents()
+                .AddInteractiveWebAssemblyComponents();
+
             builder.Services.AddEndpointDefinitions();
         }
         public static void Initialize(WebApplication app)
@@ -91,16 +94,18 @@ namespace Prodex.Server
             }
 
             app.UseHttpsRedirection();
-            app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseAntiforgery();
 
             app.UseEndpointDefinitions("api");
 
-            app.MapFallbackToFile("index.html");
+            app.MapRazorComponents<App>()
+                .AddInteractiveWebAssemblyRenderMode()
+                .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
         }
     }
 }

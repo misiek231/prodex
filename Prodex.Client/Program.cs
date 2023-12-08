@@ -12,8 +12,6 @@ using Prodex.Client.Services.Auth;
 using Prodex.Utils;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<CustomMessageHandler>();
 builder.Services.AddHttpClient("BlazorServerHttpClient",

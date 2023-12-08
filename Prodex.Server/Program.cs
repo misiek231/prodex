@@ -1,4 +1,4 @@
  using Prodex.Server;
 
-App.CreateApp(args).Run();
+Application.CreateApp(args).Run();
 

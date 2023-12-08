@@ -1,6 +1,6 @@
 ﻿namespace Prodex.Server;
 
-public class App
+public class Application
 {
     public static WebApplication CreateApp(string[] args)
     {

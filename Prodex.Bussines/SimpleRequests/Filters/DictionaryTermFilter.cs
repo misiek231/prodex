@@ -8,7 +8,7 @@ public class DictionaryTermsFilter : IFilter<DictionaryTerm, FilterModel>
 {
     public IQueryable<DictionaryTerm> Filter(IQueryable<DictionaryTerm> query, FilterModel filterModel)
     {
-        if (filterModel.DictionaryId.HasValue)
+        if (filterModel.DictionaryId != 0)
             query = query.Where(p => p.DictionaryId == filterModel.DictionaryId);
 
         return query;
