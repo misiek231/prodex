@@ -40,7 +40,7 @@
     </Field>
 </Validation>
 
-@code {
+    @code {
 
     [CascadingParameter]
     public TForm Form { get; set; }
@@ -52,11 +52,16 @@
     public bool Disabled { get; set; }
 
     [Parameter]
+    public EventCallback ValueChangedEvent { get; set; }
+
+    [Parameter]
     public Expression<Func<TForm, TField>> Property { get; set; }
 
     private Pager pager = new Pager();
 
     private List<KeyValuePair<TField, string>> Options { get; set; }
+
+
 
     protected override Task OnInitializedAsync()
     {
@@ -70,10 +75,12 @@
         Options = EnumExtensions.GetValuesWithDescription<TField>().Where(p => p.Value.Contains(search)).ToList();
     }
 
-    private void ValueChanged(TField newValue)
+    private async Task ValueChanged(TField newValue)
     {
         Console.WriteLine(newValue);
         Property.SetValue(Form, newValue);
+
+        await ValueChangedEvent.InvokeAsync();
     }
 
     private string GetLabel()

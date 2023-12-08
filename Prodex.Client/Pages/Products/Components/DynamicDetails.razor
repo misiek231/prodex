@@ -1,6 +1,12 @@
-﻿@using Prodex.Client.RestClients;
+﻿@using Blazorise.Components
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.Dictionary
+@using Prodex.Shared.Models.ProductTemplates.FieldsConfig
 @using Prodex.Shared.Models.Products.DynamicFields;
+@using Prodex.Shared.Pagination
+@using Prodex.Shared.Utils
 @inject FieldsDetailsClient client;
+@inject DictionaryTermsClient dictClient;
 
 
 <Div>
@@ -14,7 +20,26 @@
                 <Button @onclick="() => ExitEditMode(true)"><Icon Name="IconName.Save" /></Button>
                 <Button @onclick="() => ExitEditMode(false)"><Icon Name="IconName.Undo" /></Button>
             </Div>
-            <TextEdit @bind-Text="EditingValue" />
+
+            if(Fields[i].Type == FieldType.Dictionary)
+            {
+                <Autocomplete TItem="KeyValueResult"
+                      TValue="long?"
+                      Data="@DictOptions"
+                      ValueField="@(item => item.Key)"
+                      TextField="@(item => item.Value)"
+                      @bind-SelectedValue="EditingValueDict"
+                      ReadData="LoadDict"
+                      Placeholder="Search..."
+                      Debounce="true"
+                      MinLength="0">
+                    <NotFoundContent> Brak wyników </NotFoundContent>
+                </Autocomplete>
+            }
+            else
+            {
+                <TextEdit @bind-Text="EditingValue" />
+            }
         }
         else
         {
@@ -30,6 +55,8 @@
 
     public List<DynamicFieldDetailsModel> Fields = new();
 
+    public List<KeyValueResult> DictOptions = new();
+
     public int? EditingField { get; set; }
 
     [Parameter]
@@ -39,6 +66,7 @@
     public EventCallback Reload { get; set; }
 
     public string EditingValue { get; set; }
+    public long? EditingValueDict { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,6 +76,15 @@
     public async Task LoadData()
     {
         Fields = await client.Get(ProductId);
+    }
+
+    public async Task LoadDict()
+    {
+        if (EditingField.HasValue && Fields[EditingField.Value].Type == FieldType.Dictionary && Fields[EditingField.Value].DictionaryId.HasValue)
+        {
+            DictOptions = (await dictClient.Get(new Pager(), new Prodex.Shared.Models.DictionaryTerms.FilterModel { DictionaryId = Fields[EditingField.Value].DictionaryId.Value })).Items
+                .Select(p => new KeyValueResult(p.Id, p.Value)).ToList();
+        }
     }
 
     private void SetEditMode(int index)
@@ -60,11 +97,16 @@
     {
         if (save && EditingField.HasValue)
         {
-            await client.Post(ProductId, Fields[EditingField.Value].FieldConfigId, new SetProductFieldFormModel { NewValue = EditingValue });
+            var form = new SetProductFieldFormModel();
+            
+            form.NewValue = Fields[EditingField.Value].Type == FieldType.Dictionary ? EditingValueDict.ToString() : EditingValue;
+
+            await client.Post(ProductId, Fields[EditingField.Value].FieldConfigId, form);
             await LoadData();
         }
 
         EditingValue = null;
+        EditingValueDict = null;
         EditingField = null;
 
         await Reload.InvokeAsync();

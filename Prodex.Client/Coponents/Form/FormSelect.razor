@@ -1,4 +1,5 @@
-﻿@using Prodex.Client.RestClients;
+﻿@using Prodex.Client.Extensions
+@using Prodex.Client.RestClients;
 @using Prodex.Shared.Forms;
 @using Prodex.Shared.Pagination;
 @using Prodex.Shared.Utils;
@@ -8,7 +9,7 @@
 @using Prodex.Utils;
 @using System.ComponentModel;
 @typeparam TForm where TForm : FormBaseModel
-@typeparam TField where TField : IApiSelect, new()
+@typeparam TField where TField : class, IApiSelect, new()
 @inject ApiSelectClient apiSelectClient;
 
 <style>
@@ -30,6 +31,7 @@
                       ReadData="e => LoadData(e.SearchValue)"
                       Placeholder="Search..."
                       Validator="(a) => Form.GetState(a, GetProp().Name)"
+                      Disabled="Disabled"
                       Debounce="true"
                       MinLength="0">
             <NotFoundContent> Brak wyników </NotFoundContent>
@@ -37,7 +39,7 @@
     </Field>
 </Validation>
 
-@code {
+    @code {
 
     [CascadingParameter]
     public TForm Form { get; set; }
@@ -50,6 +52,9 @@
 
     [Parameter]
     public object AdditionalFilter { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
 
     private Pager pager = new Pager();
 
@@ -74,10 +79,10 @@
     {
         if (!newValue.HasValue) return;
 
-        var value = new TField();
+        var value = Activator.CreateInstance(GetProp().PropertyType) as TField;
         value.Id = newValue.Value;
-        
-        GetProp().SetValue(Form, value);
+
+        Property.SetValue(Form, value);
     }
 
     private string GetLabel()

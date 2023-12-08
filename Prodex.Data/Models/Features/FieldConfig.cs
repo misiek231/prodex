@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using Prodex.Data.Interfaces;
+﻿using Prodex.Data.Interfaces;
+using Prodex.Shared.Models.ProductTemplates.FieldsConfig;
 
 namespace Prodex.Data.Models;
 

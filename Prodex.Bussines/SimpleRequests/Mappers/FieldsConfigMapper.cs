@@ -8,7 +8,12 @@ namespace Prodex.Bussines.Mappers;
 [Mapper]
 public partial class FieldsConfigMapper : ICreateMapper<FieldConfig, FieldModel>, IListMapper<FieldConfig, FieldModel>
 {
+    [MapProperty("Dictionary.Id", "DictionaryId")]
+    [MapperIgnoreTarget("Dictionary")]
     public partial FieldConfig ToEntity(FieldModel form);
+
+    [MapProperty("Dictionary.Id", "DictionaryId")]
+    [MapperIgnoreTarget("Dictionary")]
     public partial IEnumerable<FieldConfig> ToEntity(IEnumerable<FieldModel> form);
     public partial IQueryable<FieldModel> ToListItemModel(IQueryable<FieldConfig> query);
 
