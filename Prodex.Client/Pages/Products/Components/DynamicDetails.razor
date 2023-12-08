@@ -38,7 +38,7 @@
             }
             else
             {
-                <TextEdit @bind-Text="EditingValue" />
+                <TextEdit @bind-Text="EditingValue" MaskType=" Fields[i].Type == FieldType.Number ? MaskType.Numeric : MaskType.None" />
             }
         }
         else

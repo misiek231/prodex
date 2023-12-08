@@ -42,9 +42,9 @@ public static class GetProductFieldsDetails
                 }))
                 .ToListAsync(cancellationToken);
 
-            foreach(var item in result.Where(p => p.Type == FieldType.Dictionary)) 
+            foreach (var item in result.Where(p => p.Type == FieldType.Dictionary))
             {
-                if(long.TryParse(item.Value, out long val))
+                if (long.TryParse(item.Value, out long val))
                 {
                     item.Value = (await context.DictionaryTerms.FindAsync(new object[] { val }, cancellationToken: cancellationToken)).Value;
 
