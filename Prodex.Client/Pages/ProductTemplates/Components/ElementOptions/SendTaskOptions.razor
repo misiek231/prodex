@@ -5,7 +5,7 @@
 
 <Div class="mt-3">
 
-    <FormWrapper Form="Form">
+    <FormWrapper @ref="form" Form="Form">
         <FormEnumSelect Property="p => p.Target" />
         <FormSelect Property="p => p.User" />
     </FormWrapper>
@@ -22,11 +22,12 @@
 
     [Parameter]
     public long TemplateId { get; set; }
+    FormWrapper<SendTaskConfigFormModel> form;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         await LoadData();
-        await base.OnInitializedAsync();
+        form.Rerender();
     }
 
     private async Task LoadData()

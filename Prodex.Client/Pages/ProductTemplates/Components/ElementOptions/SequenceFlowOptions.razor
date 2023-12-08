@@ -11,31 +11,32 @@
         <FormWrapper Form="Form">
             <FormEnumSelect Property="p => p.LOperandType" />
 
-               @*  @if(Form.LOperandType == OperandType.Value)
-                { *@
-                    <FormInput Property="p => p.Lvalue"/>
-                @* } *@ 
-                @* else if(Form.LOperandType == OperandType.DynamicField)
-                { *@
+            @if(Form.LOperandType == OperandType.Value)
+            {
+                <FormInput Property="p => p.Lvalue"/>
+            }
+            else if(Form.LOperandType == OperandType.DynamicField)
+            {
                 <FormSelect Property="p => p.LdynamicField" AdditionalFilter="Filter" />
-                @* } *@
+            }
             
             <FormEnumSelect Property="p => p.OperatorType" />
             
             <FormEnumSelect Property="p => p.ROperandType" />
-            @* @if(Form.ROperandType == OperandType.Value)
-            { *@
+            @if(Form.ROperandType == OperandType.Value)
+            {
                 <FormInput Property="p => p.Rvalue" />
-            @* }
+            }
             else if (Form.ROperandType == OperandType.DynamicField)
-            { *@
+            { 
                 <FormSelect Property="p => p.RdynamicField" AdditionalFilter="Filter" />
-            @* } *@
+            }
         </FormWrapper>
 
         <Button Color="Color.Primary" Clicked="@Save">Zapisz konfigurację</Button>
     </Div>
 }
+
 @code {
     SequenceFlowConfigFormModel Form = new SequenceFlowConfigFormModel();
     private FilterModel Filter => new FilterModel { TemplateId = TemplateId };
@@ -48,10 +49,10 @@
 
     private FilterModel StatusFilter => new FilterModel { TemplateId = TemplateId };
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         await LoadData();
-        await base.OnInitializedAsync();
+        await base.OnParametersSetAsync();
     }
 
     private async Task LoadData()

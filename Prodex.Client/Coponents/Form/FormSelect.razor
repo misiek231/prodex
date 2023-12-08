@@ -55,11 +55,19 @@
 
     private List<KeyValueResult> Options { get; set; }
 
+    protected override async void OnParametersSet()
+    {
+        await LoadData("");
+        base.OnParametersSet();
+    }
+
     private async Task LoadData(string search)
     {
         var name = GetProp().PropertyType.Name.PascalToKebab();
 
         Options = await apiSelectClient.Get(name, pager, search, AdditionalFilter);
+
+        this.StateHasChanged();
     }
 
     private void ValueChanged(long? newValue)

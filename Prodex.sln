@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Processes", "Prodex.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Processes.Tests", "Prodex.Processes.Tests\Prodex.Processes.Tests.csproj", "{4F138D60-E681-42D5-9BA5-844C8F57F2D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Bussines.Tests", "Prodex.Bussines.Tests\Prodex.Bussines.Tests.csproj", "{21819A92-2F93-4CC8-8021-F07577921867}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prodex.Utils", "Prodex.Utils\Prodex.Utils.csproj", "{C0275066-1BC0-4417-832F-E3D0ED0900EB}"
 EndProject
 Global
@@ -61,10 +59,6 @@ Global
 		{4F138D60-E681-42D5-9BA5-844C8F57F2D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F138D60-E681-42D5-9BA5-844C8F57F2D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F138D60-E681-42D5-9BA5-844C8F57F2D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21819A92-2F93-4CC8-8021-F07577921867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21819A92-2F93-4CC8-8021-F07577921867}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21819A92-2F93-4CC8-8021-F07577921867}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21819A92-2F93-4CC8-8021-F07577921867}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C0275066-1BC0-4417-832F-E3D0ED0900EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0275066-1BC0-4417-832F-E3D0ED0900EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0275066-1BC0-4417-832F-E3D0ED0900EB}.Release|Any CPU.ActiveCfg = Release|Any CPU

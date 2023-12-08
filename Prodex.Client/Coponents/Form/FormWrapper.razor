@@ -18,4 +18,9 @@
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 
+
+    public void Rerender()
+    {
+        this.StateHasChanged();
+    }
 }
