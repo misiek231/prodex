@@ -1,4 +1,5 @@
-﻿using Prodex.Bussines.SimpleRequests.Base;
+﻿using Microsoft.EntityFrameworkCore;
+using Prodex.Bussines.SimpleRequests.Base;
 using Prodex.Data.Models;
 using Prodex.Shared.Models.Products;
 using Prodex.Shared.Utils;
@@ -35,7 +36,12 @@ public partial class ProductsMapper : IListMapper<Product, ListItemModel>, ICrea
 
     public partial DetailsModel ToDetails(Product prod);
 
-    public partial IQueryable<ListItemModel> ToListItemModel(IQueryable<Product> prod);
+    public IQueryable<ListItemModel> ToListItemModel(IQueryable<Product> prod)
+    {
+        return ToListItemModelAuto(prod.Include(p => p.ProductTargets).ThenInclude(p => p.User));
+    }
+
+    public partial IQueryable<ListItemModel> ToListItemModelAuto(IQueryable<Product> prod);
 
     public partial IQueryable<DetailsModel> ToDetailsModel(IQueryable<Product> query);
 
