@@ -30,10 +30,12 @@ namespace Prodex.Bussines.Handlers.Products
             var result = await context.Products
                 .Include(p => p.Template)
                 .Include(p => p.Status)
-                .Include(p => p.ProductTargets)
+                .Include(p => p.ProductTargets).ThenInclude(p => p.User)
                 .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
             var model = Mapper.ToDetailsModel(result);
+
+            model.RealizingUser = result.IsFinished ? "-" : string.Join(", ", result.ProductTargets?.Select(p => $"{p.User?.Name} ({p.User.Username})") ?? Array.Empty<string>());
 
             // Przyciski są dostępne tylko dla targetów
             if (result.ProductTargets.Select(p => p.UserId).Contains(request.UserId))

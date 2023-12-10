@@ -13,9 +13,15 @@
     </CardHeader>
     <CardBody>
         <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="RowSelected" Responsive>
-            <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
-            <DataGridColumn Field="Template.Value" Caption="Szablon" Editable />@*TODO: Remove hardcoded string, best option is to make custom Grid and pass fields as func like in forms*@
-            <DataGridColumn Field="@nameof(ListItemModel.DateCreatedUtc)" Caption="Data utworzenia" />
+            <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" />
+            <DataGridColumn Field="Template.Value" Caption="Szablon" />@*TODO: Remove hardcoded string, best option is to make custom Grid and pass fields as func like in forms*@
+            <DataGridColumn Field="@nameof(ListItemModel.RealizingUser)" Caption="Aktualnie realizuje" />
+            <DataGridColumn Field="Status.Value" Caption="Status" >
+                <DisplayTemplate>
+                    <Badge Color="@context.Status.Color">@context.Status.Value</Badge>
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn Field="@nameof(ListItemModel.DateCreatedUtc)" Caption="Data utworzenia"/>
             <DataGridColumn Field="@nameof(ListItemModel.DateUpdatedUtc)" Caption="Data edycji" />
             <DataGridColumn Field="@nameof(ListItemModel.CreatedByNavigation)" Caption="Utworzone przez" />
             <DataGridColumn Field="@nameof(ListItemModel.UpdatedByNavigation)" Caption="Edytowane przez" />

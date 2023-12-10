@@ -1,26 +1,28 @@
 ﻿@page "/"
 @using Prodex.Client.Coponents
 @using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.Dashboard
 @using Prodex.Shared.Models.Products;
 @using Prodex.Shared.Pagination;
-@inject ProductsClient Products
+@using Prodex.Client.Pages.Components;
+@inject DashboardClient Dashboard
 @inject NavigationManager Navigation
 
 <style>
-    .widget-header-orange {
+    .widget-header-0 {
         background: linear-gradient(45deg,#ffc721,#edb100)!important;
     }
 
-    .widget-header-blue {
+    .widget-header-1 {
         background: linear-gradient(45deg,#2497bf,#105f7b) !important;
     }
 
-    .widget-header-lblue {
-        background: linear-gradient(45deg,#31b3e0,#1d97c2) !important;
+    .widget-header-2 {
+        background: linear-gradient(45deg,#f98483,#f75453) !important;
     }
 
-    .widget-header-red {
-        background: linear-gradient(45deg,#f98483,#f75453) !important;
+    .widget-header-3 {
+        background: linear-gradient(45deg,#31b3e0,#1d97c2) !important;
     }
 
     .card-header{
@@ -35,103 +37,28 @@
         border-radius: 0.4rem !important;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
-
-    .grid-container{
-        grid-template-columns: auto auto auto auto;
-        grid-template-rows: auto auto auto;
-    }
 </style>
 
-<Div Class="d-grid gap-3 grid-container">
-    <Card Style="grid-column: 1 / 3; max-height: 50vh; overflow: auto;">
-        <CardHeader Class="widget-header-orange">
-            Moje zadania
-        </CardHeader>
-        <CardBody Style="overflow: auto;">
-            <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="RowSelected" Responsive>
-                <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
-                <DataGridColumn Field="Template.Value" Caption="Szablon" Editable />@*TODO: Remove hardcoded string, best option is to make custom Grid and pass fields as func like in forms*@
-                <DataGridColumn Field="@nameof(ListItemModel.DateCreatedUtc)" Caption="Data utworzenia" />
-                <DataGridColumn Field="@nameof(ListItemModel.DateUpdatedUtc)" Caption="Data edycji" />
-                <DataGridColumn Field="@nameof(ListItemModel.CreatedByNavigation)" Caption="Utworzone przez" />
-                <DataGridColumn Field="@nameof(ListItemModel.UpdatedByNavigation)" Caption="Edytowane przez" />
-             </DataGrid>
-        </CardBody>
-    </Card>
-
-     <Card Style="grid-column: 3 / 5; max-height: 50vh; overflow: auto;">
-         <CardHeader Class="widget-header-orange">
-             Moje zadania
-         </CardHeader>
-         <CardBody Style="overflow: auto;">
-             <DataGrid TItem="ListItemModel" Data="@items" ReadData="LoadData" SelectedRowChanged="RowSelected" Responsive>
-                <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" Editable />
-                <DataGridColumn Field="Template.Value" Caption="Szablon" Editable />@*TODO: Remove hardcoded string, best option is to make custom Grid and pass fields as func like in forms*@
-                <DataGridColumn Field="@nameof(ListItemModel.DateCreatedUtc)" Caption="Data utworzenia" />
-                <DataGridColumn Field="@nameof(ListItemModel.DateUpdatedUtc)" Caption="Data edycji" />
-                <DataGridColumn Field="@nameof(ListItemModel.CreatedByNavigation)" Caption="Utworzone przez" />
-                <DataGridColumn Field="@nameof(ListItemModel.UpdatedByNavigation)" Caption="Edytowane przez" />
-             </DataGrid>
-         </CardBody>
-     </Card>
-
-    <Card>
-         <CardHeader Class="widget-header-blue">
-            Rower
-        </CardHeader>
-        <CardBody>
-            <Div Class="col"></Div>
-             <Div Style="font-size: 1.53125rem; font-weight: 600; text-align: center">123</Div>
-             <Div Style="font-size: 0.6875rem; color: #678898; text-transform: uppercase; font-weight: 400; text-align: center">Liczba moich zadań</Div>
-        </CardBody>
-    </Card>
-
-     <Card>
-         <CardHeader Class="widget-header-lblue">
-             Rower
-         </CardHeader>
-         <CardBody>
-             <Div Class="col"></Div>
-             <Div Style="font-size: 1.53125rem; font-weight: 600; text-align: center">123</Div>
-             <Div Style="font-size: 0.6875rem; color: #678898; text-transform: uppercase; font-weight: 400; text-align: center">Liczba moich zadań</Div>
-         </CardBody>
-     </Card>
-
-     <Card>
-         <CardHeader Class="widget-header-red">
-             Rower
-         </CardHeader>
-         <CardBody>
-             <Div Class="col"></Div>
-             <Div Style="font-size: 1.53125rem; font-weight: 600; text-align: center">123</Div>
-             <Div Style="font-size: 0.6875rem; color: #678898; text-transform: uppercase; font-weight: 400; text-align: center">Liczba moich zadań</Div>
-         </CardBody>
-     </Card>
-
-     <Card>
-         <CardHeader Class="widget-header-orange">
-             Rower
-         </CardHeader>
-         <CardBody>
-             <Div Class="col"></Div>
-             <Div Style="font-size: 1.53125rem; font-weight: 600; text-align: center">123</Div>
-             <Div Style="font-size: 0.6875rem; color: #678898; text-transform: uppercase; font-weight: 400; text-align: center">Liczba moich zadań</Div>
-         </CardBody>
-     </Card>
+<Div Class="d-flex gap-3 flex-column">
+    @for (int i = 0; i < model.Widgets.Count; i++)
+    {
+        <ListWidget Widget="@model.Widgets[i]" HeaderColor="@GetColorNumber(i)" IsAdmin="@model.IsAdmin"/>
+    }
  </Div>
 
 @code {
-    private List<ListItemModel> items = new List<ListItemModel>();
-    private Pager pager = new Pager(1, 10);
+    private DashboardDetailsModel model = new DashboardDetailsModel { Widgets = [] };
 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
 
     private async Task LoadData()
     {
         try
         {
-            var result = await Products.Get(pager, new FilterModel { TemplateId = 10007 });
-            items = result.Items.ToList();
-            pager.TotalRows = result.TotalRows;
+            model = await Dashboard.Get();
         }
         catch (HttpRequestException)
         {
@@ -139,8 +66,7 @@
         }
     }
 
-    private void RowSelected(ListItemModel item)
-    {
-        Navigation.NavigateTo($"product/{item.Template.Key}/details/{item.Id}");
+    private string GetColorNumber(int i){
+        return (i % 4).ToString();
     }
 }

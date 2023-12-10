@@ -19,8 +19,12 @@ public partial class ProductsMapper : IListMapper<Product, ListItemModel>, ICrea
     private static ApiStatus CreateKeyValueResult(PtStatus t) => t == null ? null : new(t.Id, t.Name, t.Color);
 
     [ObjectFactory]
+    private static string CreateRealizingUser(ICollection<ProductTarget> t) => t?.FirstOrDefault()?.User == null ? "-" : $"{t.FirstOrDefault().User.Name} ({t.FirstOrDefault().User.Username})";
+
+    [ObjectFactory]
     private static Shared.Models.ProductTemplates.ApiTemplateSelect CreateApiTemplate(long templateId) => new(templateId);
 
+    [MapProperty(nameof(Product.ProductTargets), nameof(ListItemModel.RealizingUser))]
     public partial ListItemModel ToListItemModel(Product prod);
 
     [MapProperty("TemplateId.Id", nameof(Product.TemplateId))]

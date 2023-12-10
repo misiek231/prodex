@@ -1,0 +1,70 @@
+﻿@using Prodex.Client.Coponents
+@using Prodex.Client.RestClients;
+@using Prodex.Shared.Models.Dashboard
+@using Prodex.Shared.Models.Products;
+@using Prodex.Shared.Pagination;
+@using Prodex.Client.Pages.Components;
+@inject NavigationManager Navigation
+
+<Card>
+    <CardHeader Class="@($"widget-header-{HeaderColor}")">
+        
+        @if (IsAdmin)
+        {
+            @:Realizowane zadania - @Widget.Name
+        }
+        else
+        {
+            @:Moje zadania - @Widget.Name
+        }
+    </CardHeader>
+    <CardBody Style="overflow: auto;">
+        <DataGrid TItem="ListItemModel" Data="@Widget.Products.Items" SelectedRowChanged="RowSelected" Responsive>
+            <DataGridColumn Field="@nameof(ListItemModel.Name)" Caption="Nazwa" />
+            <DataGridColumn Field="Template.Value" Caption="Szablon" />
+            <DataGridColumn Field="@nameof(ListItemModel.RealizingUser)" Caption="Aktualnie realizuje" />
+            <DataGridColumn Field="Status.Value" Caption="Status">
+                <DisplayTemplate>
+                    <Badge Color="@context.Status.Color">@context.Status.Value</Badge>
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn Field="@nameof(ListItemModel.DateCreatedUtc)" Caption="Data utworzenia" />
+            <DataGridColumn Field="@nameof(ListItemModel.DateUpdatedUtc)" Caption="Data edycji" />
+            <DataGridColumn Field="@nameof(ListItemModel.CreatedByNavigation)" Caption="Utworzone przez" />
+            <DataGridColumn Field="@nameof(ListItemModel.UpdatedByNavigation)" Caption="Edytowane przez" />
+        </DataGrid>
+
+        <Div>
+            <Div Style="font-size: 1.53125rem; font-weight: 600; text-align: center">@Widget.Products.TotalRows</Div>
+            <Div Style="font-size: 0.6875rem; color: #678898; text-transform: uppercase; font-weight: 400; text-align: center">
+                @if (IsAdmin)
+                {
+                    @:Liczba realizowanych zadań
+                }
+                else
+                {
+                    @:Liczba moich zadań
+                }
+            </Div>
+        </Div>
+
+    </CardBody>
+</Card>
+
+    @code {
+
+    [Parameter]
+    public bool IsAdmin { get; set; }
+
+    [Parameter]
+    public string HeaderColor { get; set; }
+
+    [Parameter]
+    public WidgetModel Widget { get; set; }
+
+    private void RowSelected(ListItemModel item)
+    {
+        Navigation.NavigateTo($"product/{item.Template.Key}/details/{item.Id}");
+    }
+}
+
