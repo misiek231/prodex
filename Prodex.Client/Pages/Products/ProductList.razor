@@ -34,14 +34,14 @@
 
  @code {
     private List<ListItemModel> items = new List<ListItemModel>();
-    private Pager pager = new Pager(1, 10);
+    private Pager pager = new Pager(1, 50);
 
     [Parameter]
     public long TemplateId { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
-        pager = new Pager(1, 10);
+        pager = new Pager(1, 50);
         await LoadData();
     }
 
