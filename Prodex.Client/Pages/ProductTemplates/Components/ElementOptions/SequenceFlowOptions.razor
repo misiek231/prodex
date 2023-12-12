@@ -71,6 +71,9 @@
     public BpmnElement Element { get; set; }
 
     [Parameter]
+    public EventCallback OnSave { get; set; }
+
+    [Parameter]
     public long TemplateId { get; set; }
 
     private FilterModel StatusFilter => new FilterModel { TemplateId = TemplateId };
@@ -89,14 +92,13 @@
     private async Task Save()
     {
         if (Form.Id.HasValue){
-            Console.WriteLine("dupa");
-            await Service.UpdateSequenceFlowConfig(Form.Id.Value, Form);
-         }
-         else{
-            Console.WriteLine("dupa2");
-             await Service.CreateSequenceFlowConfig(TemplateId, Element.Id, Form);
+        await Service.UpdateSequenceFlowConfig(Form.Id.Value, Form);
+        }
+        else{
+            await Service.CreateSequenceFlowConfig(TemplateId, Element.Id, Form);
+        }
 
-         }
+        await OnSave.InvokeAsync();
 
         await LoadData();
     }

@@ -11,15 +11,20 @@
 @inject AuthenticationStateProvider AuthProvider
 @layout AuthLayout
 
-<Card>
+<Card Style="background-color: #f1e9db;">
+    <CardHeader Style="text-align: center;font-weight: bolder; font-size: x-large">
+        Prodex
+    </CardHeader>
     <CardBody>
         <Blazorise.ValidationSummary Errors="Err" />
         <FormWrapper Form="Form">
             <FormInput Property="p => p.Username"/>
             <FormInput Property="p => p.Password" Role="TextRole.Password"/>
         </FormWrapper>
-        <Button Color="Color.Primary" @onclick="LoginClick">Zaloguj</Button>
     </CardBody>
+    <CardFooter>
+        <Button Color="Color.Primary" @onclick="LoginClick">Zaloguj</Button>
+    </CardFooter>
 </Card>
 
 @code {

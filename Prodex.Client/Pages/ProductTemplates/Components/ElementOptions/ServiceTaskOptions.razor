@@ -23,6 +23,9 @@
     [Parameter]
     public long TemplateId { get; set; }
 
+    [Parameter]
+    public EventCallback OnSave { get; set; }
+
     FormWrapper<ServiceTaskConfigFormModel> form;
 
     private FilterModel StatusFilter => new FilterModel { TemplateId = TemplateId };
@@ -44,6 +47,8 @@
             await Service.UpdateServiceTaskConfig(Form.Id.Value, Form);
         else
             await Service.CreateServiceTaskConfig(TemplateId, ElementId, Form);
+
+        await OnSave.InvokeAsync();
 
         await LoadData();
     }

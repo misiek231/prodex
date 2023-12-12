@@ -21,6 +21,9 @@
     public string ElementId { get; set; }
 
     [Parameter]
+    public EventCallback OnSave { get; set; }
+
+    [Parameter]
     public long TemplateId { get; set; }
     FormWrapper<SendTaskConfigFormModel> form;
 
@@ -41,6 +44,8 @@
             await Service.UpdateSendTaskConfig(Form.Id.Value, Form);
         else
             await Service.CreateSendTaskConfig(TemplateId, ElementId, Form);
+
+        await OnSave.InvokeAsync();
 
         await LoadData();
     }

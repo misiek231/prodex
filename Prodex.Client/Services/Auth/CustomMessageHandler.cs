@@ -1,28 +1,18 @@
 ﻿using Blazored.LocalStorage;
 using Blazorise.LoadingIndicator;
 using Microsoft.AspNetCore.Components;
+using Prodex.Client.Services.Snackbar;
 using System.Net.Http.Headers;
 
 namespace Prodex.Client.Services.Auth;
 
-public class CustomMessageHandler : DelegatingHandler
+public class CustomMessageHandler(NavigationManager navigationManager, ILocalStorageService localStorage, ILoadingIndicatorService loadingIndicator, SnackbarService snackbarService) : DelegatingHandler
 {
-    private readonly NavigationManager _navigationManager;
-    private readonly ILocalStorageService _localStorage;
-    private readonly ILoadingIndicatorService _loadingIndicator;
-
-    public CustomMessageHandler(NavigationManager navigationManager, ILocalStorageService localStorage, ILoadingIndicatorService loadingIndicator)
-    {
-        _navigationManager = navigationManager;
-        _localStorage = localStorage;
-        _loadingIndicator = loadingIndicator;
-    }
-
     protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        await _loadingIndicator.Show();
-        var token = await _localStorage.GetItemAsStringAsync("token", cancellationToken);
+        await loadingIndicator.Show();
+        var token = await localStorage.GetItemAsStringAsync("token", cancellationToken);
         if (!string.IsNullOrEmpty(token))
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
 
@@ -31,10 +21,18 @@ public class CustomMessageHandler : DelegatingHandler
         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             // TODO: refreshing token
-            await _localStorage.RemoveItemAsync("token");
-            _navigationManager.NavigateTo("login");
+            await localStorage.RemoveItemAsync("token", cancellationToken);
+            navigationManager.NavigateTo("login");
         }
-        await _loadingIndicator.Hide();
+        await loadingIndicator.Hide();
+
+        if(request.Method == HttpMethod.Post || request.Method == HttpMethod.Put || request.Method == HttpMethod.Delete) 
+        {
+            if(response.IsSuccessStatusCode)
+                await snackbarService.PushAsync("Akcja zakończona pomyślnie", Blazorise.Snackbar.SnackbarColor.Success);
+            else
+                await snackbarService.PushAsync("Wystąpił błąd. Spróbuj ponownie lub skontaktuj się z administratorem systemu", Blazorise.Snackbar.SnackbarColor.Danger);
+        }
 
         return response;
     }

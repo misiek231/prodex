@@ -16,6 +16,10 @@ window.loadBpmn = (currentInstance) => {
         await currentInstance.invokeMethodAsync('OnElementClick', e.element, e.element.businessObject.sourceRef);
     });
 
+    window.modeler.on('commandStack.shape.create.postExecute', (e) => {
+        window.updateColors();
+    });
+
 
     try {
         window.modeler.createDiagram();
@@ -35,16 +39,20 @@ window.setCurrentDiagram = async (xml) => {
 
     await window.modeler.importXML(xml);
 
+    window.updateColors();
+}
+
+window.updateColors = () => {
     const elementRegistry = window.modeler.get("elementRegistry").getAll();
     const modeling = window.modeler.get("modeling");
 
     const colorsMap = [
-        { type: "bpmn:StartEvent",       color: "#2eb85c" },
-        { type: "bpmn:UserTask",         color: "#52BAE8" },
-        { type: "bpmn:ServiceTask",      color: "#E4F6FF" },
-        { type: "bpmn:SendTask",         color: "#FFF3C3" },
+        { type: "bpmn:StartEvent", color: "#2eb85c" },
+        { type: "bpmn:UserTask", color: "#52BAE8" },
+        { type: "bpmn:ServiceTask", color: "#E4F6FF" },
+        { type: "bpmn:SendTask", color: "#FFF3C3" },
         { type: "bpmn:ExclusiveGateway", color: "#FFBA52" },
-        { type: "bpmn:EndEvent",         color: "red"  },
+        { type: "bpmn:EndEvent", color: "red" },
     ]
 
     for (let item of colorsMap) {

@@ -71,7 +71,6 @@
 
     private async Task ValueChanged(TField newValue)
     {
-        Console.WriteLine(newValue);
         Property.SetValue(Form, newValue);
 
         await OnValueChanged.InvokeAsync();

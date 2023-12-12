@@ -10,15 +10,15 @@
         @switch (element?.TypeEnum)
         {
             case ElementType.ServiceTaks: 
-                <ServiceTaskOptions TemplateId="@TemplateId" ElementId="@element.Id"/>
+                <ServiceTaskOptions TemplateId="@TemplateId" OnSave="Save" ElementId="@element.Id"/>
             break;
 
             case ElementType.SendTask:
-                <SendTaskOptions TemplateId="@TemplateId" ElementId="@element.Id" />
+                <SendTaskOptions TemplateId="@TemplateId" OnSave="Save" ElementId="@element.Id" />
             break;
 
             case ElementType.SequenceFlow:
-                <SequenceFlowOptions TemplateId="@TemplateId" Element="@element" />
+                <SequenceFlowOptions TemplateId="@TemplateId" OnSave="Save" Element="@element" />
             break;
 
             default: 
@@ -55,7 +55,6 @@
 
     private void SelectedElementChanged(BpmnElement element)
     {
-        Console.WriteLine(element.Type);
         this.element = element;
     }
 }

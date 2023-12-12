@@ -3,13 +3,14 @@
 @using Prodex.Client.Coponents
 @using Prodex.Client.RestClients;
 @using Prodex.Client.Services.Auth;
+@using Prodex.Client.Services.Snackbar
 @using Prodex.Shared.Models.Sitemap;
 @inject ILocalStorageService LocalStorage
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 @inherits LayoutComponentBase
 @inject AuthClient Auth
-
+@inject SnackbarService SnackbarService
 
 @if (Loading)
 {
@@ -57,7 +58,8 @@ else
                     </Bar>
 
                 </LayoutHeader>
-                    <LayoutContent Padding="Padding.Is3" Style="background-color: #e4e5e6">
+                <LayoutContent Padding="Padding.Is3" Style="background-color: #e4e5e6">
+                    <SnackbarStack @ref="snackbarStack" Location="SnackbarStackLocation.Top" Class="mt-3" TextWeight="TextWeight.Bold" />
                     @Body
                 </LayoutContent>
             </Layout>
@@ -72,6 +74,7 @@ else
     public SitemapModel Sitemap { get; set; }
     public bool Loading = false;
     List<BreadcrumbItemModel> BreadcrumbItems;
+    private SnackbarStack snackbarStack;
 
     protected override void OnParametersSet()
     {
@@ -97,6 +100,20 @@ else
             Sitemap = await Auth.Sitemap();
         } catch { }
         Loading = false;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+            SnackbarService.Init(ShowSnack);
+
+        base.OnAfterRender(firstRender);
+    }
+
+    private async Task ShowSnack(string message, SnackbarColor color)
+    {
+        if (snackbarStack != null)
+            await snackbarStack.PushAsync(message, color, p => p.IntervalBeforeClose = 3000);
     }
 
     private async Task LogoutClick()
