@@ -11,7 +11,7 @@ public class UsersDefinition : SimpleRequestsBaseDefinition, IEndpointDefinition
 
     public void DefineEndpoints(RouteGroupBuilder group)
     {
-        group.RequireAuthorization(Shared.Models.Users.UserType.Admin.ToString());
+        group.RequireAuthorization(UserType.Admin.ToString());
 
         DefineGetList<User, FilterModel, ListItemModel>(group);
         DefineGetDetails<User, FormModel>(group);

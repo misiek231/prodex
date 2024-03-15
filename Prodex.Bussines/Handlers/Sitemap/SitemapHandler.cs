@@ -36,8 +36,21 @@ public class GetSitemap
 
             if (user.UserTypeEnum == UserType.Admin)
             {
+                //model.Nodes.Add(new SitemapNode());
+                model.Nodes.Add(new SitemapNode
+                {
+                    Name = "Administracja:",
+                    
+                });
+
                 model.Nodes.Add(GetAdministrationNode());
             }
+
+            //model.Nodes.Add(new SitemapNode());
+            model.Nodes.Add(new SitemapNode
+            {
+                Name = "Moduły produktowe:",
+            });
 
             var newNodes = _context.ProductTemplates.ToList();
             foreach (var node in newNodes)

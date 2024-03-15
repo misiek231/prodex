@@ -9,8 +9,14 @@ using Riok.Mapperly.Abstractions;
 namespace Prodex.Bussines.Mappers;
 
 [Mapper]
-public partial class UsersMapper : IListMapper<User, ListItemModel>, ICreateMapper<User, FormModel>, IUpdateMapper<User, FormModel>, IDetailsMapper<User, FormModel>
+public partial class UsersMapper : 
+    IListMapper<User, ListItemModel>, 
+    ICreateMapper<User, FormModel>, 
+    IUpdateMapper<User, FormModel>, 
+    IDetailsMapper<User, FormModel>
 {
+    public partial ListItemModel ToListItemModel(User user);
+
     private readonly PasswordHasher Hasher;
 
     public UsersMapper(PasswordHasher hasher)
@@ -18,7 +24,6 @@ public partial class UsersMapper : IListMapper<User, ListItemModel>, ICreateMapp
         Hasher = hasher;
     }
 
-    public partial ListItemModel ToListItemModel(User status);
 
     public User ToEntity(FormModel form)
     {

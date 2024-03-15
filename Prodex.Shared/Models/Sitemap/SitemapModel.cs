@@ -1,4 +1,6 @@
-﻿namespace Prodex.Shared.Models.Sitemap
+﻿using System.Xml.Linq;
+
+namespace Prodex.Shared.Models.Sitemap
 {
     public class SitemapModel
     {
@@ -10,9 +12,24 @@
         {
             try
             {
+                if (string.IsNullOrEmpty(route))
+                {
+                    var n = Nodes.Single(p => p.Name == "Strona główna");
+                   
+                    return
+                    [
+                        new BreadcrumbItemModel
+                        {
+                            Name = n.Name,
+                            Route = null, // TODO: not relay on nullable route, see breadcrumb: administration/users/add
+                            Active = false,
+                        }
+                    ];
+                }
+
                 var result = new List<BreadcrumbItemModel>();
                 var path = route.TrimEnd('/').TrimStart('/').Split('/').ToList();
-                var node = Nodes.Single(p => p.Route == FixedPath(p.Route, path));
+                var node = Nodes.Single(p => p.Route != null && p.Route == FixedPath(p.Route, path));
 
                 var toSkip = node.Route.Count(p => p == '/');
 

@@ -21,7 +21,8 @@ public class SimpleGetList
         }
     }
 
-    public class Handler<TEntity, TFilter, TListItemModel> : IRequestHandler<Request<TEntity, TFilter, TListItemModel>, Pagination<TListItemModel>>
+    public class Handler<TEntity, TFilter, TListItemModel> : 
+        IRequestHandler<Request<TEntity, TFilter, TListItemModel>, Pagination<TListItemModel>>
         where TEntity : class, IEntity
     {
         private readonly IListMapper<TEntity, TListItemModel> Mapper;
@@ -35,7 +36,8 @@ public class SimpleGetList
             Filter = filter;
         }
 
-        public async Task<Pagination<TListItemModel>> Handle(Request<TEntity, TFilter, TListItemModel> request, CancellationToken cancellationToken)
+        public async Task<Pagination<TListItemModel>> Handle(Request<TEntity, TFilter, TListItemModel> request, 
+            CancellationToken cancellationToken)
         {
             var mapped = await Context.Set<TEntity>()
                 .Filter(Filter, request.Filter)

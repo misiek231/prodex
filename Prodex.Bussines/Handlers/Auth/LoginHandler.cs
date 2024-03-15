@@ -42,7 +42,8 @@ public class Login
 
         public async Task<OneOf<TokenModel, Error<string>>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var user = await context.Users.SingleOrDefaultAsync(p => p.Username == request.LoginModel.Username);
+            var user = await context.Users.SingleOrDefaultAsync(p => p.Username == request.LoginModel.Username, 
+                                                                cancellationToken: cancellationToken);
 
             if (user is null || !hasher.VerifyHashedPassword(user.Password, request.LoginModel.Password)) 
                 return new Error<string>("Nieprawidłowy login lub hasło");

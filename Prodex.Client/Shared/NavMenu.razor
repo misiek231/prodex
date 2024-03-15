@@ -34,10 +34,18 @@
                     }
                     else
                     {
-                        <BarLink To="@node.Route">
-                            <BarIcon IconName="@node.Icon" />
-                            @node.Name
-                        </BarLink>
+                        if (node.Route is not null)
+                        {
+                            <BarLink To="@node.Route">
+                                <BarIcon IconName="@node.Icon" />
+                                @node.Name
+                            </BarLink>
+                        }
+                        else
+                        {
+                            <p style="height: 40px; margin: 0; line-height:40px; padding-left: 7px">@node.Name</p>
+                        }
+
                     }
                 </BarItem>
             }
