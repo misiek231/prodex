@@ -33,7 +33,7 @@ public static class RunProcess
 
             await processBuilder
                 .BuildProcess(template.ProcessXml)
-                .Run(mediator, request.Enity, 1); // TODO: pass injected user Id
+                .Run(mediator, request.Enity, request.Enity.CreatedBy ?? 1); // TODO: pass injected user Id
 
             context.Update(request.Enity);
 
